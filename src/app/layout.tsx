@@ -19,7 +19,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
 			suppressHydrationWarning
 		>
 			<body
-				className={`${interFont.variable} ${geistMonoFont.variable} dark min-h-screen overscroll-y-none antialiased`}
+				className={`${interFont.variable} ${geistMonoFont.variable} dark min-h-dvh overscroll-y-none antialiased`}
 			>
 				<NuqsAdapter>{children}</NuqsAdapter>
 			</body>
