@@ -1,4 +1,4 @@
-import { caveatFont, geistMonoFont, interFont } from "@/lib/fonts";
+import { caveatFont, interFont } from "@/lib/fonts";
 import type { Metadata } from "next";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import type { PropsWithChildren } from "react";
@@ -19,7 +19,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
 			suppressHydrationWarning
 		>
 			<body
-				className={`${interFont.variable} ${geistMonoFont.variable} ${caveatFont.variable} dark min-h-dvh overscroll-y-none antialiased`}
+				className={`${interFont.variable} ${caveatFont.variable} dark min-h-dvh overflow-x-hidden overscroll-y-contain antialiased`}
 			>
 				<NuqsAdapter>{children}</NuqsAdapter>
 			</body>

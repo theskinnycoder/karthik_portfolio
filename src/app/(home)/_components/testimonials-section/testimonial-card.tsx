@@ -15,9 +15,7 @@ export interface TestimonialCardProps {
 export function TestimonialCard({ quote, author }: TestimonialCardProps) {
 	return (
 		<div className="flex flex-col gap-6 rounded-[18px] border border-border p-[18px]">
-			<p className="text-base leading-[25px] font-light tracking-[0.32px] text-muted-foreground">
-				{quote}
-			</p>
+			<p className="text-base font-light text-muted-foreground">{quote}</p>
 
 			<div className="flex items-center gap-3">
 				<Avatar className="size-10">

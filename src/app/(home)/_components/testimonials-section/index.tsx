@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { cn } from "../../../../lib/utils";
 import { TestimonialCard, type TestimonialCardProps } from "./testimonial-card";
 
 const testimonials = [
@@ -52,22 +51,18 @@ const testimonials = [
 export function TestimonialsSection() {
 	return (
 		<section className="flex flex-col items-center gap-7">
-			<h2 className="text-center font-serif text-4xl leading-6">
+			<h2 className="text-center font-serif text-4xl">
 				<span className="text-muted-foreground">What people have to </span>
-				<div className="relative block md:inline">
+				<div className="inline-flex items-baseline space-x-2 md:inline">
 					<span className="bg-linear-to-r from-[#A88BFA] to-[#EFAAFB] bg-clip-text text-transparent">
 						say about me :
 					</span>
 					<Image
 						src="/heart-icon.svg"
 						alt="heart icon"
-						width={18}
-						height={18}
-						className={cn(
-							"absolute",
-							"right-0 -bottom-1/2 -translate-y-1/2",
-							"md:-right-8 md:bottom-0 md:-translate-y-1/2",
-						)}
+						width={20}
+						height={20}
+						className="inline"
 					/>
 				</div>
 			</h2>
