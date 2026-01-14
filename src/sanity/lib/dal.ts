@@ -1,5 +1,5 @@
+import { tagResource } from "@/lib/caching";
 import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
-import { cache } from "react";
 import "server-only";
 import { sanityFetch } from "./fetch";
 import { urlFor } from "./image";
@@ -81,24 +81,24 @@ function toCompanyDTO(data: SanityCompany) {
 
 /**
  * ========================
- * Data fetching functions
+ * Cached Data Getters
  * ========================
  */
 
-export const getTestimonials = cache(async (): Promise<TestimonialDTO[]> => {
+export async function getTestimonials() {
+	await tagResource("testimonial");
+
 	const testimonials = await sanityFetch<SanityTestimonial[]>({
 		query: testimonialsQuery,
-		tags: ["testimonials"],
 	});
-
 	return testimonials.map(toTestimonialDTO);
-});
+}
 
-export const getCompanies = cache(async (): Promise<CompanyDTO[]> => {
+export async function getCompanies() {
+	await tagResource("company");
+
 	const companies = await sanityFetch<SanityCompany[]>({
 		query: companiesQuery,
-		tags: ["companies"],
 	});
-
 	return companies.map(toCompanyDTO);
-});
+}

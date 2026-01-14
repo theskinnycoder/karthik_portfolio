@@ -1,17 +1,17 @@
+import type { QueryParams } from "sanity";
 import "server-only";
 import { client } from "./client";
-import type { QueryParams } from "sanity";
 
+/**
+ * Sanity fetch wrapper
+ * **Note**: Caching is handled at the DAL level with "use cache" + cacheTag() + cacheLife()
+ */
 export async function sanityFetch<T>({
 	query,
 	params = {},
-	tags = [],
 }: {
 	query: string;
 	params?: QueryParams;
-	tags?: string[];
 }): Promise<T> {
-	return client.fetch<T>(query, params, {
-		next: { tags },
-	});
+	return client.fetch<T>(query, params);
 }
