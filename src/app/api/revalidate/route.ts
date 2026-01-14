@@ -1,9 +1,8 @@
+import { serverEnv } from "@/env/server";
 import { DOCUMENT_TYPE_TO_TAGS, getTags } from "@/lib/caching";
 import { parseBody } from "next-sanity/webhook";
 import { revalidateTag } from "next/cache";
 import { type NextRequest, NextResponse } from "next/server";
-
-const SANITY_WEBHOOK_SECRET = process.env.SANITY_WEBHOOK_SECRET;
 
 interface SanityWebhookPayload {
 	_type: keyof typeof DOCUMENT_TYPE_TO_TAGS;
@@ -24,7 +23,7 @@ export async function POST(request: NextRequest) {
 	try {
 		const { isValidSignature, body } = await parseBody<SanityWebhookPayload>(
 			request,
-			SANITY_WEBHOOK_SECRET,
+			serverEnv.SANITY_WEBHOOK_SECRET,
 			true, // Add delay to allow CDN to update
 		);
 

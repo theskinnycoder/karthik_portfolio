@@ -1,38 +1,66 @@
-// Support both Next.js (process.env) and standalone Sanity Studio/Vite (import.meta.env)
-function getEnvVar(nextKey: string, sanityKey: string): string | undefined {
-	// Next.js environment (embedded studio)
-	if (typeof process !== "undefined" && process.env?.[nextKey]) {
-		return process.env[nextKey];
-	}
+/**
+ * Sanity environment configuration
+ *
+ * Supports both:
+ * - Next.js (process.env with NEXT_PUBLIC_* prefix via t3-env)
+ * - Vite/standalone Sanity Studio (import.meta.env with SANITY_STUDIO_* prefix)
+ */
 
-	// Vite environment (standalone sanity dev)
-	// @ts-expect-error - import.meta.env exists in Vite but not in Next.js types
-	if (typeof import.meta !== "undefined" && import.meta.env?.[sanityKey]) {
-		// @ts-expect-error - import.meta.env exists in Vite
-		return import.meta.env[sanityKey] as string;
-	}
+import * as viteEnv from "../env/sanity-studio";
 
-	return undefined;
+let _clientEnv: typeof import("../env/client").clientEnv | null = null;
+function getClientEnv() {
+	if (_clientEnv === null && !viteEnv.isViteEnvironment()) {
+		// eslint-disable-next-line @typescript-eslint/no-require-imports
+		_clientEnv = require("../env/client").clientEnv;
+	}
+	return _clientEnv;
 }
 
-export const apiVersion =
-	getEnvVar("NEXT_PUBLIC_SANITY_API_VERSION", "SANITY_STUDIO_API_VERSION") ||
-	"2026-01-14";
-
-export const dataset = assertValue(
-	getEnvVar("NEXT_PUBLIC_SANITY_DATASET", "SANITY_STUDIO_DATASET"),
-	"Missing environment variable: NEXT_PUBLIC_SANITY_DATASET or SANITY_STUDIO_DATASET",
-);
-
-export const projectId = assertValue(
-	getEnvVar("NEXT_PUBLIC_SANITY_PROJECT_ID", "SANITY_STUDIO_PROJECT_ID"),
-	"Missing environment variable: NEXT_PUBLIC_SANITY_PROJECT_ID or SANITY_STUDIO_PROJECT_ID",
-);
-
-function assertValue<T>(v: T | undefined, errorMessage: string): T {
-	if (v === undefined) {
-		throw new Error(errorMessage);
+function getEnvValue<T>(
+	nextJsValue: T | undefined,
+	viteValue: T | undefined,
+	fallback: T,
+): T {
+	if (viteEnv.isViteEnvironment() && viteValue !== undefined) {
+		return viteValue;
 	}
-
-	return v;
+	if (nextJsValue !== undefined) {
+		return nextJsValue;
+	}
+	return fallback;
 }
+
+export const apiVersion = getEnvValue(
+	getClientEnv()?.NEXT_PUBLIC_SANITY_API_VERSION,
+	viteEnv.apiVersion,
+	"2026-01-14",
+);
+
+export const dataset = (() => {
+	const value = getEnvValue(
+		getClientEnv()?.NEXT_PUBLIC_SANITY_DATASET,
+		viteEnv.dataset,
+		undefined,
+	);
+	if (!value) {
+		throw new Error(
+			"Missing environment variable: NEXT_PUBLIC_SANITY_DATASET or SANITY_STUDIO_DATASET",
+		);
+	}
+	return value;
+})();
+
+export const projectId = (() => {
+	const value = getEnvValue(
+		getClientEnv()?.NEXT_PUBLIC_SANITY_PROJECT_ID,
+		viteEnv.projectId,
+		undefined,
+	);
+	if (!value) {
+		throw new Error(
+			"Missing environment variable: NEXT_PUBLIC_SANITY_PROJECT_ID or SANITY_STUDIO_PROJECT_ID",
+		);
+	}
+	return value;
+})();
