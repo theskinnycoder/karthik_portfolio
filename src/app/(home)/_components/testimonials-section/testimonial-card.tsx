@@ -42,8 +42,9 @@ export function TestimonialCard({ quote, author }: TestimonialCardProps) {
 						<Image
 							src={author.companyLogo}
 							alt={author.company}
-							width={44}
-							height={13}
+							width={1920}
+							height={1080}
+							className="h-3.5 w-fit"
 						/>
 					</div>
 				</div>

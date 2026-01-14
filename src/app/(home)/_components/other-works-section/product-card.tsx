@@ -3,6 +3,7 @@ import Image from "next/image";
 export interface ProductCardProps {
 	image: string;
 	alt: string;
+	name: string;
 	backgroundColor: string;
 	width?: number;
 	height?: number;
@@ -11,6 +12,7 @@ export interface ProductCardProps {
 export function ProductCard({
 	image,
 	alt,
+	name,
 	backgroundColor,
 	width = 296,
 	height = 458,

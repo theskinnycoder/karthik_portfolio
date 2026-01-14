@@ -2,28 +2,28 @@ import Image from "next/image";
 
 const companies = [
 	{
-		src: "/apxor-logo.svg",
+		src: "/logos/apxor-logo.svg",
 		alt: "Apxor Logo",
-		width: 82,
-		height: 24,
+		width: 84,
+		height: 26,
 	},
 	{
-		src: "/hearzap-logo.svg",
+		src: "/logos/hearzap-logo.svg",
 		alt: "Hearzap Logo",
-		width: 112,
-		height: 24,
+		width: 103,
+		height: 26,
 	},
 	{
-		src: "/eclaire-logo.svg",
+		src: "/logos/eclaire-logo.svg",
 		alt: "Eclaire Logo",
-		width: 64,
-		height: 24,
+		width: 65,
+		height: 26,
 	},
 ] as const;
 
 export function CompanyLogos() {
 	return (
-		<div className="grid grid-cols-2 items-center gap-x-1 gap-y-3.5">
+		<div className="flex flex-wrap items-center gap-x-16 gap-y-4">
 			{companies.map((company) => (
 				<Image
 					key={company.alt}
@@ -31,6 +31,7 @@ export function CompanyLogos() {
 					alt={company.alt}
 					width={company.width}
 					height={company.height}
+					className="h-[26px]"
 				/>
 			))}
 		</div>

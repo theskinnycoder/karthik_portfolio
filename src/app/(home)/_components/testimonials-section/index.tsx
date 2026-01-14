@@ -9,8 +9,8 @@ const testimonials = [
 			name: "Dr. Bharghava",
 			role: "Head, Product & Innovation at",
 			company: "Apxor",
-			companyLogo: "/apxor-logo.svg",
-			avatar: "/bharghava-avatar.svg",
+			companyLogo: "/logos/apxor-logo.svg",
+			avatar: "/avatars/bharghava-avatar.webp",
 		},
 	},
 	{
@@ -20,8 +20,8 @@ const testimonials = [
 			name: "Prabhu Konchada",
 			role: "Senior Product Manager at",
 			company: "Apxor",
-			companyLogo: "/apxor-logo.svg",
-			avatar: "/prabhu-avatar.svg",
+			companyLogo: "/logos/apxor-logo.svg",
+			avatar: "/avatars/prabhu-avatar.webp",
 		},
 	},
 	{
@@ -31,8 +31,8 @@ const testimonials = [
 			name: "Ravi Teja Akella",
 			role: "Engineering Head at",
 			company: "Apxor",
-			companyLogo: "/apxor-logo.svg",
-			avatar: "/ravi-avatar.svg",
+			companyLogo: "/logos/apxor-logo.svg",
+			avatar: "/avatars/ravi-avatar.webp",
 		},
 	},
 	{
@@ -42,8 +42,8 @@ const testimonials = [
 			name: "Raja S",
 			role: "CEO & Founder at",
 			company: "Hearzap",
-			companyLogo: "/hearzap-logo.svg",
-			avatar: "/raja-avatar.svg",
+			companyLogo: "/logos/hearzap-logo.svg",
+			avatar: "/avatars/raja-avatar.webp",
 		},
 	},
 ] satisfies TestimonialCardProps[];
@@ -58,7 +58,7 @@ export function TestimonialsSection() {
 						say about me :
 					</span>
 					<Image
-						src="/heart-icon.svg"
+						src="/icons/heart-icon.svg"
 						alt="heart icon"
 						width={20}
 						height={20}

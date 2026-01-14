@@ -10,22 +10,22 @@ const socialLinks = [
 	{
 		label: "LinkedIn",
 		href: "https://linkedin.com/in/karthikpanchala",
-		icon: "/linkedin-logo.svg",
+		icon: "/logos/linkedin-logo.svg",
 	},
 	{
 		label: "Gmail",
 		href: "mailto:karthik@example.com",
-		icon: "/gmail-logo.svg",
+		icon: "/logos/gmail-logo.svg",
 	},
 	{
 		label: "Dribble",
 		href: "https://dribble.com/karthikpanchala",
-		icon: "/dribble-logo.svg",
+		icon: "/logos/dribble-logo.svg",
 	},
 	{
 		label: "Behance",
 		href: "https://behance.net/karthikpanchala",
-		icon: "/behance-logo.svg",
+		icon: "/logos/behance-logo.svg",
 	},
 ] satisfies SocialLink[];
 

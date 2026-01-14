@@ -10,14 +10,16 @@ import { ProductCard, type ProductCardProps } from "./product-card";
 
 const products = [
 	{
-		image: "/id-card-image.svg",
+		image: "/images/id-card-image.webp",
+		name: "ID card design",
 		alt: "ID card design",
 		backgroundColor: "#979797",
 		width: 296,
 		height: 458,
 	},
 	{
-		image: "/quantum-computer-image.svg",
+		image: "/images/quantum-computer-image.webp",
+		name: "Quantum computer 3D render",
 		alt: "Quantum computer 3D render",
 		backgroundColor: "#faf9f6",
 		width: 345,

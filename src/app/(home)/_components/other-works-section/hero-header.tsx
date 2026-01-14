@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 export function HeroHeader() {
 	return (
 		<div className="flex flex-col items-center gap-12">
@@ -14,12 +12,15 @@ export function HeroHeader() {
 					</div>
 				</h2>
 
-				<Image
-					src="/mind.gif"
-					alt="Overthinking animation"
-					width={244}
-					height={164}
-					unoptimized
+				<video
+					src="/videos/mind.mp4"
+					autoPlay
+					loop
+					muted
+					playsInline
+					width={300}
+					height={200}
+					className="h-64 w-auto"
 				/>
 			</div>
 
