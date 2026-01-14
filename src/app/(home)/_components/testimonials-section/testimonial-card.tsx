@@ -1,18 +1,14 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import type { TestimonialDTO } from "@/sanity/lib/dal";
 import Image from "next/image";
 
-export interface TestimonialCardProps {
-	quote: string;
-	author: {
-		name: string;
-		role: string;
-		company: string;
-		companyLogo: string;
-		avatar: string;
-	};
-}
-
-export function TestimonialCard({ quote, author }: TestimonialCardProps) {
+export function TestimonialCard({
+	quote,
+	authorName,
+	authorRole,
+	authorAvatar,
+	company,
+}: TestimonialDTO) {
 	return (
 		<div className="flex flex-col gap-6 rounded-[18px] border border-border p-[18px]">
 			<p className="text-base font-light text-muted-foreground">{quote}</p>
@@ -20,11 +16,12 @@ export function TestimonialCard({ quote, author }: TestimonialCardProps) {
 			<div className="flex items-center gap-3">
 				<Avatar className="size-10">
 					<AvatarImage
-						src={author.avatar}
-						alt={author.name}
+						src={authorAvatar}
+						alt={authorName}
+						className="object-top"
 					/>
 					<AvatarFallback>
-						{author.name
+						{authorName
 							.split(" ")
 							.map((n) => n[0])
 							.join("")
@@ -33,15 +30,15 @@ export function TestimonialCard({ quote, author }: TestimonialCardProps) {
 				</Avatar>
 				<div className="flex flex-col">
 					<span className="text-base font-semibold text-foreground">
-						{author.name}
+						{authorName}
 					</span>
-					<div className="flex items-center gap-1.5">
+					<div className="flex items-center gap-1">
 						<span className="text-xs font-light text-muted-foreground">
-							{author.role}
+							{authorRole} at
 						</span>
 						<Image
-							src={author.companyLogo}
-							alt={author.company}
+							src={company.logo}
+							alt={company.name}
 							width={1920}
 							height={1080}
 							className="h-3.5 w-fit"

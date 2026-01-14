@@ -15,6 +15,17 @@
 		"next-devtools": {
 			"command": "npx",
 			"args": ["-y", "next-devtools-mcp@latest"]
+		},
+		"vercel": {
+			"type": "http",
+			"url": "https://mcp.vercel.com/rahul-srirams-projects/karthik-portfolio"
+		},
+		"sanity": {
+			"type": "http",
+			"url": "https://mcp.sanity.io",
+			"headers": {
+				"Authorization": "Bearer ${SANITY_MCP_TOKEN}"
+			}
 		}
 	}
 }
