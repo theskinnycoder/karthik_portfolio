@@ -25,9 +25,8 @@ export const social = defineType({
 		defineField({
 			name: "icon",
 			title: "Icon",
-			type: "image",
+			type: "cloudinary.asset",
 			description: "SVG icon for the social link",
-			options: { accept: "image/svg+xml" },
 			validation: (rule) => rule.required(),
 		}),
 		defineField({
@@ -41,7 +40,6 @@ export const social = defineType({
 	preview: {
 		select: {
 			title: "label",
-			media: "icon",
 		},
 	},
 });

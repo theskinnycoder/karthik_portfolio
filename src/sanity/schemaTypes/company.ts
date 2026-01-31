@@ -16,11 +16,8 @@ export const company = defineType({
 		defineField({
 			name: "logo",
 			title: "Logo",
-			type: "image",
+			type: "cloudinary.asset",
 			description: "Company logo (preferably SVG or PNG with transparency)",
-			options: {
-				accept: "image/svg+xml,image/png,image/webp",
-			},
 			validation: (rule) => rule.required(),
 		}),
 		defineField({
@@ -47,7 +44,6 @@ export const company = defineType({
 	preview: {
 		select: {
 			title: "name",
-			media: "logo",
 		},
 	},
 });

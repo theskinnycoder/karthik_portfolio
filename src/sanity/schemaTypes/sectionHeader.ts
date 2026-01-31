@@ -45,9 +45,8 @@ export const sectionHeader = defineType({
 		defineField({
 			name: "icon",
 			title: "Icon Image",
-			type: "image",
+			type: "cloudinary.asset",
 			description: "Optional icon image (alternative to emoji)",
-			options: { accept: "image/svg+xml,image/png,image/webp" },
 		}),
 		defineField({
 			name: "gradientFrom",
@@ -64,8 +63,8 @@ export const sectionHeader = defineType({
 		defineField({
 			name: "video",
 			title: "Video",
-			type: "file",
-			description: "Optional video for this section (uploads to Vercel Blob)",
+			type: "cloudinary.asset",
+			description: "Optional video for this section",
 		}),
 		defineField({
 			name: "subheading",

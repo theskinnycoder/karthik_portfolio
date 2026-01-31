@@ -37,11 +37,8 @@ export const testimonial = defineType({
 		defineField({
 			name: "authorAvatar",
 			title: "Author Avatar",
-			type: "image",
+			type: "cloudinary.asset",
 			description: "Author's profile photo",
-			options: {
-				hotspot: true,
-			},
 		}),
 		defineField({
 			name: "order",
@@ -55,7 +52,6 @@ export const testimonial = defineType({
 		select: {
 			title: "authorName",
 			subtitle: "company.name",
-			media: "authorAvatar",
 		},
 	},
 });

@@ -15,23 +15,23 @@ This skill covers data fetching, caching, and the Data Access Layer (DAL) patter
 
 ### Three-Layer Caching Strategy
 
-| Layer | API | Purpose |
-|-------|-----|---------|
-| **Page Level** | `"use cache"` directive | Static generation for entire page |
-| **Request Level** | `React.cache()` | Deduplicate requests within same render |
-| **Data Level** | `cacheTag()` + `cacheLife()` | Granular control with revalidation tags |
+| Layer             | API                          | Purpose                                 |
+| ----------------- | ---------------------------- | --------------------------------------- |
+| **Page Level**    | `"use cache"` directive      | Static generation for entire page       |
+| **Request Level** | `React.cache()`              | Deduplicate requests within same render |
+| **Data Level**    | `cacheTag()` + `cacheLife()` | Granular control with revalidation tags |
 
 ### When to Use What
 
-| Scenario | Approach |
-|----------|----------|
-| Entire page is static | `"use cache"` at page level |
-| Deduplicate requests in same render | `React.cache()` wrapper |
-| Control cache duration | `cacheLife("hours")` / `cacheLife("days")` |
-| Enable on-demand revalidation | `cacheTag("tag-name")` |
-| Show loading UI while fetching | Wrap in `<Suspense fallback={...}>` |
-| Immediate cache invalidation (Server Action) | `updateTag("tag-name")` |
-| Stale-while-revalidate invalidation | `revalidateTag("tag-name", "max")` |
+| Scenario                                     | Approach                                   |
+| -------------------------------------------- | ------------------------------------------ |
+| Entire page is static                        | `"use cache"` at page level                |
+| Deduplicate requests in same render          | `React.cache()` wrapper                    |
+| Control cache duration                       | `cacheLife("hours")` / `cacheLife("days")` |
+| Enable on-demand revalidation                | `cacheTag("tag-name")`                     |
+| Show loading UI while fetching               | Wrap in `<Suspense fallback={...}>`        |
+| Immediate cache invalidation (Server Action) | `updateTag("tag-name")`                    |
+| Stale-while-revalidate invalidation          | `revalidateTag("tag-name", "max")`         |
 
 ## DAL Pattern (Data Access Layer)
 
@@ -46,37 +46,37 @@ export const myQuery = groq`*[_type == "myType"] | order(order asc) {...}`;
 
 // 2. Add to DOCUMENT_TYPE_TO_TAGS in src/lib/caching.ts
 export const DOCUMENT_TYPE_TO_TAGS = {
-  myType: ["myTypes"],
-  // ...
+	myType: ["myTypes"],
+	// ...
 } as const;
 
 // 3. Define Sanity type (raw response shape)
 interface SanityMyType {
-  _id: string;
-  title: string;
-  image?: SanityImageSource;
+	_id: string;
+	title: string;
+	image?: SanityImageSource;
 }
 
 // 4. Define DTO (component props shape)
 export interface MyTypeDTO {
-  title: string;
-  imageUrl: string;
+	title: string;
+	imageUrl: string;
 }
 
 // 5. Create transformer
 function toMyTypeDTO(data: SanityMyType): MyTypeDTO {
-  return {
-    title: data.title,
-    imageUrl: data.image ? urlFor(data.image).url() : "",
-  };
+	return {
+		title: data.title,
+		imageUrl: data.image ? urlFor(data.image).url() : "",
+	};
 }
 
 // 6. Export cached getter using tagResource
 export async function getMyTypes(): Promise<MyTypeDTO[]> {
-  await tagResource("myType"); // Applies "use cache" + cacheTag + cacheLife
+	await tagResource("myType"); // Applies "use cache" + cacheTag + cacheLife
 
-  const data = await sanityFetch<SanityMyType[]>({ query: myQuery });
-  return data.map(toMyTypeDTO);
+	const data = await sanityFetch<SanityMyType[]>({ query: myQuery });
+	return data.map(toMyTypeDTO);
 }
 ```
 
@@ -100,9 +100,9 @@ For fully static pages, use `cachePageLife()` for consistent cache duration:
 import { cachePageLife } from "@/lib/caching";
 
 export default async function Page() {
-  cachePageLife(); // Applies cacheLife("days") - 1d revalidate, 1w expire
+	cachePageLife(); // Applies cacheLife("days") - 1d revalidate, 1w expire
 
-  return <main>...</main>;
+	return <main>...</main>;
 }
 ```
 
@@ -138,15 +138,15 @@ export async function getData() {
 
 ### Cache Life Profiles
 
-| Profile | Stale | Revalidate | Expire |
-|---------|-------|------------|--------|
-| `"default"` | 5m | 15m | 1y |
-| `"seconds"` | 30s | 1s | 1m |
-| `"minutes"` | 5m | 1m | 1h |
-| `"hours"` | 5m | 1h | 1d |
-| `"days"` | 5m | 1d | 1w |
-| `"weeks"` | 5m | 1w | 30d |
-| `"max"` | 5m | 30d | 1y |
+| Profile     | Stale | Revalidate | Expire |
+| ----------- | ----- | ---------- | ------ |
+| `"default"` | 5m    | 15m        | 1y     |
+| `"seconds"` | 30s   | 1s         | 1m     |
+| `"minutes"` | 5m    | 1m         | 1h     |
+| `"hours"`   | 5m    | 1h         | 1d     |
+| `"days"`    | 5m    | 1d         | 1w     |
+| `"weeks"`   | 5m    | 1w         | 30d    |
+| `"max"`     | 5m    | 30d        | 1y     |
 
 ### Custom Cache Life
 
@@ -177,27 +177,27 @@ import { parseBody } from "next-sanity/webhook";
 import { revalidateTag } from "next/cache";
 
 interface SanityWebhookPayload {
-  _type: keyof typeof DOCUMENT_TYPE_TO_TAGS;
-  _id: string;
+	_type: keyof typeof DOCUMENT_TYPE_TO_TAGS;
+	_id: string;
 }
 
 export async function POST(request: NextRequest) {
-  const { isValidSignature, body } = await parseBody<SanityWebhookPayload>(
-    request,
-    process.env.SANITY_WEBHOOK_SECRET,
-    true // Add delay for CDN
-  );
+	const { isValidSignature, body } = await parseBody<SanityWebhookPayload>(
+		request,
+		process.env.SANITY_WEBHOOK_SECRET,
+		true, // Add delay for CDN
+	);
 
-  if (!isValidSignature) {
-    return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
-  }
+	if (!isValidSignature) {
+		return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
+	}
 
-  const tags = getTags(body._type);
-  for (const tag of tags) {
-    revalidateTag(tag, "max"); // Stale-while-revalidate
-  }
+	const tags = getTags(body._type);
+	for (const tag of tags) {
+		revalidateTag(tag, "max"); // Stale-while-revalidate
+	}
 
-  return NextResponse.json({ revalidated: true, tags });
+	return NextResponse.json({ revalidated: true, tags });
 }
 ```
 
@@ -209,19 +209,21 @@ export async function POST(request: NextRequest) {
 import { updateTag } from "next/cache";
 
 export async function updateProduct(id: string, data: FormData) {
-  await db.products.update(id, data);
-  updateTag("products"); // Immediate invalidation
+	await db.products.update(id, data);
+	updateTag("products"); // Immediate invalidation
 }
 ```
 
 ## When to Use Suspense
 
 **NOT needed when:**
+
 - All data-fetching uses `"use cache"`
 - Content is included in static shell at build time
 - No runtime network requests
 
 **IS needed when:**
+
 - User-specific data (cookies, headers, searchParams)
 - Real-time data that must be fresh every request
 - Content using `connection()` to defer to runtime
@@ -231,11 +233,11 @@ export async function updateProduct(id: string, data: FormData) {
 import { Suspense } from "react";
 
 export default function Page() {
-  return (
-    <Suspense fallback={<Skeleton />}>
-      <DynamicComponent /> {/* Uses cookies, headers, etc. */}
-    </Suspense>
-  );
+	return (
+		<Suspense fallback={<Skeleton />}>
+			<DynamicComponent /> {/* Uses cookies, headers, etc. */}
+		</Suspense>
+	);
 }
 ```
 

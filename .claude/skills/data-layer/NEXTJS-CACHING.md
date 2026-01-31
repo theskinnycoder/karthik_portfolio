@@ -9,7 +9,7 @@ Detailed reference for caching in Next.js 16 with Cache Components.
 ```typescript
 // next.config.ts
 const nextConfig: NextConfig = {
-  cacheComponents: true, // Required for "use cache"
+	cacheComponents: true, // Required for "use cache"
 };
 ```
 
@@ -22,11 +22,11 @@ const nextConfig: NextConfig = {
 import { cachePageLife } from "@/lib/caching";
 
 export default async function Page() {
-  cachePageLife(); // Apply explicit cache life (1d revalidate, 1w expire)
+	cachePageLife(); // Apply explicit cache life (1d revalidate, 1w expire)
 
-  // Entire page is cached and prerendered
-  const data = await fetchData();
-  return <main>{/* ... */}</main>;
+	// Entire page is cached and prerendered
+	const data = await fetchData();
+	return <main>{/* ... */}</main>;
 }
 ```
 
@@ -36,9 +36,9 @@ export default async function Page() {
 
 ```tsx
 export async function getData() {
-  "use cache";
-  // Function output is cached
-  return await fetch("/api/data");
+	"use cache";
+	// Function output is cached
+	return await fetch("/api/data");
 }
 ```
 
@@ -48,22 +48,27 @@ export async function getData() {
 // All exports in this file are cached
 "use cache";
 
-export async function getUsers() { /* ... */ }
-export async function getPosts() { /* ... */ }
+export async function getUsers() {
+	/* ... */
+}
+export async function getPosts() {
+	/* ... */
+}
 ```
 
 ## Cache Keys
 
 Cache entries are keyed by:
+
 1. **Build ID** - Changes on each build
 2. **Function ID** - Hash of function location and signature
 3. **Serializable arguments** - Props/function arguments
 
 ```tsx
 async function getData(userId: string) {
-  "use cache";
-  // Different userId = different cache entry
-  return fetch(`/api/users/${userId}`);
+	"use cache";
+	// Different userId = different cache entry
+	return fetch(`/api/users/${userId}`);
 }
 ```
 
@@ -77,23 +82,23 @@ import { cacheLife } from "next/cache";
 // Use predefined profiles
 cacheLife("seconds"); // Very short
 cacheLife("minutes"); // Short
-cacheLife("hours");   // Medium (good for frequently updated)
-cacheLife("days");    // Long (good for portfolio content)
-cacheLife("weeks");   // Very long
-cacheLife("max");     // Maximum (rarely updated)
+cacheLife("hours"); // Medium (good for frequently updated)
+cacheLife("days"); // Long (good for portfolio content)
+cacheLife("weeks"); // Very long
+cacheLife("max"); // Maximum (rarely updated)
 ```
 
 ### Profile Values
 
-| Profile | Stale | Revalidate | Expire |
-|---------|-------|------------|--------|
-| `default` | 5m | 15m | 1y |
-| `seconds` | 30s | 1s | 1m |
-| `minutes` | 5m | 1m | 1h |
-| `hours` | 5m | 1h | 1d |
-| `days` | 5m | 1d | 1w |
-| `weeks` | 5m | 1w | 30d |
-| `max` | 5m | 30d | 1y |
+| Profile   | Stale | Revalidate | Expire |
+| --------- | ----- | ---------- | ------ |
+| `default` | 5m    | 15m        | 1y     |
+| `seconds` | 30s   | 1s         | 1m     |
+| `minutes` | 5m    | 1m         | 1h     |
+| `hours`   | 5m    | 1h         | 1d     |
+| `days`    | 5m    | 1d         | 1w     |
+| `weeks`   | 5m    | 1w         | 30d    |
+| `max`     | 5m    | 30d        | 1y     |
 
 **Note**: Without an explicit `cacheLife()`, the `default` profile is used (15m revalidate). Inner caches with longer lifetimes cannot extend beyond this.
 
@@ -102,14 +107,14 @@ cacheLife("max");     // Maximum (rarely updated)
 ```tsx
 // In next.config.ts
 const nextConfig = {
-  cacheComponents: true,
-  cacheLife: {
-    portfolio: {
-      stale: 3600,       // 1 hour
-      revalidate: 86400, // 1 day
-      expire: 604800,    // 1 week
-    },
-  },
+	cacheComponents: true,
+	cacheLife: {
+		portfolio: {
+			stale: 3600, // 1 hour
+			revalidate: 86400, // 1 day
+			expire: 604800, // 1 week
+		},
+	},
 };
 
 // In your code
@@ -120,9 +125,9 @@ cacheLife("portfolio");
 
 ```tsx
 cacheLife({
-  stale: 3600,      // Seconds until considered stale (client)
-  revalidate: 7200, // Seconds until server revalidates
-  expire: 86400,    // Seconds until cache expires completely
+	stale: 3600, // Seconds until considered stale (client)
+	revalidate: 7200, // Seconds until server revalidates
+	expire: 86400, // Seconds until cache expires completely
 });
 ```
 
@@ -134,11 +139,11 @@ cacheLife({
 import { cacheTag, cacheLife } from "next/cache";
 
 export async function getProducts() {
-  "use cache";
-  cacheLife("days");
-  cacheTag("products"); // Enable targeted revalidation
+	"use cache";
+	cacheLife("days");
+	cacheTag("products"); // Enable targeted revalidation
 
-  return db.query("SELECT * FROM products");
+	return db.query("SELECT * FROM products");
 }
 ```
 
@@ -146,9 +151,9 @@ export async function getProducts() {
 
 ```tsx
 export async function getProductWithCategory(id: string) {
-  "use cache";
-  cacheTag("products", `product-${id}`, "categories");
-  // Can be revalidated by any of these tags
+	"use cache";
+	cacheTag("products", `product-${id}`, "categories");
+	// Can be revalidated by any of these tags
 }
 ```
 
@@ -163,12 +168,13 @@ import { revalidateTag } from "next/cache";
 
 // In API route (webhook)
 export async function POST(request: NextRequest) {
-  revalidateTag("products", "max"); // Stale-while-revalidate
-  return NextResponse.json({ revalidated: true });
+	revalidateTag("products", "max"); // Stale-while-revalidate
+	return NextResponse.json({ revalidated: true });
 }
 ```
 
 **Behavior:**
+
 1. Mark tag as stale
 2. Serve cached content to current request
 3. Refresh cache in background
@@ -184,8 +190,8 @@ Used only in **Server Actions**:
 import { updateTag } from "next/cache";
 
 export async function createProduct(data: FormData) {
-  await db.products.create(data);
-  updateTag("products"); // Immediate - no stale content served
+	await db.products.create(data);
+	updateTag("products"); // Immediate - no stale content served
 }
 ```
 
@@ -197,8 +203,8 @@ export async function createProduct(data: FormData) {
 import { revalidatePath } from "next/cache";
 
 export async function updatePage(slug: string) {
-  await db.pages.update(slug);
-  revalidatePath(`/pages/${slug}`);
+	await db.pages.update(slug);
+	revalidatePath(`/pages/${slug}`);
 }
 ```
 
@@ -210,17 +216,17 @@ If your data functions use `"use cache"`, the content is **prerendered into the 
 "use cache"; // Page is static
 
 export default async function Page() {
-  // These all use "use cache" internally
-  const testimonials = await getTestimonials();
-  const companies = await getCompanies();
+	// These all use "use cache" internally
+	const testimonials = await getTestimonials();
+	const companies = await getCompanies();
 
-  return (
-    <main>
-      {/* No Suspense needed - content is in static shell */}
-      <TestimonialsSection data={testimonials} />
-      <CompanyLogos data={companies} />
-    </main>
-  );
+	return (
+		<main>
+			{/* No Suspense needed - content is in static shell */}
+			<TestimonialsSection data={testimonials} />
+			<CompanyLogos data={companies} />
+		</main>
+	);
 }
 ```
 
@@ -233,22 +239,21 @@ import { Suspense } from "react";
 import { cookies } from "next/headers";
 
 export default function Page() {
-  return (
-    <>
-      <StaticContent /> {/* Cached, in static shell */}
-
-      {/* Dynamic - needs Suspense */}
-      <Suspense fallback={<CartSkeleton />}>
-        <UserCart /> {/* Uses cookies() - runtime only */}
-      </Suspense>
-    </>
-  );
+	return (
+		<>
+			<StaticContent /> {/* Cached, in static shell */}
+			{/* Dynamic - needs Suspense */}
+			<Suspense fallback={<CartSkeleton />}>
+				<UserCart /> {/* Uses cookies() - runtime only */}
+			</Suspense>
+		</>
+	);
 }
 
 async function UserCart() {
-  const session = (await cookies()).get("session");
-  const cart = await fetchCart(session);
-  return <Cart items={cart} />;
+	const session = (await cookies()).get("session");
+	const cart = await fetchCart(session);
+	return <Cart items={cart} />;
 }
 ```
 

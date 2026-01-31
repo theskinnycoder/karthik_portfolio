@@ -2,10 +2,9 @@
 
 import { visionTool } from "@sanity/vision";
 import { defineConfig } from "sanity";
+import { cloudinarySchemaPlugin } from "sanity-plugin-cloudinary";
 import { structureTool } from "sanity/structure";
 import { apiVersion, dataset, projectId } from "./src/sanity/env";
-import { vercelBlobAssetSource } from "./src/sanity/plugins/vercel-blob-asset-source";
-import { vercelBlobFileSource } from "./src/sanity/plugins/vercel-blob-file-source";
 import { schema } from "./src/sanity/schemaTypes";
 import { structure } from "./src/sanity/structure";
 
@@ -17,15 +16,6 @@ export default defineConfig({
 	plugins: [
 		structureTool({ structure }),
 		visionTool({ defaultApiVersion: apiVersion }),
+		cloudinarySchemaPlugin(),
 	],
-	form: {
-		image: {
-			directUploads: false,
-			assetSources: () => [vercelBlobAssetSource],
-		},
-		file: {
-			directUploads: false,
-			assetSources: () => [vercelBlobFileSource],
-		},
-	},
 });

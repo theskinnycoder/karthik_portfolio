@@ -1,9 +1,12 @@
 import { tagResource } from "@/lib/caching";
-import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
+import {
+	type CloudinaryAsset,
+	getCloudinaryService,
+	getMediaUrl,
+} from "@/lib/media";
 import type { PortableTextBlock } from "next-sanity";
 import "server-only";
 import { sanityFetch } from "./fetch";
-import { urlFor } from "./image";
 import {
 	companiesQuery,
 	experiencesQuery,
@@ -23,7 +26,7 @@ import {
 interface SanityCompany {
 	_id: string;
 	name: string;
-	logo?: SanityImageSource;
+	logo?: CloudinaryAsset;
 	website?: string;
 	description?: string;
 }
@@ -33,7 +36,7 @@ interface SanityTestimonial {
 	quote: string;
 	authorName: string;
 	authorRole: string;
-	authorAvatar?: SanityImageSource;
+	authorAvatar?: CloudinaryAsset;
 	company: SanityCompany;
 }
 
@@ -41,13 +44,13 @@ interface SanitySocial {
 	_id: string;
 	label: string;
 	href: string;
-	icon: SanityImageSource;
+	icon: CloudinaryAsset;
 }
 
 interface SanityProject {
 	_id: string;
 	name: string;
-	image: SanityImageSource;
+	image: CloudinaryAsset;
 	alt: string;
 	backgroundColor: string;
 }
@@ -72,10 +75,10 @@ interface SanitySectionHeader {
 	headingPrefix?: string;
 	headingHighlight: string;
 	headingEmoji?: string;
-	icon?: SanityImageSource;
+	icon?: CloudinaryAsset;
 	gradientFrom?: string;
 	gradientTo?: string;
-	videoUrl?: string;
+	video?: CloudinaryAsset;
 	subheading?: string;
 }
 
@@ -88,6 +91,7 @@ interface SanitySectionHeader {
 export interface CompanyDTO {
 	name: string;
 	logo: string;
+	logoPublicId?: string;
 	website?: string;
 	description?: string;
 }
@@ -97,6 +101,7 @@ export interface TestimonialDTO {
 	authorName: string;
 	authorRole: string;
 	authorAvatar: string;
+	authorAvatarPublicId?: string;
 	company: CompanyDTO;
 }
 
@@ -104,11 +109,13 @@ export interface SocialDTO {
 	label: string;
 	href: string;
 	icon: string;
+	iconPublicId?: string;
 }
 
 export interface ProjectDTO {
 	name: string;
 	image: string;
+	imagePublicId?: string;
 	alt: string;
 	backgroundColor: string;
 }
@@ -131,9 +138,11 @@ export interface SectionHeaderDTO {
 	headingHighlight: string;
 	headingEmoji?: string;
 	icon?: string;
+	iconPublicId?: string;
 	gradientFrom?: string;
 	gradientTo?: string;
 	videoUrl?: string;
+	videoPublicId?: string;
 	subheading?: string;
 }
 
@@ -143,15 +152,19 @@ export interface SectionHeaderDTO {
  * ========================
  */
 
+const media = getCloudinaryService();
+
 function toTestimonialDTO(data: SanityTestimonial) {
 	const testimonial: TestimonialDTO = {
 		quote: data.quote,
 		authorName: data.authorName,
 		authorRole: data.authorRole,
-		authorAvatar: data.authorAvatar ? urlFor(data.authorAvatar).url() : "",
+		authorAvatar: getMediaUrl(data.authorAvatar),
+		authorAvatarPublicId: data.authorAvatar?.public_id,
 		company: {
 			name: data.company.name,
-			logo: data.company.logo ? urlFor(data.company.logo).url() : "",
+			logo: getMediaUrl(data.company.logo),
+			logoPublicId: data.company.logo?.public_id,
 		},
 	};
 	return testimonial;
@@ -160,7 +173,8 @@ function toTestimonialDTO(data: SanityTestimonial) {
 function toCompanyDTO(data: SanityCompany) {
 	const company: CompanyDTO = {
 		name: data.name,
-		logo: data.logo ? urlFor(data.logo).url() : "",
+		logo: getMediaUrl(data.logo),
+		logoPublicId: data.logo?.public_id,
 		website: data?.website,
 		description: data?.description,
 	};
@@ -171,14 +185,16 @@ function toSocialDTO(data: SanitySocial): SocialDTO {
 	return {
 		label: data.label,
 		href: data.href,
-		icon: urlFor(data.icon).url(),
+		icon: getMediaUrl(data.icon),
+		iconPublicId: data.icon?.public_id,
 	};
 }
 
 function toProjectDTO(data: SanityProject): ProjectDTO {
 	return {
 		name: data.name,
-		image: urlFor(data.image).url(),
+		image: getMediaUrl(data.image),
+		imagePublicId: data.image?.public_id,
 		alt: data.alt,
 		backgroundColor: data.backgroundColor,
 	};
@@ -190,6 +206,21 @@ function toExperienceDTO(data: SanityExperience): ExperienceDTO {
 		url: data.url,
 		role: data.role,
 		description: data.description,
+	};
+}
+
+function toSectionHeaderDTO(data: SanitySectionHeader): SectionHeaderDTO {
+	return {
+		headingPrefix: data.headingPrefix,
+		headingHighlight: data.headingHighlight,
+		headingEmoji: data.headingEmoji,
+		icon: getMediaUrl(data.icon),
+		iconPublicId: data.icon?.public_id,
+		gradientFrom: data.gradientFrom,
+		gradientTo: data.gradientTo,
+		videoUrl: data.video ? media.getVideoUrl(data.video) : undefined,
+		videoPublicId: data.video?.public_id,
+		subheading: data.subheading,
 	};
 }
 
@@ -268,14 +299,5 @@ export async function getSectionHeader(
 		params: { slug },
 	});
 	if (!header) return null;
-	return {
-		headingPrefix: header.headingPrefix,
-		headingHighlight: header.headingHighlight,
-		headingEmoji: header.headingEmoji,
-		icon: header.icon ? urlFor(header.icon).url() : undefined,
-		gradientFrom: header.gradientFrom,
-		gradientTo: header.gradientTo,
-		videoUrl: header.videoUrl,
-		subheading: header.subheading,
-	};
+	return toSectionHeaderDTO(header);
 }

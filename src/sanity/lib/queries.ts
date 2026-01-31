@@ -74,7 +74,7 @@ export const sectionHeaderQuery = groq`
     icon,
     gradientFrom,
     gradientTo,
-    "videoUrl": video.asset->url,
+    video,
     subheading
   }
 `;

@@ -16,8 +16,7 @@ export const project = defineType({
 		defineField({
 			name: "image",
 			title: "Image",
-			type: "image",
-			options: { hotspot: true },
+			type: "cloudinary.asset",
 			validation: (rule) => rule.required(),
 		}),
 		defineField({
@@ -49,7 +48,6 @@ export const project = defineType({
 	preview: {
 		select: {
 			title: "name",
-			media: "image",
 		},
 	},
 });
