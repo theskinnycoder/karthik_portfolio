@@ -1,9 +1,22 @@
 import { type SchemaPluginOptions, type SchemaTypeDefinition } from "sanity";
 import { company } from "./company";
+import { experience } from "./experience";
+import { project } from "./project";
+import { sectionHeader } from "./sectionHeader";
+import { siteProfile } from "./siteProfile";
+import { social } from "./social";
 import { testimonial } from "./testimonial";
 
 export const schema = {
-	types: [company, testimonial],
+	types: [
+		company,
+		experience,
+		project,
+		sectionHeader,
+		siteProfile,
+		social,
+		testimonial,
+	],
 } satisfies
 	| SchemaPluginOptions
 	| {

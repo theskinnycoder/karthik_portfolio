@@ -7,6 +7,11 @@ import { cacheLife, cacheTag } from "next/cache";
 export const DOCUMENT_TYPE_TO_TAGS = {
 	testimonial: ["testimonials"],
 	company: ["companies"],
+	social: ["socials"],
+	project: ["projects"],
+	experience: ["experiences"],
+	siteProfile: ["siteProfile"],
+	sectionHeader: ["sectionHeaders"],
 } as const;
 
 /**

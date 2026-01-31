@@ -8,6 +8,14 @@ const nextConfig = {
 	typedRoutes: true,
 	cacheComponents: true,
 	reactStrictMode: true,
+	images: {
+		remotePatterns: [
+			{
+				protocol: "https",
+				hostname: "cdn.sanity.io",
+			},
+		],
+	},
 } satisfies NextConfig;
 
 export default nextConfig;

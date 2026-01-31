@@ -1,35 +1,9 @@
+import { getSocials } from "@/sanity/lib/dal";
 import Image from "next/image";
 
-interface SocialLink {
-	label: string;
-	href: string;
-	icon: string;
-}
+export async function SocialLinks() {
+	const socialLinks = await getSocials();
 
-const socialLinks = [
-	{
-		label: "LinkedIn",
-		href: "https://linkedin.com/in/karthikpanchala",
-		icon: "/logos/linkedin-logo.svg",
-	},
-	{
-		label: "Gmail",
-		href: "mailto:karthik@example.com",
-		icon: "/logos/gmail-logo.svg",
-	},
-	{
-		label: "Dribble",
-		href: "https://dribble.com/karthikpanchala",
-		icon: "/logos/dribble-logo.svg",
-	},
-	{
-		label: "Behance",
-		href: "https://behance.net/karthikpanchala",
-		icon: "/logos/behance-logo.svg",
-	},
-] satisfies SocialLink[];
-
-export function SocialLinks() {
 	return (
 		<div className="flex flex-wrap gap-2">
 			{socialLinks.map((link) => (

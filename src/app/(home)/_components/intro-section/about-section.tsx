@@ -1,10 +1,31 @@
+import {
+	PortableText,
+	type PortableTextBlock,
+	type PortableTextComponents,
+} from "next-sanity";
+
+interface AboutSectionProps {
+	bio?: PortableTextBlock[];
+}
+
+const bioComponents: PortableTextComponents = {
+	block: {
+		normal: ({ children }) => <p>{children}</p>,
+	},
+	marks: {
+		strong: ({ children }) => (
+			<span className="font-medium text-foreground">{children}</span>
+		),
+	},
+};
+
 function Highlight({ children }: { children: React.ReactNode }) {
 	return <span className="font-medium text-foreground">{children}</span>;
 }
 
-export function AboutSection() {
+function FallbackBio() {
 	return (
-		<div className="space-y-3 text-base font-light text-muted-foreground">
+		<>
 			<p>
 				Hello, there! My name is <Highlight>Karthik</Highlight>, and I&apos;m a{" "}
 				<Highlight>Product Designer</Highlight> based in Hyderabad. I love
@@ -22,6 +43,21 @@ export function AboutSection() {
 				I&apos;m currently open to new opportunities, so if you think I&apos;d
 				be a great fit, feel free to reach out!
 			</p>
+		</>
+	);
+}
+
+export function AboutSection({ bio }: AboutSectionProps) {
+	return (
+		<div className="space-y-3 text-base font-light text-muted-foreground">
+			{bio ? (
+				<PortableText
+					value={bio}
+					components={bioComponents}
+				/>
+			) : (
+				<FallbackBio />
+			)}
 		</div>
 	);
 }
