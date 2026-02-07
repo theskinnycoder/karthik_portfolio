@@ -1,5 +1,5 @@
+import { MediaImage } from "@/components/media";
 import { getSocials } from "@/sanity/lib/dal";
-import Image from "next/image";
 
 export async function SocialLinks() {
 	const socialLinks = await getSocials();
@@ -14,11 +14,12 @@ export async function SocialLinks() {
 					rel="noopener noreferrer"
 					className="inline-flex items-center gap-1 rounded-full border border-border bg-card px-2 py-1 text-base font-semibold text-foreground transition-colors hover:bg-muted"
 				>
-					<Image
+					<MediaImage
 						src={link.icon}
 						alt={link.label}
 						width={18}
 						height={18}
+						loading="eager"
 					/>
 					<span>{link.label}</span>
 				</a>

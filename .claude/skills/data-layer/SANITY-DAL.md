@@ -13,10 +13,15 @@ src/sanity/
 │   ├── env.ts         # Environment config
 │   ├── fetch.ts       # Fetch wrapper
 │   ├── queries.ts     # GROQ queries
-│   ├── dal.ts         # Data Access Layer
-│   └── image.ts       # Image URL builder
+│   └── dal.ts         # Data Access Layer
 ├── plugins/           # Custom plugins
 └── structure.ts       # Studio desk structure
+
+src/lib/media/
+├── index.ts                  # Re-exports + factory
+├── types.ts                  # CloudinaryAsset type
+├── media-service.ts          # Abstract class
+└── cloudinary.service.ts     # Cloudinary implementation
 ```
 
 ## GROQ Queries
@@ -51,30 +56,6 @@ export const companiesQuery = defineQuery(/* groq */ `
     logo,
     website,
     description
-  }
-`);
-```
-
-### Query Fragments (Reusable)
-
-```typescript
-// src/sanity/lib/fragments.ts
-export const imageFragment = /* groq */ `
-  asset->{
-    _id,
-    url,
-    metadata { lqip, dimensions }
-  },
-  alt
-`;
-
-// Usage
-export const postQuery = defineQuery(/* groq */ `
-  *[_type == "post"][0] {
-    title,
-    mainImage {
-      ${imageFragment}
-    }
   }
 `);
 ```
@@ -159,10 +140,13 @@ export default async function Page() {
 ```typescript
 // src/sanity/lib/dal.ts
 import { tagResource } from "@/lib/caching";
-import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
+import {
+	type CloudinaryAsset,
+	getMediaUrl,
+	getCloudinaryService,
+} from "@/lib/media";
 import "server-only";
 import { sanityFetch } from "./fetch";
-import { urlFor } from "./image";
 import { testimonialsQuery, companiesQuery } from "./queries";
 
 /**
@@ -174,7 +158,7 @@ import { testimonialsQuery, companiesQuery } from "./queries";
 interface SanityCompany {
 	_id: string;
 	name: string;
-	logo?: SanityImageSource;
+	logo?: CloudinaryAsset;
 	website?: string;
 	description?: string;
 }
@@ -184,7 +168,7 @@ interface SanityTestimonial {
 	quote: string;
 	authorName: string;
 	authorRole: string;
-	authorAvatar?: SanityImageSource;
+	authorAvatar?: CloudinaryAsset;
 	company: SanityCompany;
 }
 
@@ -197,6 +181,7 @@ interface SanityTestimonial {
 export interface CompanyDTO {
 	name: string;
 	logo: string;
+	logoPublicId?: string;
 	website?: string;
 	description?: string;
 }
@@ -206,6 +191,7 @@ export interface TestimonialDTO {
 	authorName: string;
 	authorRole: string;
 	authorAvatar: string;
+	authorAvatarPublicId?: string;
 	company: CompanyDTO;
 }
 
@@ -218,7 +204,8 @@ export interface TestimonialDTO {
 function toCompanyDTO(data: SanityCompany): CompanyDTO {
 	return {
 		name: data.name,
-		logo: data.logo ? urlFor(data.logo).url() : "",
+		logo: getMediaUrl(data.logo),
+		logoPublicId: data.logo?.public_id,
 		website: data.website,
 		description: data.description,
 	};
@@ -229,7 +216,8 @@ function toTestimonialDTO(data: SanityTestimonial): TestimonialDTO {
 		quote: data.quote,
 		authorName: data.authorName,
 		authorRole: data.authorRole,
-		authorAvatar: data.authorAvatar ? urlFor(data.authorAvatar).url() : "",
+		authorAvatar: getMediaUrl(data.authorAvatar),
+		authorAvatarPublicId: data.authorAvatar?.public_id,
 		company: toCompanyDTO(data.company),
 	};
 }
@@ -259,21 +247,52 @@ export async function getCompanies(): Promise<CompanyDTO[]> {
 }
 ```
 
-## Image URL Building
+## Media URL Building (Cloudinary)
 
-### urlFor Helper
+### Media Service
+
+Media assets are stored in Cloudinary and managed via `@/lib/media`:
 
 ```typescript
-// src/sanity/lib/image.ts
-import imageUrlBuilder from "@sanity/image-url";
-import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
-import { client } from "./client";
-
-const builder = imageUrlBuilder(client);
-
-export function urlFor(source: SanityImageSource) {
-	return builder.image(source);
+// src/lib/media/types.ts
+export interface CloudinaryAsset {
+	public_id: string;
+	resource_type: "image" | "video" | "raw" | "auto";
+	format?: string;
+	secure_url?: string;
+	width?: number;
+	height?: number;
 }
+
+export interface ImageTransformOptions {
+	width?: number;
+	height?: number;
+	format?: "auto" | "webp" | "png" | "jpg" | "gif";
+	quality?: "auto" | number;
+	crop?: "fill" | "fit" | "scale" | "thumb";
+}
+```
+
+### getMediaUrl Helper
+
+```typescript
+import { getMediaUrl, getCloudinaryService } from "@/lib/media";
+
+// Get image URL (auto-detects image vs video)
+const imageUrl = getMediaUrl(data.logo);
+
+// Get video URL with service
+const media = getCloudinaryService();
+const videoUrl = media.getVideoUrl(data.video);
+
+// With transformations
+const thumbUrl = media.getImageUrl(data.image, {
+	width: 200,
+	height: 200,
+	crop: "fill",
+	format: "auto",
+	quality: "auto",
+});
 ```
 
 ### Usage in Transformers
@@ -282,15 +301,16 @@ export function urlFor(source: SanityImageSource) {
 function toDTO(data: SanityType): DTO {
 	return {
 		// Basic URL
-		imageUrl: data.image ? urlFor(data.image).url() : "",
+		imageUrl: getMediaUrl(data.image),
 
-		// With dimensions
-		imageUrl: data.image ? urlFor(data.image).width(800).height(600).url() : "",
+		// Include publicId for CldImage component
+		imagePublicId: data.image?.public_id,
 
-		// With format and quality
-		imageUrl: data.image
-			? urlFor(data.image).format("webp").quality(80).url()
-			: "",
+		// Video URL
+		videoUrl: data.video
+			? getCloudinaryService().getVideoUrl(data.video)
+			: undefined,
+		videoPublicId: data.video?.public_id,
 	};
 }
 ```
@@ -355,12 +375,30 @@ export const testimonial = defineType({
 			validation: (rule) => rule.required(),
 		}),
 		defineField({
+			name: "authorAvatar",
+			title: "Author Avatar",
+			type: "cloudinary.asset",
+		}),
+		defineField({
 			name: "company",
 			type: "reference",
 			to: [{ type: "company" }],
 		}),
 	],
 });
+```
+
+### Cloudinary Asset Fields
+
+Use `cloudinary.asset` type for all media fields:
+
+```typescript
+defineField({
+	name: "logo",
+	title: "Logo",
+	type: "cloudinary.asset",
+	validation: (rule) => rule.required(),
+}),
 ```
 
 ### Validation Patterns
@@ -435,11 +473,15 @@ In Sanity Dashboard (sanity.io/manage):
 ### Checklist
 
 1. **Create schema** in `src/sanity/schemaTypes/newType.ts`
+   - Use `cloudinary.asset` for media fields
 2. **Export from index** in `schemaTypes/index.ts`
 3. **Add GROQ query** in `queries.ts`
 4. **Add to `DOCUMENT_TYPE_TO_TAGS`** in `src/lib/caching.ts`
 5. **Add types** (Sanity interface + DTO) in `dal.ts`
+   - Use `CloudinaryAsset` for media fields in Sanity interface
+   - Include `publicId` fields in DTO for CldImage component
 6. **Add transformer** function in `dal.ts`
+   - Use `getMediaUrl()` for image/video URLs
 7. **Add cached getter** using `await tagResource("newType")` in `dal.ts`
 8. **Deploy schema**: `bun run sanity:schema:deploy`
 9. **Generate types**: `bun run sanity:typegen`

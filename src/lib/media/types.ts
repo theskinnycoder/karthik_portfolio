@@ -25,7 +25,13 @@ export interface ImageTransformOptions {
 	width?: number;
 	height?: number;
 	format?: "auto" | "webp" | "avif" | "png" | "jpg";
-	quality?: number | "auto";
+	quality?:
+		| number
+		| "auto"
+		| "auto:best"
+		| "auto:good"
+		| "auto:eco"
+		| "auto:low";
 	crop?: "fill" | "fit" | "scale" | "thumb" | "pad";
 	gravity?: "auto" | "face" | "center" | "north" | "south" | "east" | "west";
 }
@@ -37,5 +43,11 @@ export interface VideoTransformOptions {
 	width?: number;
 	height?: number;
 	format?: "auto" | "mp4" | "webm";
-	quality?: number | "auto";
+	quality?:
+		| number
+		| "auto"
+		| "auto:best"
+		| "auto:good"
+		| "auto:eco"
+		| "auto:low";
 }

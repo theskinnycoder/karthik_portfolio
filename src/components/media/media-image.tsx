@@ -1,30 +1,18 @@
-"use client";
-
-import { CldImage, type CldImageProps } from "next-cloudinary";
+import Image, { type ImageProps } from "next/image";
 
 export interface MediaImageProps extends Omit<
-	CldImageProps,
-	"src" | "alt" | "width" | "height"
+	ImageProps,
+	"src" | "unoptimized"
 > {
-	publicId: string;
-	alt: string;
-	width: number;
-	height: number;
+	src: string;
 }
 
-export function MediaImage({
-	publicId,
-	alt,
-	width,
-	height,
-	...props
-}: MediaImageProps) {
+export function MediaImage({ src, alt, ...props }: MediaImageProps) {
 	return (
-		<CldImage
-			src={publicId}
+		<Image
+			src={src}
 			alt={alt}
-			width={width}
-			height={height}
+			unoptimized
 			{...props}
 		/>
 	);

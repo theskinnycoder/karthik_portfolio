@@ -1,14 +1,11 @@
 import { MediaImage } from "@/components/media";
-import Image from "next/image";
 
 interface HeroHeaderProps {
 	headingPrefix?: string;
 	headingHighlight?: string;
 	headingEmoji?: string;
 	icon?: string;
-	iconPublicId?: string;
 	videoUrl?: string;
-	videoPublicId?: string;
 	subheading?: string;
 	gradientFrom?: string;
 	gradientTo?: string;
@@ -19,14 +16,12 @@ export function HeroHeader({
 	headingHighlight = "Overthinking!!",
 	headingEmoji = "👀",
 	icon,
-	iconPublicId,
 	videoUrl,
-	videoPublicId,
 	subheading = "Here are some other designs I tinkered around with",
 	gradientFrom = "#FBBA27",
 	gradientTo = "#FB7481",
 }: HeroHeaderProps) {
-	const hasVideo = videoUrl || videoPublicId;
+	const hasVideo = !!videoUrl;
 
 	return (
 		<div className="flex flex-col items-center gap-12">
@@ -44,21 +39,14 @@ export function HeroHeader({
 						>
 							{headingHighlight}{" "}
 						</span>
-						{iconPublicId ? (
+						{icon ? (
 							<MediaImage
-								publicId={iconPublicId}
-								alt=""
-								width={20}
-								height={20}
-								className="inline"
-							/>
-						) : icon ? (
-							<Image
 								src={icon}
 								alt=""
 								width={20}
 								height={20}
 								className="inline"
+								loading="eager"
 							/>
 						) : headingEmoji ? (
 							<span>{headingEmoji}</span>

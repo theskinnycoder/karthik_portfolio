@@ -11,5 +11,9 @@
 	"prettier.enable": true,
 	"eslint.enable": true,
 	"typescript.tsdk": "./node_modules/typescript/lib",
-	"typescript.enablePromptUseWorkspaceTsdk": true
+	"typescript.enablePromptUseWorkspaceTsdk": true,
+	"editor.letterSpacing": -0.25,
+	// "workbench.fontAliasing": "antialiased",
+	// "editor.fontWeight": "550",
+	"editor.fontLigatures": "'ss01', 'ss02', 'zero'"
 }

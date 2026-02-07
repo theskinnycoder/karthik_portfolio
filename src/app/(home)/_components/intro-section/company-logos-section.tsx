@@ -1,5 +1,5 @@
+import { MediaImage } from "@/components/media";
 import { getCompanies } from "@/sanity/lib/dal";
-import Image from "next/image";
 
 export async function CompanyLogos() {
 	const companies = await getCompanies();
@@ -7,13 +7,15 @@ export async function CompanyLogos() {
 	return (
 		<div className="flex flex-wrap items-center gap-x-16 gap-y-4">
 			{companies.map((company) => (
-				<Image
+				<MediaImage
 					key={company.name}
 					src={company.logo}
 					alt={company.name}
-					width={1920}
-					height={1080}
-					className="h-[26px] w-fit"
+					width={0}
+					height={0}
+					className="h-[26px] w-auto"
+					sizes="100vw"
+					loading="eager"
 				/>
 			))}
 		</div>

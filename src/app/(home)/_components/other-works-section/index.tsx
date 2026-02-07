@@ -15,9 +15,7 @@ export async function OtherWorksSection() {
 				headingHighlight={header?.headingHighlight}
 				headingEmoji={header?.headingEmoji}
 				icon={header?.icon}
-				iconPublicId={header?.iconPublicId}
 				videoUrl={header?.videoUrl}
-				videoPublicId={header?.videoPublicId}
 				subheading={header?.subheading}
 				gradientFrom={header?.gradientFrom}
 				gradientTo={header?.gradientTo}

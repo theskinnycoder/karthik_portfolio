@@ -31,7 +31,7 @@ bunx --bun shadcn@latest add <component_name>  # Install shadcn component
 
 ## Architecture
 
-**Stack:** Next.js 16 (App Router, Cache Components) + React 19 + TypeScript + Tailwind CSS v4 + Sanity CMS
+**Stack:** Next.js 16 (App Router, Cache Components) + React 19 + TypeScript + Tailwind CSS v4 + Sanity CMS + Cloudinary
 
 **Path alias:** `@/*` maps to `./src/*`
 
@@ -40,11 +40,12 @@ bunx --bun shadcn@latest add <component_name>  # Install shadcn component
 - `src/app/` - App Router pages and layouts (route groups use parentheses, e.g., `(home)`)
 - `src/app/(home)/_components/` - Page-specific components organized by section
 - `src/components/ui/` - Reusable shadcn-style UI components
+- `src/components/media/` - Cloudinary media components (MediaImage wraps `next/image`)
 - `src/lib/` - Utilities (`utils.ts` has `cn()` helper, `fonts.ts` has font config, `caching.ts` has cache utilities)
+- `src/lib/media/` - Cloudinary media service abstraction
 - `src/sanity/` - Sanity CMS integration
   - `schemaTypes/` - Document schema definitions
-  - `lib/` - Client, DAL, queries, image helpers
-  - `plugins/` - Custom plugins (Vercel Blob asset source)
+  - `lib/` - Client, DAL, queries
 - `public/` - Static assets (SVG logos, icons)
 
 ### Routes
@@ -54,7 +55,6 @@ bunx --bun shadcn@latest add <component_name>  # Install shadcn component
 | `/`                   | Home page               | Static (cached) |
 | `/studio/[[...tool]]` | Sanity Studio           | Client-side     |
 | `/api/revalidate`     | Sanity webhook endpoint | API Route       |
-| `/api/upload`         | Vercel Blob upload      | API Route       |
 
 ## Sanity CMS
 
@@ -71,9 +71,7 @@ src/sanity/
 │   ├── env.ts         # Environment config
 │   ├── fetch.ts       # Fetch wrapper
 │   ├── queries.ts     # GROQ queries
-│   ├── dal.ts         # Data Access Layer
-│   └── image.ts       # Image URL builder
-├── plugins/           # Custom plugins (Vercel Blob asset source)
+│   └── dal.ts         # Data Access Layer
 └── structure.ts       # Studio desk structure
 ```
 
@@ -84,7 +82,7 @@ All Sanity data flows through the DAL (`src/sanity/lib/dal.ts`):
 1. **Define GROQ query** in `queries.ts`
 2. **Create raw Sanity type** matching query response
 3. **Create DTO interface** matching component props
-4. **Write transformer** (Sanity → DTO, including image URLs via `urlFor()`)
+4. **Write transformer** (Sanity → DTO, including media URLs via `getMediaUrl()`)
 5. **Export async function** using `tagResource()` for caching
 
 ```tsx
@@ -101,7 +99,7 @@ export interface MyTypeDTO {
 
 function toMyTypeDTO(data: SanityMyType): MyTypeDTO {
 	return {
-		// Transform fields, convert images: urlFor(data.image).url()
+		// Transform fields, convert media: getMediaUrl(data.image)
 	};
 }
 
@@ -123,6 +121,57 @@ export async function getMyTypes(): Promise<MyTypeDTO[]> {
 4. Add document type to `DOCUMENT_TYPE_TO_TAGS` in `src/lib/caching.ts`
 5. Add Sanity type, DTO, transformer, and getter to `dal.ts`
 6. Deploy schema: `bun run sanity:schema:deploy`
+
+## Media (Cloudinary)
+
+All media assets are stored in Cloudinary using `sanity-plugin-cloudinary`.
+
+### Schema Usage
+
+Use `type: "cloudinary.asset"` for media fields:
+
+```tsx
+defineField({
+	name: "image",
+	title: "Image",
+	type: "cloudinary.asset",
+	validation: (rule) => rule.required(),
+}),
+```
+
+### Media Service
+
+The media service (`src/lib/media/`) provides URL generation with transformations:
+
+```tsx
+import { getMediaUrl, getCloudinaryService } from "@/lib/media";
+
+// Simple URL
+const url = getMediaUrl(asset);
+
+// With transformations
+const service = getCloudinaryService();
+const optimizedUrl = service.getImageUrl(asset, {
+	width: 800,
+	format: "auto",
+	quality: "auto",
+});
+```
+
+### Media Components
+
+`MediaImage` wraps `next/image` with `unoptimized` (Cloudinary already serves optimized WebP). Pass a full Cloudinary URL via `src`:
+
+```tsx
+import { MediaImage } from "@/components/media";
+
+<MediaImage
+	src={data.image}
+	alt="..."
+	width={400}
+	height={300}
+/>;
+```
 
 ## Caching
 
@@ -253,15 +302,14 @@ function Highlight({ children }: { children: React.ReactNode }) {
 }
 ```
 
-**Images and icons** - Use `next/image` for all images including SVG icons from `/public`:
+**Images and icons** - Use `next/image` for static assets, `MediaImage` for Cloudinary assets:
 
 ```tsx
-<Image
-	src="/linkedin-logo.svg"
-	alt="LinkedIn"
-	width={18}
-	height={18}
-/>
+// Static asset from /public
+<Image src="/linkedin-logo.svg" alt="LinkedIn" width={18} height={18} />
+
+// Cloudinary asset (full URL from DAL)
+<MediaImage src={data.logo} alt="Logo" width={100} height={28} />
 ```
 
 ## Styling

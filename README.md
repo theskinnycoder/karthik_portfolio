@@ -8,14 +8,14 @@ Personal portfolio website built with modern web technologies.
 - **UI:** React 19, Tailwind CSS v4, shadcn/ui
 - **Language:** TypeScript 5.9
 - **CMS:** Sanity v4 (embedded studio)
-- **Storage:** Vercel Blob (for media assets)
+- **Media:** Cloudinary (via sanity-plugin-cloudinary + next-cloudinary)
 - **Package Manager:** Bun
 
 ## Prerequisites
 
 - Node.js 18+
 - Bun 1.3+
-- Vercel account (for Blob storage)
+- Cloudinary account
 - Sanity account
 
 ## Getting Started
@@ -28,11 +28,22 @@ bun install
 
 ### 2. Environment Setup
 
-Copy `.env.example` to `.env` and fill in values, or pull from Vercel:
+Copy `.env.example` to `.env` and fill in values:
 
 ```bash
-bun run vercel:env:pull
+cp .env.example .env
 ```
+
+Required variables:
+
+| Variable                            | Description           |
+| ----------------------------------- | --------------------- |
+| `NEXT_PUBLIC_SANITY_PROJECT_ID`     | Sanity project ID     |
+| `NEXT_PUBLIC_SANITY_DATASET`        | Sanity dataset name   |
+| `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` | Cloudinary cloud name |
+| `SANITY_API_READ_TOKEN`             | Sanity read token     |
+| `CLOUDINARY_API_KEY`                | Cloudinary API key    |
+| `CLOUDINARY_API_SECRET`             | Cloudinary API secret |
 
 ### 3. Development
 
@@ -40,16 +51,6 @@ bun run vercel:env:pull
 bun dev          # Start dev server at localhost:3000
 bun run studio   # Access Sanity Studio at /studio
 ```
-
-## Environment Variables
-
-| Variable                        | Description               |
-| ------------------------------- | ------------------------- |
-| `NEXT_PUBLIC_SANITY_PROJECT_ID` | Sanity project ID         |
-| `NEXT_PUBLIC_SANITY_DATASET`    | Sanity dataset name       |
-| `SANITY_API_READ_TOKEN`         | Sanity read token         |
-| `SANITY_API_WRITE_TOKEN`        | Sanity write token        |
-| `BLOB_READ_WRITE_TOKEN`         | Vercel Blob storage token |
 
 ## Scripts
 
@@ -80,23 +81,33 @@ bun run studio   # Access Sanity Studio at /studio
 | `bun run sanity:manage`        | Open Sanity management console |
 | `bun run sanity:typegen`       | Generate TypeScript types      |
 
-### Vercel
-
-| Command                   | Description               |
-| ------------------------- | ------------------------- |
-| `bun run vercel:deploy`   | Deploy to Vercel          |
-| `bun run vercel:env:pull` | Pull env vars from Vercel |
-| `bun run vercel:env:push` | Push env vars to Vercel   |
-| `bun run vercel:link`     | Link to Vercel project    |
-| `bun run blob:list`       | List Vercel Blob files    |
-| `bun run blob:del`        | Delete Vercel Blob files  |
-
 ### Production
 
 | Command         | Description           |
 | --------------- | --------------------- |
 | `bun run build` | Build for production  |
 | `bun start`     | Run production server |
+
+## Media Assets (Cloudinary)
+
+Media assets are managed through Cloudinary:
+
+- **Sanity Studio**: Uses `sanity-plugin-cloudinary` for the Media Library picker
+- **Frontend**: Uses `next-cloudinary` for optimized image/video rendering (`CldImage`, `CldVideoPlayer`)
+- **DAL**: Uses `CloudinaryMediaService` from `@/lib/media` for URL building
+
+### Media Service Pattern
+
+```typescript
+import { getMediaUrl, getCloudinaryService } from "@/lib/media";
+
+// Get image URL
+const imageUrl = getMediaUrl(cloudinaryAsset);
+
+// Get video URL with service
+const media = getCloudinaryService();
+const videoUrl = media.getVideoUrl(cloudinaryAsset);
+```
 
 ## MCP Setup (Claude Code)
 

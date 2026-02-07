@@ -1,6 +1,6 @@
+import { MediaImage } from "@/components/media";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import type { TestimonialDTO } from "@/sanity/lib/dal";
-import Image from "next/image";
 
 export function TestimonialCard({
 	quote,
@@ -36,12 +36,14 @@ export function TestimonialCard({
 						<span className="text-xs font-light text-muted-foreground">
 							{authorRole} at
 						</span>
-						<Image
+						<MediaImage
 							src={company.logo}
 							alt={company.name}
-							width={1920}
-							height={1080}
-							className="h-3.5 w-fit"
+							width={0}
+							height={0}
+							className="h-3.5 w-auto"
+							sizes="100vw"
+							loading="eager"
 						/>
 					</div>
 				</div>

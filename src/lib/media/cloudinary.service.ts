@@ -1,5 +1,4 @@
 import { clientEnv } from "@/env/client";
-import { MediaService } from "./media-service";
 import type {
 	CloudinaryAsset,
 	ImageTransformOptions,
@@ -7,15 +6,13 @@ import type {
 } from "./types";
 
 /**
- * Cloudinary media service implementation.
+ * Cloudinary media service.
  * Handles URL generation with transformations for Cloudinary-hosted assets.
  */
-export class CloudinaryMediaService extends MediaService {
-	readonly provider = "cloudinary" as const;
+export class CloudinaryMediaService {
 	private readonly cloudName: string;
 
 	constructor() {
-		super();
 		this.cloudName = clientEnv.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
 	}
 
@@ -59,7 +56,7 @@ export class CloudinaryMediaService extends MediaService {
 	}
 
 	private buildImageTransforms(options?: ImageTransformOptions): string {
-		if (!options) return "f_auto,q_auto";
+		if (!options) return "f_auto,q_auto:best";
 
 		const transforms: string[] = [];
 
@@ -74,7 +71,7 @@ export class CloudinaryMediaService extends MediaService {
 		if (options.quality !== undefined) {
 			transforms.push(`q_${options.quality}`);
 		} else {
-			transforms.push("q_auto");
+			transforms.push("q_auto:best");
 		}
 
 		// Dimensions
@@ -99,7 +96,7 @@ export class CloudinaryMediaService extends MediaService {
 	}
 
 	private buildVideoTransforms(options?: VideoTransformOptions): string {
-		if (!options) return "f_auto,q_auto";
+		if (!options) return "f_auto,q_auto:best";
 
 		const transforms: string[] = [];
 
@@ -110,11 +107,11 @@ export class CloudinaryMediaService extends MediaService {
 			transforms.push("f_auto");
 		}
 
-		// Quality
+		// Quality - use q_auto:best for higher quality video
 		if (options.quality !== undefined) {
 			transforms.push(`q_${options.quality}`);
 		} else {
-			transforms.push("q_auto");
+			transforms.push("q_auto:best");
 		}
 
 		// Dimensions

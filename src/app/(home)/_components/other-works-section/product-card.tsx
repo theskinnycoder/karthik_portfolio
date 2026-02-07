@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { MediaImage } from "@/components/media";
 
 export interface ProductCardProps {
 	image: string;
@@ -12,7 +12,6 @@ export interface ProductCardProps {
 export function ProductCard({
 	image,
 	alt,
-	name,
 	backgroundColor,
 	width = 296,
 	height = 458,
@@ -22,7 +21,7 @@ export function ProductCard({
 			className="shrink-0 overflow-hidden rounded-[14px]"
 			style={{ backgroundColor, width, height }}
 		>
-			<Image
+			<MediaImage
 				src={image}
 				alt={alt}
 				width={width}

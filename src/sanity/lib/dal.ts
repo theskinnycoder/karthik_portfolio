@@ -1,9 +1,6 @@
 import { tagResource } from "@/lib/caching";
-import {
-	type CloudinaryAsset,
-	getCloudinaryService,
-	getMediaUrl,
-} from "@/lib/media";
+import { getMediaUrl } from "@/lib/media";
+import type { CloudinaryAsset } from "@/lib/media";
 import type { PortableTextBlock } from "next-sanity";
 import "server-only";
 import { sanityFetch } from "./fetch";
@@ -26,7 +23,7 @@ import {
 interface SanityCompany {
 	_id: string;
 	name: string;
-	logo?: CloudinaryAsset;
+	logo: CloudinaryAsset;
 	website?: string;
 	description?: string;
 }
@@ -75,7 +72,7 @@ interface SanitySectionHeader {
 	headingPrefix?: string;
 	headingHighlight: string;
 	headingEmoji?: string;
-	icon?: CloudinaryAsset;
+	icon: CloudinaryAsset;
 	gradientFrom?: string;
 	gradientTo?: string;
 	video?: CloudinaryAsset;
@@ -91,7 +88,6 @@ interface SanitySectionHeader {
 export interface CompanyDTO {
 	name: string;
 	logo: string;
-	logoPublicId?: string;
 	website?: string;
 	description?: string;
 }
@@ -101,7 +97,6 @@ export interface TestimonialDTO {
 	authorName: string;
 	authorRole: string;
 	authorAvatar: string;
-	authorAvatarPublicId?: string;
 	company: CompanyDTO;
 }
 
@@ -109,13 +104,11 @@ export interface SocialDTO {
 	label: string;
 	href: string;
 	icon: string;
-	iconPublicId?: string;
 }
 
 export interface ProjectDTO {
 	name: string;
 	image: string;
-	imagePublicId?: string;
 	alt: string;
 	backgroundColor: string;
 }
@@ -138,11 +131,9 @@ export interface SectionHeaderDTO {
 	headingHighlight: string;
 	headingEmoji?: string;
 	icon?: string;
-	iconPublicId?: string;
 	gradientFrom?: string;
 	gradientTo?: string;
 	videoUrl?: string;
-	videoPublicId?: string;
 	subheading?: string;
 }
 
@@ -152,19 +143,15 @@ export interface SectionHeaderDTO {
  * ========================
  */
 
-const media = getCloudinaryService();
-
 function toTestimonialDTO(data: SanityTestimonial) {
 	const testimonial: TestimonialDTO = {
 		quote: data.quote,
 		authorName: data.authorName,
 		authorRole: data.authorRole,
 		authorAvatar: getMediaUrl(data.authorAvatar),
-		authorAvatarPublicId: data.authorAvatar?.public_id,
 		company: {
 			name: data.company.name,
 			logo: getMediaUrl(data.company.logo),
-			logoPublicId: data.company.logo?.public_id,
 		},
 	};
 	return testimonial;
@@ -174,7 +161,6 @@ function toCompanyDTO(data: SanityCompany) {
 	const company: CompanyDTO = {
 		name: data.name,
 		logo: getMediaUrl(data.logo),
-		logoPublicId: data.logo?.public_id,
 		website: data?.website,
 		description: data?.description,
 	};
@@ -186,7 +172,6 @@ function toSocialDTO(data: SanitySocial): SocialDTO {
 		label: data.label,
 		href: data.href,
 		icon: getMediaUrl(data.icon),
-		iconPublicId: data.icon?.public_id,
 	};
 }
 
@@ -194,7 +179,6 @@ function toProjectDTO(data: SanityProject): ProjectDTO {
 	return {
 		name: data.name,
 		image: getMediaUrl(data.image),
-		imagePublicId: data.image?.public_id,
 		alt: data.alt,
 		backgroundColor: data.backgroundColor,
 	};
@@ -215,11 +199,9 @@ function toSectionHeaderDTO(data: SanitySectionHeader): SectionHeaderDTO {
 		headingHighlight: data.headingHighlight,
 		headingEmoji: data.headingEmoji,
 		icon: getMediaUrl(data.icon),
-		iconPublicId: data.icon?.public_id,
 		gradientFrom: data.gradientFrom,
 		gradientTo: data.gradientTo,
-		videoUrl: data.video ? media.getVideoUrl(data.video) : undefined,
-		videoPublicId: data.video?.public_id,
+		videoUrl: getMediaUrl(data.video),
 		subheading: data.subheading,
 	};
 }

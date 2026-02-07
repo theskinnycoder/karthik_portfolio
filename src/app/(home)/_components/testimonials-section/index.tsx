@@ -1,5 +1,5 @@
+import { MediaImage } from "@/components/media";
 import { getSectionHeader, getTestimonials } from "@/sanity/lib/dal";
-import Image from "next/image";
 import { TestimonialCard } from "./testimonial-card";
 
 export async function TestimonialsSection() {
@@ -29,20 +29,13 @@ export async function TestimonialsSection() {
 					>
 						{headingHighlight}
 					</span>
-					{icon ? (
-						<Image
+					{icon && (
+						<MediaImage
 							src={icon}
 							alt=""
 							width={20}
 							height={20}
-							className="inline"
-						/>
-					) : (
-						<Image
-							src="/icons/heart-icon.svg"
-							alt="heart icon"
-							width={20}
-							height={20}
+							loading="eager"
 							className="inline"
 						/>
 					)}

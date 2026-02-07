@@ -1,10 +1,5 @@
 export { CloudinaryMediaService } from "./cloudinary.service";
-export { MediaService } from "./media-service";
-export type {
-	CloudinaryAsset,
-	ImageTransformOptions,
-	VideoTransformOptions,
-} from "./types";
+export type { CloudinaryAsset } from "./types";
 
 import { CloudinaryMediaService } from "./cloudinary.service";
 import type { CloudinaryAsset } from "./types";
