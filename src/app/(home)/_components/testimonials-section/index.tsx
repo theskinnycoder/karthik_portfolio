@@ -1,6 +1,6 @@
 import { MediaImage } from "@/components/media";
 import { getSectionHeader, getTestimonials } from "@/sanity/lib/dal";
-import { TestimonialCard } from "./testimonial-card";
+import { TestimonialsCarousel } from "./testimonials-carousel";
 
 export async function TestimonialsSection() {
 	const [testimonials, header] = await Promise.all([
@@ -42,18 +42,7 @@ export async function TestimonialsSection() {
 				</div>
 			</h2>
 
-			<div className="flex w-full flex-col gap-[18px]">
-				{testimonials.map((testimonial) => (
-					<TestimonialCard
-						key={testimonial.authorName}
-						authorAvatar={testimonial.authorAvatar}
-						authorName={testimonial.authorName}
-						authorRole={testimonial.authorRole}
-						company={testimonial.company}
-						quote={testimonial.quote}
-					/>
-				))}
-			</div>
+			<TestimonialsCarousel testimonials={testimonials} />
 		</section>
 	);
 }
