@@ -1,14 +1,10 @@
-import type { Metadata } from "next";
 import type { PropsWithChildren } from "react";
-import "./globals.css";
+import { Navbar } from "@/components/navbar";
 import { caveatFont, interFont } from "@/lib/fonts";
 
-export const metadata: Metadata = {
-	title: "Karthik Portfolio",
-	description: "Karthik's Portfolio",
-};
+type SiteLayoutProps = PropsWithChildren;
 
-export default function RootLayout({ children }: PropsWithChildren) {
+export default function SiteLayout({ children }: SiteLayoutProps) {
 	return (
 		<html
 			lang="en"
@@ -19,6 +15,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
 				className={`${interFont.variable} ${caveatFont.variable} dark min-h-dvh overflow-x-hidden overscroll-y-contain antialiased`}
 			>
 				{children}
+				<Navbar />
 			</body>
 		</html>
 	);
