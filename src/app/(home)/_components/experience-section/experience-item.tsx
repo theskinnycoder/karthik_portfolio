@@ -1,3 +1,4 @@
+import { ArrowUpRight } from "lucide-react";
 import {
 	Item,
 	ItemActions,
@@ -5,7 +6,6 @@ import {
 	ItemDescription,
 	ItemTitle,
 } from "@/components/ui/item";
-import { ArrowUpRight } from "lucide-react";
 
 export interface ExperienceItemProps {
 	company: string;

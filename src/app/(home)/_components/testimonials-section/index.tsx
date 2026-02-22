@@ -1,3 +1,4 @@
+import GradientText from "@/components/GradientText";
 import { MediaImage } from "@/components/media";
 import { getSectionHeader, getTestimonials } from "@/sanity/lib/dal";
 import { TestimonialsCarousel } from "./testimonials-carousel";
@@ -21,14 +22,13 @@ export async function TestimonialsSection() {
 					<span className="text-muted-foreground">{headingPrefix} </span>
 				)}
 				<div className="inline-flex items-baseline space-x-2 md:inline">
-					<span
-						className="bg-clip-text text-transparent"
-						style={{
-							backgroundImage: `linear-gradient(to right, ${gradientFrom}, ${gradientTo})`,
-						}}
+					<GradientText
+						colors={[gradientFrom, gradientTo]}
+						direction="horizontal"
+						className="mx-0 mr-2 inline-flex! font-serif text-4xl"
 					>
 						{headingHighlight}
-					</span>
+					</GradientText>
 					{icon && (
 						<MediaImage
 							src={icon}

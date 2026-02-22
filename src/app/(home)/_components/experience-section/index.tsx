@@ -1,4 +1,6 @@
-import { ItemGroup, ItemSeparator } from "@/components/ui/item";
+import { MenuListItem } from "@/components/MenuList";
+import SplitText from "@/components/SplitText";
+import { ItemGroup } from "@/components/ui/item";
 import { getExperiences, getSectionHeader } from "@/sanity/lib/dal";
 import { ExperienceItem } from "./experience-item";
 
@@ -12,15 +14,19 @@ export async function ExperienceSection() {
 
 	return (
 		<section className="flex flex-col gap-6">
-			<h2 className="text-center text-3xl font-semibold text-foreground">
-				{headingHighlight}
-			</h2>
+			<SplitText
+				text={headingHighlight}
+				tag="h2"
+				className="text-center text-3xl font-semibold text-foreground"
+				splitType="chars"
+			/>
 
 			<ItemGroup>
 				{experiences.map((exp, i) => (
 					<div key={exp.company}>
-						<ExperienceItem {...exp} />
-						{i < experiences.length - 1 && <ItemSeparator />}
+						<MenuListItem>
+							<ExperienceItem {...exp} />
+						</MenuListItem>
 					</div>
 				))}
 			</ItemGroup>

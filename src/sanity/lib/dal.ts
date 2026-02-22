@@ -1,7 +1,7 @@
-import { tagResource } from "@/lib/caching";
-import { getMediaUrl } from "@/lib/media";
-import type { CloudinaryAsset } from "@/lib/media";
 import type { PortableTextBlock } from "next-sanity";
+import { tagResource } from "@/lib/caching";
+import type { CloudinaryAsset } from "@/lib/media";
+import { getMediaUrl } from "@/lib/media";
 import "server-only";
 import { sanityFetch } from "./fetch";
 import {

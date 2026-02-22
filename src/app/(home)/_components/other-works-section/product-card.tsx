@@ -5,27 +5,19 @@ export interface ProductCardProps {
 	alt: string;
 	name: string;
 	backgroundColor: string;
-	width?: number;
-	height?: number;
 }
 
-export function ProductCard({
-	image,
-	alt,
-	backgroundColor,
-	width = 296,
-	height = 458,
-}: ProductCardProps) {
+export function ProductCard({ image, alt, backgroundColor }: ProductCardProps) {
 	return (
 		<div
-			className="shrink-0 overflow-hidden rounded-[14px]"
-			style={{ backgroundColor, width, height }}
+			className="h-full overflow-hidden rounded-[14px]"
+			style={{ backgroundColor }}
 		>
 			<MediaImage
 				src={image}
 				alt={alt}
-				width={width}
-				height={height}
+				width={296}
+				height={458}
 				className="size-full object-cover"
 			/>
 		</div>

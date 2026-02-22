@@ -1,3 +1,4 @@
+import GradientText from "@/components/GradientText";
 import { MediaImage } from "@/components/media";
 
 interface HeroHeaderProps {
@@ -31,14 +32,13 @@ export function HeroHeader({
 						<span className="text-muted-foreground">{headingPrefix} </span>
 					)}
 					<div className="inline-flex items-baseline space-x-2 md:inline">
-						<span
-							className="bg-clip-text text-transparent"
-							style={{
-								backgroundImage: `linear-gradient(to right, ${gradientFrom}, ${gradientTo})`,
-							}}
+						<GradientText
+							colors={[gradientFrom, gradientTo]}
+							direction="horizontal"
+							className="mx-0 inline-flex! rounded-none font-serif text-4xl"
 						>
-							{headingHighlight}{" "}
-						</span>
+							{headingHighlight}
+						</GradientText>
 						{icon ? (
 							<MediaImage
 								src={icon}
@@ -49,7 +49,7 @@ export function HeroHeader({
 								loading="eager"
 							/>
 						) : headingEmoji ? (
-							<span>{headingEmoji}</span>
+							<span> {headingEmoji}</span>
 						) : null}
 					</div>
 				</h2>

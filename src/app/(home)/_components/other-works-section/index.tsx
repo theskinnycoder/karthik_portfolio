@@ -9,7 +9,7 @@ export async function OtherWorksSection() {
 	]);
 
 	return (
-		<section className="flex flex-col items-center gap-9">
+		<section className="flex flex-col items-center gap-7">
 			<HeroHeader
 				headingPrefix={header?.headingPrefix}
 				headingHighlight={header?.headingHighlight}

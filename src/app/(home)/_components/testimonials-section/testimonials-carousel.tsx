@@ -29,6 +29,12 @@ export function TestimonialsCarousel({
 		}),
 	);
 
+	const duplicatedTestimonials = [
+		...testimonials,
+		...testimonials,
+		...testimonials,
+	];
+
 	return (
 		<div className="w-full self-center md:w-screen md:[mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
 			<Carousel
@@ -43,9 +49,9 @@ export function TestimonialsCarousel({
 				className="w-full"
 			>
 				<CarouselContent className="items-stretch">
-					{testimonials.map((testimonial) => (
+					{duplicatedTestimonials.map((testimonial, index) => (
 						<CarouselItem
-							key={testimonial.authorName}
+							key={`${testimonial.authorName}-${index}`}
 							className="basis-[85%] md:basis-1/2 lg:basis-1/3"
 						>
 							<TestimonialCard
