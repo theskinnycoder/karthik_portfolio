@@ -22,7 +22,7 @@ export async function ExperienceSection() {
 			/>
 
 			<ItemGroup>
-				{experiences.map((exp, i) => (
+				{experiences.map((exp) => (
 					<div key={exp.company}>
 						<MenuListItem>
 							<ExperienceItem {...exp} />

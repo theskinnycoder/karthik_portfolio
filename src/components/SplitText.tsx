@@ -60,7 +60,8 @@ const SplitText: FC<SplitTextProps> = ({
 
 	useEffect(() => {
 		if (document.fonts.status === "loaded") {
-			setFontsLoaded(true);
+			// Fonts already loaded, update state via microtask to avoid synchronous setState in effect
+			queueMicrotask(() => setFontsLoaded(true));
 		} else {
 			document.fonts.ready.then(() => {
 				setFontsLoaded(true);
@@ -80,7 +81,7 @@ const SplitText: FC<SplitTextProps> = ({
 			if (el._rbsplitInstance) {
 				try {
 					el._rbsplitInstance.revert();
-				} catch (_) {}
+				} catch {}
 				el._rbsplitInstance = undefined;
 			}
 
@@ -151,7 +152,7 @@ const SplitText: FC<SplitTextProps> = ({
 				});
 				try {
 					splitInstance.revert();
-				} catch (_) {}
+				} catch {}
 				el._rbsplitInstance = undefined;
 			};
 		},

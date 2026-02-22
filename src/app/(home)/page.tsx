@@ -10,7 +10,7 @@ export default async function Page() {
 	cachePageLife();
 
 	return (
-		<main className="mx-auto flex w-full max-w-2xl flex-col gap-16 px-6 py-16">
+		<main className="mx-auto flex w-full max-w-2xl flex-col gap-16 px-6 pt-16 pb-24">
 			<IntroSection />
 			<ExperienceSection />
 			<OtherWorksSection />

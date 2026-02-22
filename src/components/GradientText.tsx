@@ -1,18 +1,18 @@
 "use client";
 
 import {
+	motion,
+	useAnimationFrame,
+	useMotionValue,
+	useTransform,
+} from "motion/react";
+import {
 	type ReactNode,
-	useState,
 	useCallback,
 	useEffect,
 	useRef,
+	useState,
 } from "react";
-import {
-	motion,
-	useMotionValue,
-	useAnimationFrame,
-	useTransform,
-} from "motion/react";
 
 interface GradientTextProps {
 	children: ReactNode;
@@ -77,7 +77,7 @@ export default function GradientText({
 	useEffect(() => {
 		elapsedRef.current = 0;
 		progress.set(0);
-	}, [animationSpeed, yoyo]);
+	}, [progress]);
 
 	const backgroundPosition = useTransform(progress, (p) => {
 		if (direction === "horizontal") {
@@ -120,17 +120,17 @@ export default function GradientText({
 
 	return (
 		<motion.div
-			className={`relative mx-auto flex max-w-fit cursor-pointer flex-row items-center justify-center overflow-hidden rounded-[1.25rem] font-medium backdrop-blur transition-shadow duration-500 ${showBorder ? "px-2 py-1" : ""} ${className}`}
+			className={`relative mx-auto flex max-w-fit flex-row items-center justify-center overflow-hidden rounded-4xl font-medium backdrop-blur transition-shadow duration-500 ${showBorder ? "px-2 py-1" : ""} ${className}`}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
 		>
 			{showBorder && (
 				<motion.div
-					className="pointer-events-none absolute inset-0 z-0 rounded-[1.25rem]"
+					className="pointer-events-none absolute inset-0 z-0 rounded-4xl"
 					style={{ ...gradientStyle, backgroundPosition }}
 				>
 					<div
-						className="absolute z-[-1] rounded-[1.25rem] bg-black"
+						className="absolute z-[-1] rounded-4xl bg-black"
 						style={{
 							width: "calc(100% - 2px)",
 							height: "calc(100% - 2px)",
