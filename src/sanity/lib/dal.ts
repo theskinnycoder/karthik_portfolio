@@ -12,6 +12,7 @@ import {
 	siteProfileQuery,
 	socialsQuery,
 	testimonialsQuery,
+	workPageQuery,
 } from "./queries";
 
 /**
@@ -65,6 +66,27 @@ interface SanitySiteProfile {
 	name: string;
 	title: string;
 	bio: PortableTextBlock[];
+}
+
+interface SanityWorkItem {
+	_id: string;
+	title: string;
+	icon?: CloudinaryAsset;
+	tag: string;
+	image: CloudinaryAsset;
+	description: string;
+	slug: string;
+}
+
+interface SanityWorkPageCompany {
+	_id: string;
+	name: string;
+	logo: CloudinaryAsset;
+	website?: string;
+	isCurrent?: boolean;
+	workTagline?: string;
+	workDescription?: PortableTextBlock[];
+	workItems: SanityWorkItem[];
 }
 
 interface SanitySectionHeader {
@@ -124,6 +146,25 @@ export interface SiteProfileDTO {
 	name: string;
 	title: string;
 	bio: PortableTextBlock[];
+}
+
+export interface WorkItemDTO {
+	title: string;
+	icon?: string;
+	tag: string;
+	image: string;
+	description: string;
+	slug: string;
+}
+
+export interface WorkPageCompanyDTO {
+	name: string;
+	logo: string;
+	website?: string;
+	isCurrent: boolean;
+	workTagline?: string;
+	workDescription?: PortableTextBlock[];
+	workItems: WorkItemDTO[];
 }
 
 export interface SectionHeaderDTO {
@@ -190,6 +231,29 @@ function toExperienceDTO(data: SanityExperience): ExperienceDTO {
 		url: data.url,
 		role: data.role,
 		description: data.description,
+	};
+}
+
+function toWorkItemDTO(data: SanityWorkItem): WorkItemDTO {
+	return {
+		title: data.title,
+		icon: data.icon ? getMediaUrl(data.icon) : undefined,
+		tag: data.tag,
+		image: getMediaUrl(data.image),
+		description: data.description,
+		slug: data.slug,
+	};
+}
+
+function toWorkPageCompanyDTO(data: SanityWorkPageCompany): WorkPageCompanyDTO {
+	return {
+		name: data.name,
+		logo: getMediaUrl(data.logo),
+		website: data.website,
+		isCurrent: data.isCurrent ?? false,
+		workTagline: data.workTagline,
+		workDescription: data.workDescription,
+		workItems: data.workItems.map(toWorkItemDTO),
 	};
 }
 
@@ -282,4 +346,14 @@ export async function getSectionHeader(
 	});
 	if (!header) return null;
 	return toSectionHeaderDTO(header);
+}
+
+export async function getWorkPageCompanies(): Promise<WorkPageCompanyDTO[]> {
+	await tagResource("workItem");
+	await tagResource("company");
+
+	const companies = await sanityFetch<SanityWorkPageCompany[]>({
+		query: workPageQuery,
+	});
+	return companies.map(toWorkPageCompanyDTO);
 }

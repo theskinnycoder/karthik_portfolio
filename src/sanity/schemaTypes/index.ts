@@ -6,6 +6,7 @@ import { sectionHeader } from "./sectionHeader";
 import { siteProfile } from "./siteProfile";
 import { social } from "./social";
 import { testimonial } from "./testimonial";
+import { workItem } from "./workItem";
 
 export const schema = {
 	types: [
@@ -16,6 +17,7 @@ export const schema = {
 		siteProfile,
 		social,
 		testimonial,
+		workItem,
 	],
 } satisfies
 	| SchemaPluginOptions

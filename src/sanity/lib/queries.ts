@@ -64,6 +64,27 @@ export const siteProfileQuery = groq`
   }
 `;
 
+export const workPageQuery = groq`
+  *[_type == "company" && count(*[_type == "workItem" && references(^._id)]) > 0] | order(order asc) {
+    _id,
+    name,
+    logo,
+    website,
+    isCurrent,
+    workTagline,
+    workDescription,
+    "workItems": *[_type == "workItem" && references(^._id)] | order(order asc) {
+      _id,
+      title,
+      icon,
+      tag,
+      image,
+      description,
+      "slug": slug.current
+    }
+  }
+`;
+
 // Collection - query by slug
 export const sectionHeaderQuery = groq`
   *[_type == "sectionHeader" && slug.current == $slug][0] {

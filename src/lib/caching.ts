@@ -12,6 +12,7 @@ export const DOCUMENT_TYPE_TO_TAGS = {
 	experience: ["experiences"],
 	siteProfile: ["siteProfile"],
 	sectionHeader: ["sectionHeaders"],
+	workItem: ["workItems"],
 } as const;
 
 /**

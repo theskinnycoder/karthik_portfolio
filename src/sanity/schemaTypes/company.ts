@@ -34,6 +34,27 @@ export const company = defineType({
 			description: "Brief description of the company",
 		}),
 		defineField({
+			name: "isCurrent",
+			title: "Currently Working Here",
+			type: "boolean",
+			initialValue: false,
+		}),
+		defineField({
+			name: "workTagline",
+			title: "Work Tagline",
+			type: "string",
+			description:
+				'Tagline shown on the work page (e.g. "World\'s 1st Nudging Platform...")',
+		}),
+		defineField({
+			name: "workDescription",
+			title: "Work Description",
+			type: "array",
+			of: [{ type: "block" }],
+			description:
+				"Description shown on the work page (bold text renders as white highlighted text)",
+		}),
+		defineField({
 			name: "order",
 			title: "Display Order",
 			type: "number",
