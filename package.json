@@ -3,12 +3,12 @@
 	"version": "0.1.0",
 	"private": true,
 	"engines": {
-		"node": "22.x"
+		"node": "24.x"
 	},
 	"scripts": {
-		"dev": "next dev --turbopack",
-		"build": "next build",
-		"start": "next start",
+		"dev": "bun --bun next dev --turbopack",
+		"build": "bun --bun next build",
+		"start": "bun --bun next start",
 		"lint:check": "bunx eslint",
 		"lint:fix": "bunx eslint --fix",
 		"format:check": "bunx prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
@@ -54,6 +54,7 @@
 		"eslint-config-next": "^16.1.1",
 		"prettier": "^3.7.4",
 		"prettier-plugin-tailwindcss": "^0.7.2",
+		"shadcn": "^3.6.3",
 		"tailwindcss": "^4.1.18",
 		"typescript": "^5.9.3"
 	},
