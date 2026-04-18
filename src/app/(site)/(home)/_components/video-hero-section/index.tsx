@@ -65,7 +65,7 @@ export function VideoHeroSection() {
 
 					{/* arrow.gif — pointing at the circle */}
 					<Image
-						src="/Indicator.gif"
+						src="/arrow.gif"
 						alt=""
 						width={135}
 						height={135}
