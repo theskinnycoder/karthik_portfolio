@@ -19,24 +19,60 @@ export type WorkItem = {
 	_createdAt: string;
 	_updatedAt: string;
 	_rev: string;
-	company?: {
+	company: {
 		_ref: string;
 		_type: "reference";
 		_weak?: boolean;
 		[internalGroqTypeReferenceTo]?: "company";
 	};
-	title?: string;
+	title: string;
 	icon?: CloudinaryAsset;
-	tag?: string;
-	image?: CloudinaryAsset;
-	description?: string;
-	slug?: Slug;
+	tag: string;
+	image: CloudinaryAsset;
+	description: string;
+	heroImage: CloudinaryAsset;
+	excerpt?: string;
+	role: string;
+	year: string;
+	duration?: string;
+	stack?: Array<string>;
+	liveUrl?: string;
+	content?: Array<
+		| {
+				children?: Array<{
+					marks?: Array<string>;
+					text?: string;
+					_type: "span";
+					_key: string;
+				}>;
+				style?: "normal" | "h2" | "h3" | "h4" | "blockquote";
+				listItem?: "bullet" | "number";
+				markDefs?: Array<{
+					href: string;
+					openInNewTab?: boolean;
+					_type: "link";
+					_key: string;
+				}>;
+				level?: number;
+				_type: "block";
+				_key: string;
+		  }
+		| {
+				asset: CloudinaryAsset;
+				alt: string;
+				caption?: string;
+				size: "inline" | "wide" | "full";
+				_type: "contentImage";
+				_key: string;
+		  }
+	>;
+	slug: Slug;
 	order?: number;
 };
 
 export type Slug = {
 	_type: "slug";
-	current?: string;
+	current: string;
 	source?: string;
 };
 
@@ -70,10 +106,10 @@ export type Testimonial = {
 	_createdAt: string;
 	_updatedAt: string;
 	_rev: string;
-	quote?: string;
-	authorName?: string;
-	authorRole?: string;
-	company?: {
+	quote: string;
+	authorName: string;
+	authorRole: string;
+	company: {
 		_ref: string;
 		_type: "reference";
 		_weak?: boolean;
@@ -89,9 +125,9 @@ export type Social = {
 	_createdAt: string;
 	_updatedAt: string;
 	_rev: string;
-	label?: string;
-	href?: string;
-	icon?: CloudinaryAsset;
+	label: string;
+	href: string;
+	icon: CloudinaryAsset;
 	order?: number;
 };
 
@@ -101,9 +137,9 @@ export type SiteProfile = {
 	_createdAt: string;
 	_updatedAt: string;
 	_rev: string;
-	name?: string;
-	title?: string;
-	bio?: Array<{
+	name: string;
+	title: string;
+	bio: Array<{
 		children?: Array<{
 			marks?: Array<string>;
 			text?: string;
@@ -129,10 +165,10 @@ export type SectionHeader = {
 	_createdAt: string;
 	_updatedAt: string;
 	_rev: string;
-	slug?: Slug;
-	title?: string;
+	slug: Slug;
+	title: string;
 	headingPrefix?: string;
-	headingHighlight?: string;
+	headingHighlight: string;
 	headingEmoji?: string;
 	icon?: CloudinaryAsset;
 	gradientFrom?: string;
@@ -147,10 +183,10 @@ export type Project = {
 	_createdAt: string;
 	_updatedAt: string;
 	_rev: string;
-	name?: string;
-	image?: CloudinaryAsset;
-	alt?: string;
-	backgroundColor?: string;
+	name: string;
+	image: CloudinaryAsset;
+	alt: string;
+	backgroundColor: string;
 	order?: number;
 };
 
@@ -160,10 +196,10 @@ export type Experience = {
 	_createdAt: string;
 	_updatedAt: string;
 	_rev: string;
-	company?: string;
-	url?: string;
-	role?: string;
-	description?: string;
+	company: string;
+	url: string;
+	role: string;
+	description: string;
 	order?: number;
 };
 
@@ -173,8 +209,8 @@ export type Company = {
 	_createdAt: string;
 	_updatedAt: string;
 	_rev: string;
-	name?: string;
-	logo?: CloudinaryAsset;
+	name: string;
+	logo: CloudinaryAsset;
 	website?: string;
 	description?: string;
 	isCurrent?: boolean;
@@ -239,9 +275,9 @@ export type SanityImagePalette = {
 
 export type SanityImageDimensions = {
 	_type: "sanity.imageDimensions";
-	height?: number;
-	width?: number;
-	aspectRatio?: number;
+	height: number;
+	width: number;
+	aspectRatio: number;
 };
 
 export type SanityImageMetadata = {
@@ -257,18 +293,18 @@ export type SanityImageMetadata = {
 
 export type SanityImageHotspot = {
 	_type: "sanity.imageHotspot";
-	x?: number;
-	y?: number;
-	height?: number;
-	width?: number;
+	x: number;
+	y: number;
+	height: number;
+	width: number;
 };
 
 export type SanityImageCrop = {
 	_type: "sanity.imageCrop";
-	top?: number;
-	bottom?: number;
-	left?: number;
-	right?: number;
+	top: number;
+	bottom: number;
+	left: number;
+	right: number;
 };
 
 export type SanityFileAsset = {
@@ -360,22 +396,22 @@ export declare const internalGroqTypeReferenceTo: unique symbol;
 // Query: *[_type == "testimonial"] | order(order asc) {    _id,    quote,    authorName,    authorRole,    authorAvatar,    company->{      _id,      name,      logo    }  }
 export type TestimonialsQueryResult = Array<{
 	_id: string;
-	quote: string | null;
-	authorName: string | null;
-	authorRole: string | null;
+	quote: string;
+	authorName: string;
+	authorRole: string;
 	authorAvatar: CloudinaryAsset | null;
 	company: {
 		_id: string;
-		name: string | null;
-		logo: CloudinaryAsset | null;
-	} | null;
+		name: string;
+		logo: CloudinaryAsset;
+	};
 }>;
 // Variable: companiesQuery
 // Query: *[_type == "company"] | order(order asc) {    _id,    name,		logo,		website,		description	}
 export type CompaniesQueryResult = Array<{
 	_id: string;
-	name: string | null;
-	logo: CloudinaryAsset | null;
+	name: string;
+	logo: CloudinaryAsset;
 	website: string | null;
 	description: string | null;
 }>;
@@ -383,34 +419,34 @@ export type CompaniesQueryResult = Array<{
 // Query: *[_type == "social"] | order(order asc) {    _id,    label,    href,    icon  }
 export type SocialsQueryResult = Array<{
 	_id: string;
-	label: string | null;
-	href: string | null;
-	icon: CloudinaryAsset | null;
+	label: string;
+	href: string;
+	icon: CloudinaryAsset;
 }>;
 // Variable: projectsQuery
 // Query: *[_type == "project"] | order(order asc) {    _id,    name,    image,    alt,    backgroundColor  }
 export type ProjectsQueryResult = Array<{
 	_id: string;
-	name: string | null;
-	image: CloudinaryAsset | null;
-	alt: string | null;
-	backgroundColor: string | null;
+	name: string;
+	image: CloudinaryAsset;
+	alt: string;
+	backgroundColor: string;
 }>;
 // Variable: experiencesQuery
 // Query: *[_type == "experience"] | order(order asc) {    _id,    company,    url,    role,    description  }
 export type ExperiencesQueryResult = Array<{
 	_id: string;
-	company: string | null;
-	url: string | null;
-	role: string | null;
-	description: string | null;
+	company: string;
+	url: string;
+	role: string;
+	description: string;
 }>;
 // Variable: siteProfileQuery
 // Query: *[_type == "siteProfile"][0] {    _id,    name,    title,    bio  }
 export type SiteProfileQueryResult = {
 	_id: string;
-	name: string | null;
-	title: string | null;
+	name: string;
+	title: string;
 	bio: Array<{
 		children?: Array<{
 			marks?: Array<string>;
@@ -428,14 +464,14 @@ export type SiteProfileQueryResult = {
 		level?: number;
 		_type: "block";
 		_key: string;
-	}> | null;
+	}>;
 } | null;
 // Variable: workPageQuery
 // Query: *[_type == "company" && count(*[_type == "workItem" && references(^._id)]) > 0] | order(order asc) {    _id,    name,    logo,    website,    isCurrent,    workTagline,    workDescription,    "workItems": *[_type == "workItem" && references(^._id)] | order(order asc) {      _id,      title,      icon,      tag,      image,      description,      "slug": slug.current    }  }
 export type WorkPageQueryResult = Array<{
 	_id: string;
-	name: string | null;
-	logo: CloudinaryAsset | null;
+	name: string;
+	logo: CloudinaryAsset;
 	website: string | null;
 	isCurrent: boolean | null;
 	workTagline: string | null;
@@ -459,12 +495,12 @@ export type WorkPageQueryResult = Array<{
 	}> | null;
 	workItems: Array<{
 		_id: string;
-		title: string | null;
+		title: string;
 		icon: CloudinaryAsset | null;
-		tag: string | null;
-		image: CloudinaryAsset | null;
-		description: string | null;
-		slug: string | null;
+		tag: string;
+		image: CloudinaryAsset;
+		description: string;
+		slug: string;
 	}>;
 }>;
 // Variable: sectionHeaderQuery
@@ -472,7 +508,7 @@ export type WorkPageQueryResult = Array<{
 export type SectionHeaderQueryResult = {
 	_id: string;
 	headingPrefix: string | null;
-	headingHighlight: string | null;
+	headingHighlight: string;
 	headingEmoji: string | null;
 	icon: CloudinaryAsset | null;
 	gradientFrom: string | null;
@@ -480,6 +516,61 @@ export type SectionHeaderQueryResult = {
 	video: CloudinaryAsset | null;
 	subheading: string | null;
 } | null;
+// Variable: workItemBySlugQuery
+// Query: *[_type == "workItem" && slug.current == $slug][0] {    _id,    title,    "slug": slug.current,    tag,    description,    excerpt,    role,    year,    duration,    stack,    liveUrl,    image,    heroImage,    content,    "company": company->{      _id,      name,      logo,      website    }  }
+export type WorkItemBySlugQueryResult = {
+	_id: string;
+	title: string;
+	slug: string;
+	tag: string;
+	description: string;
+	excerpt: string | null;
+	role: string;
+	year: string;
+	duration: string | null;
+	stack: Array<string> | null;
+	liveUrl: string | null;
+	image: CloudinaryAsset;
+	heroImage: CloudinaryAsset;
+	content: Array<
+		| {
+				children?: Array<{
+					marks?: Array<string>;
+					text?: string;
+					_type: "span";
+					_key: string;
+				}>;
+				style?: "blockquote" | "h2" | "h3" | "h4" | "normal";
+				listItem?: "bullet" | "number";
+				markDefs?: Array<{
+					href: string;
+					openInNewTab?: boolean;
+					_type: "link";
+					_key: string;
+				}>;
+				level?: number;
+				_type: "block";
+				_key: string;
+		  }
+		| {
+				asset: CloudinaryAsset;
+				alt: string;
+				caption?: string;
+				size: "full" | "inline" | "wide";
+				_type: "contentImage";
+				_key: string;
+		  }
+	> | null;
+	company: {
+		_id: string;
+		name: string;
+		logo: CloudinaryAsset;
+		website: string | null;
+	};
+} | null;
+// Variable: allWorkItemSlugsQuery
+// Query: *[_type == "workItem" && defined(slug.current)].slug.current
+export type AllWorkItemSlugsQueryResult = Array<string>;
 
 // Query TypeMap
 import "@sanity/client";
@@ -493,5 +584,7 @@ declare module "@sanity/client" {
 		'\n  *[_type == "siteProfile"][0] {\n    _id,\n    name,\n    title,\n    bio\n  }\n': SiteProfileQueryResult;
 		'\n  *[_type == "company" && count(*[_type == "workItem" && references(^._id)]) > 0] | order(order asc) {\n    _id,\n    name,\n    logo,\n    website,\n    isCurrent,\n    workTagline,\n    workDescription,\n    "workItems": *[_type == "workItem" && references(^._id)] | order(order asc) {\n      _id,\n      title,\n      icon,\n      tag,\n      image,\n      description,\n      "slug": slug.current\n    }\n  }\n': WorkPageQueryResult;
 		'\n  *[_type == "sectionHeader" && slug.current == $slug][0] {\n    _id,\n    headingPrefix,\n    headingHighlight,\n    headingEmoji,\n    icon,\n    gradientFrom,\n    gradientTo,\n    video,\n    subheading\n  }\n': SectionHeaderQueryResult;
+		'\n  *[_type == "workItem" && slug.current == $slug][0] {\n    _id,\n    title,\n    "slug": slug.current,\n    tag,\n    description,\n    excerpt,\n    role,\n    year,\n    duration,\n    stack,\n    liveUrl,\n    image,\n    heroImage,\n    content,\n    "company": company->{\n      _id,\n      name,\n      logo,\n      website\n    }\n  }\n': WorkItemBySlugQueryResult;
+		'\n  *[_type == "workItem" && defined(slug.current)].slug.current\n': AllWorkItemSlugsQueryResult;
 	}
 }

@@ -1,9 +1,6 @@
-import {
-	PortableText,
-	type PortableTextBlock,
-	type PortableTextComponents,
-} from "next-sanity";
+import type { PortableTextBlock } from "next-sanity";
 import { MediaImage } from "@/components/media";
+import { PortableTextRenderer } from "@/components/portable-text";
 
 interface CompanyHeaderProps {
 	logo: string;
@@ -12,17 +9,6 @@ interface CompanyHeaderProps {
 	workTagline?: string;
 	workDescription?: PortableTextBlock[];
 }
-
-const descriptionComponents: PortableTextComponents = {
-	block: {
-		normal: ({ children }) => <p>{children}</p>,
-	},
-	marks: {
-		strong: ({ children }) => (
-			<span className="font-medium text-foreground">{children}</span>
-		),
-	},
-};
 
 export function CompanyHeader({
 	logo,
@@ -54,9 +40,9 @@ export function CompanyHeader({
 			)}
 			{workDescription && (
 				<div className="text-sm font-light text-muted-foreground">
-					<PortableText
+					<PortableTextRenderer
 						value={workDescription}
-						components={descriptionComponents}
+						variant="base"
 					/>
 				</div>
 			)}

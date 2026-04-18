@@ -99,3 +99,32 @@ export const sectionHeaderQuery = groq`
     subheading
   }
 `;
+
+export const workItemBySlugQuery = groq`
+  *[_type == "workItem" && slug.current == $slug][0] {
+    _id,
+    title,
+    "slug": slug.current,
+    tag,
+    description,
+    excerpt,
+    role,
+    year,
+    duration,
+    stack,
+    liveUrl,
+    image,
+    heroImage,
+    content,
+    "company": company->{
+      _id,
+      name,
+      logo,
+      website
+    }
+  }
+`;
+
+export const allWorkItemSlugsQuery = groq`
+  *[_type == "workItem" && defined(slug.current)].slug.current
+`;

@@ -1,23 +1,9 @@
-import {
-	PortableText,
-	type PortableTextBlock,
-	type PortableTextComponents,
-} from "next-sanity";
+import type { PortableTextBlock } from "next-sanity";
+import { PortableTextRenderer } from "@/components/portable-text";
 
 interface AboutSectionProps {
 	bio?: PortableTextBlock[];
 }
-
-const bioComponents: PortableTextComponents = {
-	block: {
-		normal: ({ children }) => <p>{children}</p>,
-	},
-	marks: {
-		strong: ({ children }) => (
-			<span className="font-medium text-foreground">{children}</span>
-		),
-	},
-};
 
 function Highlight({ children }: { children: React.ReactNode }) {
 	return <span className="font-medium text-foreground">{children}</span>;
@@ -51,9 +37,9 @@ export function AboutSection({ bio }: AboutSectionProps) {
 	return (
 		<div className="space-y-3 text-base font-light text-muted-foreground">
 			{bio ? (
-				<PortableText
+				<PortableTextRenderer
 					value={bio}
-					components={bioComponents}
+					variant="base"
 				/>
 			) : (
 				<FallbackBio />

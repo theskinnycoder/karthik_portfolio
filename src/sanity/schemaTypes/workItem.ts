@@ -1,5 +1,5 @@
 import { ComposeIcon } from "@sanity/icons";
-import { defineField, defineType } from "sanity";
+import { defineArrayMember, defineField, defineType } from "sanity";
 
 export const workItem = defineType({
 	name: "workItem",
@@ -35,8 +35,9 @@ export const workItem = defineType({
 		}),
 		defineField({
 			name: "image",
-			title: "Image",
+			title: "Card Image",
 			type: "cloudinary.asset",
+			description: "Image shown on the work list card",
 			validation: (rule) => rule.required(),
 		}),
 		defineField({
@@ -45,6 +46,156 @@ export const workItem = defineType({
 			type: "string",
 			description: "One-line summary shown on the card",
 			validation: (rule) => rule.required(),
+		}),
+		defineField({
+			name: "heroImage",
+			title: "Hero Image",
+			type: "cloudinary.asset",
+			description: "Large image shown at the top of the case-study page",
+			validation: (rule) => rule.required(),
+		}),
+		defineField({
+			name: "excerpt",
+			title: "Excerpt",
+			type: "text",
+			rows: 3,
+			description:
+				"Short lede shown under the title on the case-study page (falls back to description if empty)",
+		}),
+		defineField({
+			name: "role",
+			title: "Role",
+			type: "string",
+			description: 'e.g. "Product Designer", "Design Lead"',
+			validation: (rule) => rule.required(),
+		}),
+		defineField({
+			name: "year",
+			title: "Year",
+			type: "string",
+			description: 'e.g. "2024" or "2023—present"',
+			validation: (rule) => rule.required(),
+		}),
+		defineField({
+			name: "duration",
+			title: "Duration",
+			type: "string",
+			description: 'Optional time spent, e.g. "3 months"',
+		}),
+		defineField({
+			name: "stack",
+			title: "Stack / Tools",
+			type: "array",
+			of: [{ type: "string" }],
+			options: { layout: "tags" },
+			description: "Tools, methods, or technologies used on the project",
+		}),
+		defineField({
+			name: "liveUrl",
+			title: "Live URL",
+			type: "url",
+			description: "Optional link to the shipped product",
+		}),
+		defineField({
+			name: "content",
+			title: "Content",
+			type: "array",
+			description: "Rich-text body for the case study",
+			of: [
+				defineArrayMember({
+					type: "block",
+					styles: [
+						{ title: "Normal", value: "normal" },
+						{ title: "Heading 2", value: "h2" },
+						{ title: "Heading 3", value: "h3" },
+						{ title: "Heading 4", value: "h4" },
+						{ title: "Quote", value: "blockquote" },
+					],
+					lists: [
+						{ title: "Bullet", value: "bullet" },
+						{ title: "Numbered", value: "number" },
+					],
+					marks: {
+						decorators: [
+							{ title: "Strong", value: "strong" },
+							{ title: "Emphasis", value: "em" },
+							{ title: "Code", value: "code" },
+						],
+						annotations: [
+							{
+								name: "link",
+								type: "object",
+								title: "Link",
+								fields: [
+									defineField({
+										name: "href",
+										title: "URL",
+										type: "url",
+										validation: (rule) =>
+											rule.required().uri({
+												scheme: ["http", "https", "mailto", "tel"],
+											}),
+									}),
+									defineField({
+										name: "openInNewTab",
+										title: "Open in new tab",
+										type: "boolean",
+										initialValue: false,
+									}),
+								],
+							},
+						],
+					},
+				}),
+				defineArrayMember({
+					type: "object",
+					name: "contentImage",
+					title: "Image",
+					fields: [
+						defineField({
+							name: "asset",
+							title: "Image",
+							type: "cloudinary.asset",
+							validation: (rule) => rule.required(),
+						}),
+						defineField({
+							name: "alt",
+							title: "Alt text",
+							type: "string",
+							description: "Required for accessibility and SEO",
+							validation: (rule) => rule.required(),
+						}),
+						defineField({
+							name: "caption",
+							title: "Caption",
+							type: "string",
+							description: "Optional caption displayed below the image",
+						}),
+						defineField({
+							name: "size",
+							title: "Size",
+							type: "string",
+							options: {
+								list: [
+									{ title: "Inline", value: "inline" },
+									{ title: "Wide", value: "wide" },
+									{ title: "Full-bleed", value: "full" },
+								],
+								layout: "radio",
+							},
+							initialValue: "inline",
+							validation: (rule) => rule.required(),
+						}),
+					],
+					preview: {
+						select: {
+							title: "alt",
+							subtitle: "caption",
+							media: "asset",
+						},
+					},
+				}),
+			],
 		}),
 		defineField({
 			name: "slug",
@@ -65,6 +216,7 @@ export const workItem = defineType({
 		select: {
 			title: "title",
 			subtitle: "tag",
+			media: "heroImage",
 		},
 	},
 });

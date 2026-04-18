@@ -5,6 +5,7 @@ import { getMediaUrl } from "@/lib/media";
 import "server-only";
 import { sanityFetch } from "./fetch";
 import {
+	allWorkItemSlugsQuery,
 	companiesQuery,
 	experiencesQuery,
 	projectsQuery,
@@ -12,6 +13,7 @@ import {
 	siteProfileQuery,
 	socialsQuery,
 	testimonialsQuery,
+	workItemBySlugQuery,
 	workPageQuery,
 } from "./queries";
 
@@ -76,6 +78,35 @@ interface SanityWorkItem {
 	image: CloudinaryAsset;
 	description: string;
 	slug: string;
+}
+
+interface SanityContentImage {
+	_type: "contentImage";
+	_key: string;
+	asset: CloudinaryAsset;
+	alt: string;
+	caption?: string;
+	size: "inline" | "wide" | "full";
+}
+
+type SanityContentBlock = PortableTextBlock | SanityContentImage;
+
+interface SanityWorkItemDetail {
+	_id: string;
+	title: string;
+	slug: string;
+	tag: string;
+	description: string;
+	excerpt?: string;
+	role: string;
+	year: string;
+	duration?: string;
+	stack?: string[];
+	liveUrl?: string;
+	image: CloudinaryAsset;
+	heroImage?: CloudinaryAsset;
+	content?: SanityContentBlock[];
+	company: SanityCompany;
 }
 
 interface SanityWorkPageCompany {
@@ -155,6 +186,33 @@ export interface WorkItemDTO {
 	image: string;
 	description: string;
 	slug: string;
+}
+
+export interface ContentImageDTO {
+	_type: "contentImage";
+	_key: string;
+	url: string;
+	alt: string;
+	caption?: string;
+	size: "inline" | "wide" | "full";
+}
+
+export type ContentBlock = PortableTextBlock | ContentImageDTO;
+
+export interface WorkItemDetailDTO {
+	title: string;
+	slug: string;
+	tag: string;
+	description: string;
+	excerpt?: string;
+	role: string;
+	year: string;
+	duration?: string;
+	stack?: string[];
+	liveUrl?: string;
+	heroImage: string;
+	content: ContentBlock[];
+	company: CompanyDTO;
 }
 
 export interface WorkPageCompanyDTO {
@@ -242,6 +300,50 @@ function toWorkItemDTO(data: SanityWorkItem): WorkItemDTO {
 		image: getMediaUrl(data.image),
 		description: data.description,
 		slug: data.slug,
+	};
+}
+
+function isContentImage(
+	block: SanityContentBlock,
+): block is SanityContentImage {
+	return (block as SanityContentImage)._type === "contentImage";
+}
+
+function toContentBlock(block: SanityContentBlock): ContentBlock {
+	if (isContentImage(block)) {
+		return {
+			_type: "contentImage",
+			_key: block._key,
+			url: getMediaUrl(block.asset),
+			alt: block.alt,
+			caption: block.caption,
+			size: block.size,
+		};
+	}
+	return block;
+}
+
+function toWorkItemDetailDTO(data: SanityWorkItemDetail): WorkItemDetailDTO {
+	// Fall back to the card `image` when `heroImage` hasn't been populated yet.
+	// `heroImage` is a newer required field; existing docs may still predate it.
+	const heroImage = data.heroImage
+		? getMediaUrl(data.heroImage)
+		: getMediaUrl(data.image);
+
+	return {
+		title: data.title,
+		slug: data.slug,
+		tag: data.tag,
+		description: data.description,
+		excerpt: data.excerpt,
+		role: data.role,
+		year: data.year,
+		duration: data.duration,
+		stack: data.stack,
+		liveUrl: data.liveUrl,
+		heroImage,
+		content: (data.content ?? []).map(toContentBlock),
+		company: toCompanyDTO(data.company),
 	};
 }
 
@@ -356,4 +458,26 @@ export async function getWorkPageCompanies(): Promise<WorkPageCompanyDTO[]> {
 		query: workPageQuery,
 	});
 	return companies.map(toWorkPageCompanyDTO);
+}
+
+export async function getWorkItemBySlug(
+	slug: string,
+): Promise<WorkItemDetailDTO | null> {
+	await tagResource("workItem");
+	await tagResource("company");
+
+	const data = await sanityFetch<SanityWorkItemDetail | null>({
+		query: workItemBySlugQuery,
+		params: { slug },
+	});
+	if (!data) return null;
+	return toWorkItemDetailDTO(data);
+}
+
+export async function getAllWorkItemSlugs(): Promise<string[]> {
+	await tagResource("workItem");
+
+	return sanityFetch<string[]>({
+		query: allWorkItemSlugsQuery,
+	});
 }
