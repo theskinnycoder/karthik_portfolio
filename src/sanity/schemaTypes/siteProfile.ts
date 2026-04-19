@@ -1,5 +1,6 @@
 import { UserIcon } from "@sanity/icons";
 import { defineArrayMember, defineField, defineType } from "sanity";
+import { fontWeightDecorators } from "./portableTextMarks";
 
 export const siteProfile = defineType({
 	name: "siteProfile",
@@ -24,7 +25,20 @@ export const siteProfile = defineType({
 			name: "bio",
 			title: "Biography",
 			type: "array",
-			of: [defineArrayMember({ type: "block" })],
+			of: [
+				defineArrayMember({
+					type: "block",
+					marks: {
+						decorators: [
+							{ title: "Strong", value: "strong" },
+							{ title: "Emphasis", value: "em" },
+							{ title: "Underline", value: "underline" },
+							{ title: "Strike", value: "strike-through" },
+							...fontWeightDecorators,
+						],
+					},
+				}),
+			],
 			description: "Rich text bio - use bold for highlighted text",
 			validation: (rule) => rule.required(),
 		}),

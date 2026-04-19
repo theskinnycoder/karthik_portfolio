@@ -1,5 +1,6 @@
 import { ComposeIcon } from "@sanity/icons";
 import { defineArrayMember, defineField, defineType } from "sanity";
+import { fontWeightDecorators } from "./portableTextMarks";
 
 export const workItem = defineType({
 	name: "workItem",
@@ -120,6 +121,7 @@ export const workItem = defineType({
 							{ title: "Strong", value: "strong" },
 							{ title: "Emphasis", value: "em" },
 							{ title: "Code", value: "code" },
+							...fontWeightDecorators,
 						],
 						annotations: [
 							{
