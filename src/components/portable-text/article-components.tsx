@@ -11,35 +11,42 @@ import { cn } from "@/lib/utils";
 export const articleComponents: PortableTextComponents = {
 	block: {
 		normal: ({ children }) => (
-			<p className="text-base leading-relaxed font-light text-muted-foreground">
+			<p className="text-base leading-relaxed font-normal text-muted-foreground">
 				{children}
 			</p>
 		),
+		h1: ({ children }) => (
+			<h1 className="mt-12 text-3xl font-normal text-foreground">{children}</h1>
+		),
 		h2: ({ children }) => (
-			<h2 className="mt-10 text-2xl font-semibold text-foreground">
-				{children}
-			</h2>
+			<h2 className="mt-10 text-2xl font-normal text-foreground">{children}</h2>
 		),
 		h3: ({ children }) => (
-			<h3 className="mt-8 text-xl font-semibold text-foreground">{children}</h3>
+			<h3 className="mt-8 text-xl font-normal text-foreground">{children}</h3>
 		),
 		h4: ({ children }) => (
-			<h4 className="mt-6 text-lg font-semibold text-foreground">{children}</h4>
+			<h4 className="mt-6 text-lg font-normal text-foreground">{children}</h4>
+		),
+		h5: ({ children }) => (
+			<h5 className="mt-6 text-base font-normal text-foreground">{children}</h5>
+		),
+		h6: ({ children }) => (
+			<h6 className="mt-6 text-sm font-normal text-foreground">{children}</h6>
 		),
 		blockquote: ({ children }) => (
-			<blockquote className="my-6 border-l-2 border-border pl-4 text-base font-light text-muted-foreground italic">
+			<blockquote className="my-6 border-l-2 border-border pl-4 text-base font-normal text-muted-foreground italic">
 				{children}
 			</blockquote>
 		),
 	},
 	list: {
 		bullet: ({ children }) => (
-			<ul className="my-3 list-disc space-y-2 pl-6 text-base font-light text-muted-foreground">
+			<ul className="my-3 list-disc space-y-2 pl-6 text-base font-normal text-muted-foreground">
 				{children}
 			</ul>
 		),
 		number: ({ children }) => (
-			<ol className="my-3 list-decimal space-y-2 pl-6 text-base font-light text-muted-foreground">
+			<ol className="my-3 list-decimal space-y-2 pl-6 text-base font-normal text-muted-foreground">
 				{children}
 			</ol>
 		),
@@ -58,6 +65,16 @@ export const articleComponents: PortableTextComponents = {
 				{children}
 			</code>
 		),
+		fontRegular: ({ children }) => (
+			<span className="font-normal">{children}</span>
+		),
+		fontMedium: ({ children }) => (
+			<span className="font-medium">{children}</span>
+		),
+		fontSemibold: ({ children }) => (
+			<span className="font-semibold">{children}</span>
+		),
+		fontBold: ({ children }) => <span className="font-bold">{children}</span>,
 		link: ({ value, children }) => {
 			const href = typeof value?.href === "string" ? value.href : "#";
 			const openInNewTab = Boolean(value?.openInNewTab);

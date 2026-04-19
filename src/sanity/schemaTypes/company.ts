@@ -1,5 +1,6 @@
 import { CaseIcon } from "@sanity/icons";
-import { defineField, defineType } from "sanity";
+import { defineArrayMember, defineField, defineType } from "sanity";
+import { fontWeightDecorators } from "./portableTextMarks";
 
 export const company = defineType({
 	name: "company",
@@ -50,7 +51,20 @@ export const company = defineType({
 			name: "workDescription",
 			title: "Work Description",
 			type: "array",
-			of: [{ type: "block" }],
+			of: [
+				defineArrayMember({
+					type: "block",
+					marks: {
+						decorators: [
+							{ title: "Strong", value: "strong" },
+							{ title: "Emphasis", value: "em" },
+							{ title: "Underline", value: "underline" },
+							{ title: "Strike", value: "strike-through" },
+							...fontWeightDecorators,
+						],
+					},
+				}),
+			],
 			description:
 				"Description shown on the work page (bold text renders as white highlighted text)",
 		}),
