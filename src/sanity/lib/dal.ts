@@ -118,6 +118,7 @@ export interface WorkItemDTO {
 export interface TeamMemberDTO {
 	name: string;
 	role: string;
+	avatar?: string;
 }
 
 export interface BrandDTO {
@@ -167,13 +168,23 @@ export interface ContentVideoDTO {
 	controls: boolean;
 }
 
+export interface ContentMetaDTO {
+	_type: "contentMeta";
+	_key: string;
+	role?: string;
+	team: TeamMemberDTO[];
+	timeline?: string;
+	tools: string[];
+}
+
 export type ContentBlock =
 	| PortableTextBlock
 	| ContentImageDTO
 	| ContentTestimonialDTO
 	| ContentCodeDTO
 	| ContentDividerDTO
-	| ContentVideoDTO;
+	| ContentVideoDTO
+	| ContentMetaDTO;
 
 export interface WorkNavLinkDTO {
 	title: string;
@@ -187,11 +198,6 @@ export interface WorkItemDetailDTO {
 	tag: string;
 	description: string;
 	excerpt?: string;
-	role: string;
-	year: string;
-	duration?: string;
-	stack?: string[];
-	team: TeamMemberDTO[];
 	brand: BrandDTO;
 	liveUrl?: string;
 	heroImage: string;
@@ -383,6 +389,27 @@ function toContentVideoDTO(
 	};
 }
 
+function toContentMetaDTO(
+	data: ContentBlockOfType<"contentMeta">,
+): ContentMetaDTO {
+	const team = (data.team ?? [])
+		.map<TeamMemberDTO>((m) => ({
+			name: m.name ?? "",
+			role: m.role ?? "",
+			avatar: m.avatar ? getMediaUrl(m.avatar) || undefined : undefined,
+		}))
+		.filter((m) => m.name.length > 0);
+
+	return {
+		_type: "contentMeta",
+		_key: data._key,
+		role: data.role ?? undefined,
+		team,
+		timeline: data.timeline ?? undefined,
+		tools: data.tools ?? [],
+	};
+}
+
 function hasType<T extends string>(
 	block: ContentBlockRaw,
 	type: T,
@@ -397,6 +424,7 @@ function toContentBlock(block: ContentBlockRaw): ContentBlock | null {
 	if (hasType(block, "contentCode")) return toContentCodeDTO(block);
 	if (hasType(block, "contentDivider")) return toContentDividerDTO(block);
 	if (hasType(block, "contentVideo")) return toContentVideoDTO(block);
+	if (hasType(block, "contentMeta")) return toContentMetaDTO(block);
 	// Pass-through for PortableText `block` — the generated shape is a superset
 	// of `PortableTextBlock` so the cast is safe at runtime.
 	return block as unknown as PortableTextBlock;
@@ -425,13 +453,6 @@ function toWorkItemDetailDTO(data: WorkItemDetailRaw): WorkItemDetailDTO {
 		tag: data.tag ?? "",
 		description: data.description ?? "",
 		excerpt: data.excerpt ?? undefined,
-		role: data.role ?? "",
-		year: data.year ?? "",
-		duration: data.duration ?? undefined,
-		stack: data.stack ?? undefined,
-		team: (data.team ?? [])
-			.map((m) => ({ name: m.name ?? "", role: m.role ?? "" }))
-			.filter((m) => m.name.length > 0),
 		brand: {
 			primary: data.brand?.primary ?? undefined,
 			secondary: data.brand?.secondary ?? undefined,

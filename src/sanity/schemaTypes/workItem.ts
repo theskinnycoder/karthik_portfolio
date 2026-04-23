@@ -63,63 +63,6 @@ export const workItem = defineType({
 				"Short lede shown under the title on the case-study page (falls back to description if empty)",
 		}),
 		defineField({
-			name: "role",
-			title: "Role",
-			type: "string",
-			description: 'e.g. "Product Designer", "Design Lead"',
-			validation: (rule) => rule.required(),
-		}),
-		defineField({
-			name: "year",
-			title: "Year",
-			type: "string",
-			description: 'e.g. "2024" or "2023—present"',
-			validation: (rule) => rule.required(),
-		}),
-		defineField({
-			name: "duration",
-			title: "Duration",
-			type: "string",
-			description: 'Optional time spent, e.g. "3 months"',
-		}),
-		defineField({
-			name: "stack",
-			title: "Stack / Tools",
-			type: "array",
-			of: [{ type: "string" }],
-			options: { layout: "tags" },
-			description: "Tools, methods, or technologies used on the project",
-		}),
-		defineField({
-			name: "team",
-			title: "Team",
-			type: "array",
-			description: "People on the project (shown in meta panel)",
-			of: [
-				defineArrayMember({
-					type: "object",
-					name: "teamMember",
-					fields: [
-						defineField({
-							name: "name",
-							title: "Name",
-							type: "string",
-							validation: (rule) => rule.required(),
-						}),
-						defineField({
-							name: "role",
-							title: "Role",
-							type: "string",
-							validation: (rule) => rule.required(),
-						}),
-					],
-					preview: {
-						select: { title: "name", subtitle: "role" },
-					},
-				}),
-			],
-		}),
-		defineField({
 			name: "brand",
 			title: "Brand colors",
 			type: "object",
@@ -283,6 +226,82 @@ export const workItem = defineType({
 							title: (author as string) || "Testimonial",
 							subtitle: quote as string,
 						}),
+					},
+				}),
+				defineArrayMember({
+					type: "object",
+					name: "contentMeta",
+					title: "Meta panel",
+					fields: [
+						defineField({
+							name: "role",
+							title: "My Work",
+							type: "string",
+							description:
+								'e.g. "Product Research, User Flow, UX, High Fidelity"',
+						}),
+						defineField({
+							name: "team",
+							title: "Team",
+							type: "array",
+							of: [
+								defineArrayMember({
+									type: "object",
+									name: "teamMember",
+									fields: [
+										defineField({
+											name: "name",
+											title: "Name",
+											type: "string",
+											validation: (rule) => rule.required(),
+										}),
+										defineField({
+											name: "role",
+											title: "Role",
+											type: "string",
+											validation: (rule) => rule.required(),
+										}),
+										defineField({
+											name: "avatar",
+											title: "Avatar",
+											type: "cloudinary.asset",
+										}),
+									],
+									preview: {
+										select: {
+											title: "name",
+											subtitle: "role",
+											media: "avatar",
+										},
+									},
+								}),
+							],
+						}),
+						defineField({
+							name: "timeline",
+							title: "Time Line",
+							type: "string",
+							description: 'e.g. "2 Weeks · August 2023"',
+						}),
+						defineField({
+							name: "tools",
+							title: "Tools",
+							type: "array",
+							of: [{ type: "string" }],
+							options: { layout: "tags" },
+						}),
+					],
+					preview: {
+						select: { role: "role", timeline: "timeline" },
+						prepare: ({ role, timeline }) => {
+							const parts = [role, timeline].filter(
+								(p): p is string => typeof p === "string" && p.length > 0,
+							);
+							return {
+								title: "Meta panel",
+								subtitle: parts.length > 0 ? parts.join(" · ") : undefined,
+							};
+						},
 					},
 				}),
 				defineArrayMember({

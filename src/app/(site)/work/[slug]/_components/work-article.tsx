@@ -2,7 +2,6 @@ import type { CSSProperties } from "react";
 import { PortableTextRenderer } from "@/components/portable-text";
 import type { BrandDTO, WorkItemDetailDTO } from "@/sanity/lib/dal";
 import { WorkBackLink } from "./work-back-link";
-import { WorkMeta } from "./work-meta";
 import { WorkPrevNext } from "./work-prev-next";
 
 interface WorkArticleProps {
@@ -43,7 +42,6 @@ export function WorkArticle({ work }: WorkArticleProps) {
 					variant="article"
 				/>
 			)}
-			<WorkMeta work={work} />
 			{hasNavigation && (
 				<WorkPrevNext
 					prev={work.prev}

@@ -3,6 +3,7 @@ import type {
 	ContentCodeDTO,
 	ContentDividerDTO,
 	ContentImageDTO,
+	ContentMetaDTO,
 	ContentTestimonialDTO,
 	ContentVideoDTO,
 } from "@/sanity/lib/dal";
@@ -10,6 +11,7 @@ import {
 	ContentCode,
 	ContentDivider,
 	ContentImage,
+	ContentMeta,
 	ContentTestimonial,
 	ContentVideo,
 } from "./blocks";
@@ -59,6 +61,9 @@ export const articleComponents: PortableTextComponents = {
 		),
 		contentVideo: ({ value }: { value: ContentVideoDTO }) => (
 			<ContentVideo value={value} />
+		),
+		contentMeta: ({ value }: { value: ContentMetaDTO }) => (
+			<ContentMeta value={value} />
 		),
 	},
 };
