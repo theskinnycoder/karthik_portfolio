@@ -1,68 +1,70 @@
-import { ArrowUpRight } from "lucide-react";
+import type { ReactNode } from "react";
 import type { WorkItemDetailDTO } from "@/sanity/lib/dal";
 
 interface WorkMetaProps {
 	work: WorkItemDetailDTO;
 }
 
-interface MetaItem {
-	label: string;
-	value: string;
-}
-
+/**
+ * Inline meta block. Mirrors Figma 538:235 "Final Container" — each section
+ * is a label row (1.5×18 coral divider + uppercase title) stacked above a
+ * value row. No surrounding card; the block reads as part of the article
+ * flow rather than a boxed panel.
+ */
 export function WorkMeta({ work }: WorkMetaProps) {
-	const items: MetaItem[] = [
-		{ label: "Role", value: work.role },
-		{ label: "Year", value: work.year },
-		...(work.duration ? [{ label: "Duration", value: work.duration }] : []),
-		{ label: "Company", value: work.company.name },
-	];
+	const timeline = work.duration
+		? `${work.year} · ${work.duration}`
+		: work.year;
 
 	return (
-		<div className="flex flex-col gap-6 border-y border-border py-6">
-			<dl className="grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-4">
-				{items.map((item) => (
-					<div
-						key={item.label}
-						className="flex flex-col gap-1"
-					>
-						<dt className="text-xs font-light tracking-wide text-muted-foreground uppercase">
-							{item.label}
-						</dt>
-						<dd className="text-sm font-medium text-foreground">
-							{item.value}
-						</dd>
-					</div>
-				))}
-			</dl>
-			{work.stack && work.stack.length > 0 && (
-				<div className="flex flex-col gap-2">
-					<span className="text-xs font-light tracking-wide text-muted-foreground uppercase">
-						Stack
-					</span>
-					<div className="flex flex-wrap gap-2">
-						{work.stack.map((tool) => (
-							<span
-								key={tool}
-								className="rounded-full border border-border bg-card px-2.5 py-0.5 text-xs font-light text-muted-foreground"
+		<div className="not-prose flex flex-col gap-6">
+			<MetaSection label="My Work">{work.role}</MetaSection>
+
+			{work.team.length > 0 && (
+				<MetaSection label="Team">
+					<ul className="flex flex-col gap-1.5">
+						{work.team.map((member) => (
+							<li
+								key={member.name}
+								className="flex flex-wrap items-baseline gap-x-2"
 							>
-								{tool}
-							</span>
+								<span className="font-medium text-foreground">
+									{member.name}
+								</span>
+								<span className="text-muted-foreground">· {member.role}</span>
+							</li>
 						))}
-					</div>
-				</div>
+					</ul>
+				</MetaSection>
 			)}
-			{work.liveUrl && (
-				<a
-					href={work.liveUrl}
-					target="_blank"
-					rel="noopener noreferrer"
-					className="inline-flex w-fit items-center gap-1.5 text-sm font-medium text-foreground underline decoration-muted-foreground underline-offset-4 transition-colors hover:decoration-foreground"
-				>
-					Visit live project
-					<ArrowUpRight className="size-4" />
-				</a>
+
+			<MetaSection label="Timeline">{timeline}</MetaSection>
+
+			{work.stack && work.stack.length > 0 && (
+				<MetaSection label="Tools">{work.stack.join(", ")}</MetaSection>
 			)}
+		</div>
+	);
+}
+
+interface MetaSectionProps {
+	label: string;
+	children: ReactNode;
+}
+
+function MetaSection({ label, children }: MetaSectionProps) {
+	return (
+		<div className="flex flex-col gap-2">
+			<div className="flex items-center gap-2.5">
+				<span
+					aria-hidden
+					className="block h-[18px] w-[1.5px] rounded-sm bg-[var(--accent-coral)]"
+				/>
+				<span className="text-xs font-light tracking-wide text-foreground uppercase">
+					{label}
+				</span>
+			</div>
+			<div className="pl-[11px] text-sm text-foreground">{children}</div>
 		</div>
 	);
 }

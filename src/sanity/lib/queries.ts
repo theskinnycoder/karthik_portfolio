@@ -1,4 +1,4 @@
-import { groq } from "next-sanity";
+import { defineQuery, groq } from "next-sanity";
 
 export const testimonialsQuery = groq`
   *[_type == "testimonial"] | order(order asc) {
@@ -100,7 +100,7 @@ export const sectionHeaderQuery = groq`
   }
 `;
 
-export const workItemBySlugQuery = groq`
+export const workItemBySlugQuery = defineQuery(`
   *[_type == "workItem" && slug.current == $slug][0] {
     _id,
     title,
@@ -115,7 +115,45 @@ export const workItemBySlugQuery = groq`
     liveUrl,
     image,
     heroImage,
-    content,
+    team[] { _key, name, role },
+    brand,
+    content[] {
+      ...,
+      _type == "contentTestimonial" => {
+        _type,
+        _key,
+        "testimonial": testimonial->{
+          _id,
+          quote,
+          authorName,
+          authorRole,
+          authorAvatar,
+          company->{
+            _id,
+            name,
+            logo
+          }
+        }
+      },
+      _type == "contentGallery" => {
+        _type,
+        _key,
+        columns,
+        items[] { _key, asset, alt, caption }
+      }
+    },
+    "prev": *[_type == "workItem" && order < ^.order && defined(slug.current)]
+      | order(order desc)[0] {
+        title,
+        "slug": slug.current,
+        tag
+      },
+    "next": *[_type == "workItem" && order > ^.order && defined(slug.current)]
+      | order(order asc)[0] {
+        title,
+        "slug": slug.current,
+        tag
+      },
     "company": company->{
       _id,
       name,
@@ -123,7 +161,7 @@ export const workItemBySlugQuery = groq`
       website
     }
   }
-`;
+`);
 
 export const allWorkItemSlugsQuery = groq`
   *[_type == "workItem" && defined(slug.current)].slug.current

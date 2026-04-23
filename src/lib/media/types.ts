@@ -1,15 +1,21 @@
 /**
- * Cloudinary asset shape returned by sanity-plugin-cloudinary
+ * Cloudinary asset shape returned by sanity-plugin-cloudinary.
+ *
+ * Field-level optionality matches what Sanity TypeGen emits for `cloudinary.asset`
+ * in `sanity.types.ts` — every field is technically optional because the plugin
+ * doesn't enforce them in the schema. In practice, populated assets always carry
+ * `public_id`, `resource_type`, `type`, and `format`; `getMediaUrl()` guards for
+ * missing values at runtime.
  */
 export interface CloudinaryAsset {
 	_type: "cloudinary.asset";
-	public_id: string;
-	resource_type: "image" | "video" | "raw";
-	type: "upload" | "private" | "authenticated";
-	format: string;
-	version: number;
-	url: string;
-	secure_url: string;
+	public_id?: string;
+	resource_type?: string;
+	type?: string;
+	format?: string;
+	version?: number;
+	url?: string;
+	secure_url?: string;
 	width?: number;
 	height?: number;
 	bytes?: number;

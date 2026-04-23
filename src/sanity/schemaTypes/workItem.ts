@@ -91,6 +91,69 @@ export const workItem = defineType({
 			description: "Tools, methods, or technologies used on the project",
 		}),
 		defineField({
+			name: "team",
+			title: "Team",
+			type: "array",
+			description: "People on the project (shown in meta panel)",
+			of: [
+				defineArrayMember({
+					type: "object",
+					name: "teamMember",
+					fields: [
+						defineField({
+							name: "name",
+							title: "Name",
+							type: "string",
+							validation: (rule) => rule.required(),
+						}),
+						defineField({
+							name: "role",
+							title: "Role",
+							type: "string",
+							validation: (rule) => rule.required(),
+						}),
+					],
+					preview: {
+						select: { title: "name", subtitle: "role" },
+					},
+				}),
+			],
+		}),
+		defineField({
+			name: "brand",
+			title: "Brand colors",
+			type: "object",
+			description:
+				"Optional per-case-study brand palette. Leave blank to use the site default.",
+			options: { collapsible: true, collapsed: true },
+			fields: [
+				defineField({
+					name: "primary",
+					title: "Primary",
+					type: "string",
+					description: "Hex, e.g. #2563EB",
+				}),
+				defineField({
+					name: "secondary",
+					title: "Secondary",
+					type: "string",
+					description: "Hex",
+				}),
+				defineField({
+					name: "accent",
+					title: "Accent",
+					type: "string",
+					description: "Hex",
+				}),
+				defineField({
+					name: "muted",
+					title: "Muted background",
+					type: "string",
+					description: "Hex, subtle fill",
+				}),
+			],
+		}),
+		defineField({
 			name: "liveUrl",
 			title: "Live URL",
 			type: "url",
@@ -193,6 +256,30 @@ export const workItem = defineType({
 							subtitle: "caption",
 							media: "asset",
 						},
+					},
+				}),
+				defineArrayMember({
+					type: "object",
+					name: "contentTestimonial",
+					title: "Testimonial",
+					fields: [
+						defineField({
+							name: "testimonial",
+							title: "Testimonial",
+							type: "reference",
+							to: [{ type: "testimonial" }],
+							validation: (rule) => rule.required(),
+						}),
+					],
+					preview: {
+						select: {
+							author: "testimonial.authorName",
+							quote: "testimonial.quote",
+						},
+						prepare: ({ author, quote }) => ({
+							title: (author as string) || "Testimonial",
+							subtitle: quote as string,
+						}),
 					},
 				}),
 			],

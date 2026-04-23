@@ -17,8 +17,9 @@
 		"studio": "bunx sanity dev",
 		"sanity:deploy": "bunx sanity deploy",
 		"sanity:schema:deploy": "bunx sanity schema deploy",
+		"sanity:schema:extract": "bunx sanity schema extract",
 		"sanity:manage": "bunx sanity manage",
-		"sanity:typegen": "bunx sanity typegen generate"
+		"sanity:typegen": "bun run sanity:schema:extract && bunx sanity typegen generate"
 	},
 	"dependencies": {
 		"@gsap/react": "^2.1.2",
@@ -47,6 +48,7 @@
 	},
 	"devDependencies": {
 		"@tailwindcss/postcss": "^4.1.18",
+		"@tailwindcss/typography": "^0.5.19",
 		"@types/node": "^25.0.5",
 		"@types/react": "^19.2.8",
 		"@types/react-dom": "^19.2.3",
