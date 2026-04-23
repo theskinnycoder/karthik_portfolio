@@ -57,7 +57,15 @@ export type WorkItem = {
 					_type: "span";
 					_key: string;
 				}>;
-				style?: "normal" | "h2" | "h3" | "h4" | "blockquote";
+				style?:
+					| "normal"
+					| "h1"
+					| "h2"
+					| "h3"
+					| "h4"
+					| "h5"
+					| "h6"
+					| "blockquote";
 				listItem?: "bullet" | "number";
 				markDefs?: Array<{
 					href?: string;
@@ -85,6 +93,40 @@ export type WorkItem = {
 					[internalGroqTypeReferenceTo]?: "testimonial";
 				};
 				_type: "contentTestimonial";
+				_key: string;
+		  }
+		| {
+				language?:
+					| "typescript"
+					| "javascript"
+					| "tsx"
+					| "jsx"
+					| "css"
+					| "html"
+					| "json"
+					| "markdown"
+					| "bash"
+					| "python"
+					| "groq"
+					| "text";
+				filename?: string;
+				code?: string;
+				_type: "contentCode";
+				_key: string;
+		  }
+		| {
+				style?: "line" | "space";
+				_type: "contentDivider";
+				_key: string;
+		  }
+		| {
+				asset?: CloudinaryAsset;
+				caption?: string;
+				autoplay?: boolean;
+				loop?: boolean;
+				muted?: boolean;
+				controls?: boolean;
+				_type: "contentVideo";
 				_key: string;
 		  }
 	>;
@@ -539,7 +581,7 @@ export type SectionHeaderQueryResult = {
 	subheading: string | null;
 } | null;
 // Variable: workItemBySlugQuery
-// Query: *[_type == "workItem" && slug.current == $slug][0] {    _id,    title,    "slug": slug.current,    tag,    description,    excerpt,    role,    year,    duration,    stack,    liveUrl,    image,    heroImage,    team[] { _key, name, role },    brand,    content[] {      ...,      _type == "contentTestimonial" => {        _type,        _key,        "testimonial": testimonial->{          _id,          quote,          authorName,          authorRole,          authorAvatar,          company->{            _id,            name,            logo          }        }      },      _type == "contentGallery" => {        _type,        _key,        columns,        items[] { _key, asset, alt, caption }      }    },    "prev": *[_type == "workItem" && order < ^.order && defined(slug.current)]      | order(order desc)[0] {        title,        "slug": slug.current,        tag      },    "next": *[_type == "workItem" && order > ^.order && defined(slug.current)]      | order(order asc)[0] {        title,        "slug": slug.current,        tag      },    "company": company->{      _id,      name,      logo,      website    }  }
+// Query: *[_type == "workItem" && slug.current == $slug][0] {    _id,    title,    "slug": slug.current,    tag,    description,    excerpt,    role,    year,    duration,    stack,    liveUrl,    image,    heroImage,    team[] { _key, name, role },    brand,    content[] {      ...,      _type == "contentTestimonial" => {        _type,        _key,        "testimonial": testimonial->{          _id,          quote,          authorName,          authorRole,          authorAvatar,          company->{            _id,            name,            logo          }        }      }    },    "prev": *[_type == "workItem" && order < ^.order && defined(slug.current)]      | order(order desc)[0] {        title,        "slug": slug.current,        tag      },    "next": *[_type == "workItem" && order > ^.order && defined(slug.current)]      | order(order asc)[0] {        title,        "slug": slug.current,        tag      },    "company": company->{      _id,      name,      logo,      website    }  }
 export type WorkItemBySlugQueryResult = {
 	_id: string;
 	title: string | null;
@@ -573,7 +615,15 @@ export type WorkItemBySlugQueryResult = {
 					_type: "span";
 					_key: string;
 				}>;
-				style?: "blockquote" | "h2" | "h3" | "h4" | "normal";
+				style?:
+					| "blockquote"
+					| "h1"
+					| "h2"
+					| "h3"
+					| "h4"
+					| "h5"
+					| "h6"
+					| "normal";
 				listItem?: "bullet" | "number";
 				markDefs?: Array<{
 					href?: string;
@@ -583,6 +633,30 @@ export type WorkItemBySlugQueryResult = {
 				}>;
 				level?: number;
 				_type: "block";
+				_key: string;
+		  }
+		| {
+				language?:
+					| "bash"
+					| "css"
+					| "groq"
+					| "html"
+					| "javascript"
+					| "json"
+					| "jsx"
+					| "markdown"
+					| "python"
+					| "text"
+					| "tsx"
+					| "typescript";
+				filename?: string;
+				code?: string;
+				_type: "contentCode";
+				_key: string;
+		  }
+		| {
+				style?: "line" | "space";
+				_type: "contentDivider";
 				_key: string;
 		  }
 		| {
@@ -607,6 +681,16 @@ export type WorkItemBySlugQueryResult = {
 					} | null;
 				} | null;
 				_type: "contentTestimonial";
+				_key: string;
+		  }
+		| {
+				asset?: CloudinaryAsset;
+				caption?: string;
+				autoplay?: boolean;
+				loop?: boolean;
+				muted?: boolean;
+				controls?: boolean;
+				_type: "contentVideo";
 				_key: string;
 		  }
 	> | null;
@@ -643,7 +727,7 @@ declare module "@sanity/client" {
 		'\n  *[_type == "siteProfile"][0] {\n    _id,\n    name,\n    title,\n    bio\n  }\n': SiteProfileQueryResult;
 		'\n  *[_type == "company" && count(*[_type == "workItem" && references(^._id)]) > 0] | order(order asc) {\n    _id,\n    name,\n    logo,\n    website,\n    isCurrent,\n    workTagline,\n    workDescription,\n    "workItems": *[_type == "workItem" && references(^._id)] | order(order asc) {\n      _id,\n      title,\n      icon,\n      tag,\n      image,\n      description,\n      "slug": slug.current\n    }\n  }\n': WorkPageQueryResult;
 		'\n  *[_type == "sectionHeader" && slug.current == $slug][0] {\n    _id,\n    headingPrefix,\n    headingHighlight,\n    headingEmoji,\n    icon,\n    gradientFrom,\n    gradientTo,\n    video,\n    subheading\n  }\n': SectionHeaderQueryResult;
-		'\n  *[_type == "workItem" && slug.current == $slug][0] {\n    _id,\n    title,\n    "slug": slug.current,\n    tag,\n    description,\n    excerpt,\n    role,\n    year,\n    duration,\n    stack,\n    liveUrl,\n    image,\n    heroImage,\n    team[] { _key, name, role },\n    brand,\n    content[] {\n      ...,\n      _type == "contentTestimonial" => {\n        _type,\n        _key,\n        "testimonial": testimonial->{\n          _id,\n          quote,\n          authorName,\n          authorRole,\n          authorAvatar,\n          company->{\n            _id,\n            name,\n            logo\n          }\n        }\n      },\n      _type == "contentGallery" => {\n        _type,\n        _key,\n        columns,\n        items[] { _key, asset, alt, caption }\n      }\n    },\n    "prev": *[_type == "workItem" && order < ^.order && defined(slug.current)]\n      | order(order desc)[0] {\n        title,\n        "slug": slug.current,\n        tag\n      },\n    "next": *[_type == "workItem" && order > ^.order && defined(slug.current)]\n      | order(order asc)[0] {\n        title,\n        "slug": slug.current,\n        tag\n      },\n    "company": company->{\n      _id,\n      name,\n      logo,\n      website\n    }\n  }\n': WorkItemBySlugQueryResult;
+		'\n  *[_type == "workItem" && slug.current == $slug][0] {\n    _id,\n    title,\n    "slug": slug.current,\n    tag,\n    description,\n    excerpt,\n    role,\n    year,\n    duration,\n    stack,\n    liveUrl,\n    image,\n    heroImage,\n    team[] { _key, name, role },\n    brand,\n    content[] {\n      ...,\n      _type == "contentTestimonial" => {\n        _type,\n        _key,\n        "testimonial": testimonial->{\n          _id,\n          quote,\n          authorName,\n          authorRole,\n          authorAvatar,\n          company->{\n            _id,\n            name,\n            logo\n          }\n        }\n      }\n    },\n    "prev": *[_type == "workItem" && order < ^.order && defined(slug.current)]\n      | order(order desc)[0] {\n        title,\n        "slug": slug.current,\n        tag\n      },\n    "next": *[_type == "workItem" && order > ^.order && defined(slug.current)]\n      | order(order asc)[0] {\n        title,\n        "slug": slug.current,\n        tag\n      },\n    "company": company->{\n      _id,\n      name,\n      logo,\n      website\n    }\n  }\n': WorkItemBySlugQueryResult;
 		'\n  *[_type == "workItem" && defined(slug.current)].slug.current\n': AllWorkItemSlugsQueryResult;
 	}
 }

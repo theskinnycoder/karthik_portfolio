@@ -169,9 +169,12 @@ export const workItem = defineType({
 					type: "block",
 					styles: [
 						{ title: "Normal", value: "normal" },
+						{ title: "Heading 1", value: "h1" },
 						{ title: "Heading 2", value: "h2" },
 						{ title: "Heading 3", value: "h3" },
 						{ title: "Heading 4", value: "h4" },
+						{ title: "Heading 5", value: "h5" },
+						{ title: "Heading 6", value: "h6" },
 						{ title: "Quote", value: "blockquote" },
 					],
 					lists: [
@@ -279,6 +282,138 @@ export const workItem = defineType({
 						prepare: ({ author, quote }) => ({
 							title: (author as string) || "Testimonial",
 							subtitle: quote as string,
+						}),
+					},
+				}),
+				defineArrayMember({
+					type: "object",
+					name: "contentCode",
+					title: "Code block",
+					fields: [
+						defineField({
+							name: "language",
+							title: "Language",
+							type: "string",
+							options: {
+								list: [
+									{ title: "TypeScript", value: "typescript" },
+									{ title: "JavaScript", value: "javascript" },
+									{ title: "TSX", value: "tsx" },
+									{ title: "JSX", value: "jsx" },
+									{ title: "CSS", value: "css" },
+									{ title: "HTML", value: "html" },
+									{ title: "JSON", value: "json" },
+									{ title: "Markdown", value: "markdown" },
+									{ title: "Bash", value: "bash" },
+									{ title: "Python", value: "python" },
+									{ title: "GROQ", value: "groq" },
+									{ title: "Plain text", value: "text" },
+								],
+							},
+							initialValue: "text",
+						}),
+						defineField({
+							name: "filename",
+							title: "Filename",
+							type: "string",
+							description: "Optional label shown above the code",
+						}),
+						defineField({
+							name: "code",
+							title: "Code",
+							type: "text",
+							rows: 10,
+							validation: (rule) => rule.required(),
+						}),
+					],
+					preview: {
+						select: { title: "filename", subtitle: "language", code: "code" },
+						prepare: ({ title, subtitle, code }) => ({
+							title: (title as string) || (subtitle as string) || "Code",
+							subtitle:
+								typeof code === "string"
+									? code.split("\n")[0].slice(0, 80)
+									: undefined,
+						}),
+					},
+				}),
+				defineArrayMember({
+					type: "object",
+					name: "contentDivider",
+					title: "Divider",
+					fields: [
+						defineField({
+							name: "style",
+							title: "Style",
+							type: "string",
+							options: {
+								list: [
+									{ title: "Line", value: "line" },
+									{ title: "Space", value: "space" },
+								],
+								layout: "radio",
+							},
+							initialValue: "line",
+							validation: (rule) => rule.required(),
+						}),
+					],
+					preview: {
+						select: { style: "style" },
+						prepare: ({ style }) => ({
+							title: "Divider",
+							subtitle: style as string,
+						}),
+					},
+				}),
+				defineArrayMember({
+					type: "object",
+					name: "contentVideo",
+					title: "Video",
+					fields: [
+						defineField({
+							name: "asset",
+							title: "Video",
+							type: "cloudinary.asset",
+							validation: (rule) => rule.required(),
+						}),
+						defineField({
+							name: "caption",
+							title: "Caption",
+							type: "string",
+						}),
+						defineField({
+							name: "autoplay",
+							title: "Autoplay",
+							type: "boolean",
+							description:
+								"Auto-plays on load. Requires muted to be enabled in browsers.",
+							initialValue: false,
+						}),
+						defineField({
+							name: "loop",
+							title: "Loop",
+							type: "boolean",
+							initialValue: false,
+						}),
+						defineField({
+							name: "muted",
+							title: "Muted",
+							type: "boolean",
+							description: "Start muted. Required when autoplay is on.",
+							initialValue: true,
+						}),
+						defineField({
+							name: "controls",
+							title: "Show controls",
+							type: "boolean",
+							initialValue: true,
+						}),
+					],
+					preview: {
+						select: { title: "caption", media: "asset" },
+						prepare: ({ title, media }) => ({
+							title: (title as string) || "Video",
+							media: media as unknown as undefined,
 						}),
 					},
 				}),

@@ -134,12 +134,6 @@ export const workItemBySlugQuery = defineQuery(`
             logo
           }
         }
-      },
-      _type == "contentGallery" => {
-        _type,
-        _key,
-        columns,
-        items[] { _key, asset, alt, caption }
       }
     },
     "prev": *[_type == "workItem" && order < ^.order && defined(slug.current)]

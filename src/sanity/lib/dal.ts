@@ -142,10 +142,38 @@ export interface ContentTestimonialDTO {
 	testimonial: TestimonialDTO;
 }
 
+export interface ContentCodeDTO {
+	_type: "contentCode";
+	_key: string;
+	language: string;
+	filename?: string;
+	code: string;
+}
+
+export interface ContentDividerDTO {
+	_type: "contentDivider";
+	_key: string;
+	style: "line" | "space";
+}
+
+export interface ContentVideoDTO {
+	_type: "contentVideo";
+	_key: string;
+	url: string;
+	caption?: string;
+	autoplay: boolean;
+	loop: boolean;
+	muted: boolean;
+	controls: boolean;
+}
+
 export type ContentBlock =
 	| PortableTextBlock
 	| ContentImageDTO
-	| ContentTestimonialDTO;
+	| ContentTestimonialDTO
+	| ContentCodeDTO
+	| ContentDividerDTO
+	| ContentVideoDTO;
 
 export interface WorkNavLinkDTO {
 	title: string;
@@ -315,6 +343,46 @@ function toContentTestimonialDTO(
 	};
 }
 
+function toContentCodeDTO(
+	data: ContentBlockOfType<"contentCode">,
+): ContentCodeDTO | null {
+	if (!data.code) return null;
+	return {
+		_type: "contentCode",
+		_key: data._key,
+		language: data.language ?? "text",
+		filename: data.filename ?? undefined,
+		code: data.code,
+	};
+}
+
+function toContentDividerDTO(
+	data: ContentBlockOfType<"contentDivider">,
+): ContentDividerDTO {
+	return {
+		_type: "contentDivider",
+		_key: data._key,
+		style: data.style ?? "line",
+	};
+}
+
+function toContentVideoDTO(
+	data: ContentBlockOfType<"contentVideo">,
+): ContentVideoDTO | null {
+	const url = getMediaUrl(data.asset);
+	if (!url) return null;
+	return {
+		_type: "contentVideo",
+		_key: data._key,
+		url,
+		caption: data.caption ?? undefined,
+		autoplay: data.autoplay ?? false,
+		loop: data.loop ?? false,
+		muted: data.muted ?? true,
+		controls: data.controls ?? true,
+	};
+}
+
 function hasType<T extends string>(
 	block: ContentBlockRaw,
 	type: T,
@@ -326,6 +394,9 @@ function toContentBlock(block: ContentBlockRaw): ContentBlock | null {
 	if (hasType(block, "contentImage")) return toContentImageDTO(block);
 	if (hasType(block, "contentTestimonial"))
 		return toContentTestimonialDTO(block);
+	if (hasType(block, "contentCode")) return toContentCodeDTO(block);
+	if (hasType(block, "contentDivider")) return toContentDividerDTO(block);
+	if (hasType(block, "contentVideo")) return toContentVideoDTO(block);
 	// Pass-through for PortableText `block` — the generated shape is a superset
 	// of `PortableTextBlock` so the cast is safe at runtime.
 	return block as unknown as PortableTextBlock;

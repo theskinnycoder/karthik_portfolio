@@ -1,16 +1,29 @@
 import type { PortableTextComponents } from "next-sanity";
-import type { ContentImageDTO, ContentTestimonialDTO } from "@/sanity/lib/dal";
-import { ContentImage, ContentTestimonial } from "./blocks";
+import type {
+	ContentCodeDTO,
+	ContentDividerDTO,
+	ContentImageDTO,
+	ContentTestimonialDTO,
+	ContentVideoDTO,
+} from "@/sanity/lib/dal";
+import {
+	ContentCode,
+	ContentDivider,
+	ContentImage,
+	ContentTestimonial,
+	ContentVideo,
+} from "./blocks";
 
 /**
  * Component map for case-study articles. The wrapping container applies the
  * `prose` utility (see PortableTextRenderer), so native prose elements —
- * headings, paragraphs, lists, marks, links, inline code — inherit
+ * headings (h1–h6), paragraphs, lists, marks, links, inline code — inherit
  * typography-plugin styling automatically.
  *
  * We only override what prose can't express:
  * - `link` carries PortableText-specific href / openInNewTab data
- * - `types` wires custom contentImage / contentTestimonial blocks
+ * - `types` wires custom contentImage / contentTestimonial / contentCode /
+ *   contentDivider / contentVideo blocks
  *
  * Block-level marks (strong, em, code) fall through to prose defaults, which
  * the data-theme="work-detail" tokens recolor to the Figma palette.
@@ -37,6 +50,15 @@ export const articleComponents: PortableTextComponents = {
 		),
 		contentTestimonial: ({ value }: { value: ContentTestimonialDTO }) => (
 			<ContentTestimonial value={value} />
+		),
+		contentCode: ({ value }: { value: ContentCodeDTO }) => (
+			<ContentCode value={value} />
+		),
+		contentDivider: ({ value }: { value: ContentDividerDTO }) => (
+			<ContentDivider value={value} />
+		),
+		contentVideo: ({ value }: { value: ContentVideoDTO }) => (
+			<ContentVideo value={value} />
 		),
 	},
 };
