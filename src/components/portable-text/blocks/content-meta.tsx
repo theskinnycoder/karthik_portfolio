@@ -8,9 +8,13 @@ interface ContentMetaProps {
 
 /**
  * Inline meta panel. Mirrors Figma's "My Work / Team / Time Line / Tools"
- * sections — each section has a 1.5×18 coral tick + uppercase label above a
+ * sections — each section has a 1.5×18 coral tick + title-case label above a
  * value row. Sections with no content are skipped, so authors can pick
  * whatever subset applies to a given case study.
+ *
+ * Labels and values follow the same responsive rem scale as article body
+ * text (14px → 15px → 16px at md/lg). Colors match the prose system —
+ * `text-foreground` for labels, `text-muted-foreground` for values.
  *
  * Not a fixed panel: rendered wherever the author drops the block inside the
  * article body (replaces the old top-level WorkMeta component).
@@ -53,11 +57,13 @@ function MetaSection({ label, children }: MetaSectionProps) {
 					aria-hidden
 					className="block h-[18px] w-[1.5px] rounded-sm bg-[var(--accent-coral)]"
 				/>
-				<span className="text-xs font-light tracking-wide text-foreground uppercase">
+				<span className="text-[0.875rem] font-semibold text-foreground md:text-[0.9375rem] lg:text-[1rem]">
 					{label}
 				</span>
 			</div>
-			<div className="pl-[11px] text-sm text-foreground">{children}</div>
+			<div className="pl-[11px] text-[0.875rem] font-normal text-muted-foreground md:text-[0.9375rem] lg:text-[1rem]">
+				{children}
+			</div>
 		</div>
 	);
 }
@@ -89,11 +95,11 @@ function TeamRoster({ members }: { members: TeamMemberDTO[] }) {
 				{members.map((m) => (
 					<li
 						key={m.name}
-						className="text-foreground"
+						className="text-[0.875rem] text-foreground md:text-[0.9375rem] lg:text-[1rem]"
 					>
 						<span className="font-medium">{m.name}</span>
 						{", "}
-						<span className="font-light">{m.role}</span>
+						<span className="font-normal">{m.role}</span>
 					</li>
 				))}
 			</ul>

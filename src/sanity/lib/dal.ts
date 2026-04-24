@@ -143,14 +143,6 @@ export interface ContentTestimonialDTO {
 	testimonial: TestimonialDTO;
 }
 
-export interface ContentCodeDTO {
-	_type: "contentCode";
-	_key: string;
-	language: string;
-	filename?: string;
-	code: string;
-}
-
 export interface ContentDividerDTO {
 	_type: "contentDivider";
 	_key: string;
@@ -181,7 +173,6 @@ export type ContentBlock =
 	| PortableTextBlock
 	| ContentImageDTO
 	| ContentTestimonialDTO
-	| ContentCodeDTO
 	| ContentDividerDTO
 	| ContentVideoDTO
 	| ContentMetaDTO;
@@ -349,19 +340,6 @@ function toContentTestimonialDTO(
 	};
 }
 
-function toContentCodeDTO(
-	data: ContentBlockOfType<"contentCode">,
-): ContentCodeDTO | null {
-	if (!data.code) return null;
-	return {
-		_type: "contentCode",
-		_key: data._key,
-		language: data.language ?? "text",
-		filename: data.filename ?? undefined,
-		code: data.code,
-	};
-}
-
 function toContentDividerDTO(
 	data: ContentBlockOfType<"contentDivider">,
 ): ContentDividerDTO {
@@ -421,7 +399,6 @@ function toContentBlock(block: ContentBlockRaw): ContentBlock | null {
 	if (hasType(block, "contentImage")) return toContentImageDTO(block);
 	if (hasType(block, "contentTestimonial"))
 		return toContentTestimonialDTO(block);
-	if (hasType(block, "contentCode")) return toContentCodeDTO(block);
 	if (hasType(block, "contentDivider")) return toContentDividerDTO(block);
 	if (hasType(block, "contentVideo")) return toContentVideoDTO(block);
 	if (hasType(block, "contentMeta")) return toContentMetaDTO(block);

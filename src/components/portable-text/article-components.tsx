@@ -1,6 +1,5 @@
 import type { PortableTextComponents } from "next-sanity";
 import type {
-	ContentCodeDTO,
 	ContentDividerDTO,
 	ContentImageDTO,
 	ContentMetaDTO,
@@ -8,7 +7,6 @@ import type {
 	ContentVideoDTO,
 } from "@/sanity/lib/dal";
 import {
-	ContentCode,
 	ContentDivider,
 	ContentImage,
 	ContentMeta,
@@ -18,17 +16,12 @@ import {
 
 /**
  * Component map for case-study articles. The wrapping container applies the
- * `prose` utility (see PortableTextRenderer), so native prose elements —
- * headings (h1–h6), paragraphs, lists, marks, links, inline code — inherit
- * typography-plugin styling automatically.
+ * `prose` utility (see PortableTextRenderer) so headings, paragraphs, lists
+ * and decorators (em / s / underline) pick up typography-plugin defaults.
  *
- * We only override what prose can't express:
- * - `link` carries PortableText-specific href / openInNewTab data
- * - `types` wires custom contentImage / contentTestimonial / contentCode /
- *   contentDivider / contentVideo blocks
- *
- * Block-level marks (strong, em, code) fall through to prose defaults, which
- * the data-theme="work-detail" tokens recolor to the Figma palette.
+ * Custom mark annotations (textColor, fontWeight, fontFamily) paint inline
+ * styles so an author can override the prose defaults per-span from Studio.
+ * Inline style beats prose's class selectors — authors always win.
  */
 export const articleComponents: PortableTextComponents = {
 	marks: {
@@ -45,6 +38,32 @@ export const articleComponents: PortableTextComponents = {
 				</a>
 			);
 		},
+		textColor: ({ value, children }) => {
+			const hex =
+				typeof value?.value?.hex === "string" ? value.value.hex : undefined;
+			return <span style={hex ? { color: hex } : undefined}>{children}</span>;
+		},
+		fontWeight: ({ value, children }) => {
+			const weight = typeof value?.value === "string" ? value.value : undefined;
+			return (
+				<span style={weight ? { fontWeight: weight } : undefined}>
+					{children}
+				</span>
+			);
+		},
+		fontFamily: ({ value, children }) => {
+			const family =
+				value?.value === "serif"
+					? "var(--font-serif)"
+					: value?.value === "sans"
+						? "var(--font-sans)"
+						: undefined;
+			return (
+				<span style={family ? { fontFamily: family } : undefined}>
+					{children}
+				</span>
+			);
+		},
 	},
 	types: {
 		contentImage: ({ value }: { value: ContentImageDTO }) => (
@@ -52,9 +71,6 @@ export const articleComponents: PortableTextComponents = {
 		),
 		contentTestimonial: ({ value }: { value: ContentTestimonialDTO }) => (
 			<ContentTestimonial value={value} />
-		),
-		contentCode: ({ value }: { value: ContentCodeDTO }) => (
-			<ContentCode value={value} />
 		),
 		contentDivider: ({ value }: { value: ContentDividerDTO }) => (
 			<ContentDivider value={value} />

@@ -1,5 +1,6 @@
 "use client";
 
+import { colorInput } from "@sanity/color-input";
 import { visionTool } from "@sanity/vision";
 import { defineConfig } from "sanity";
 import { cloudinarySchemaPlugin } from "sanity-plugin-cloudinary";
@@ -17,5 +18,6 @@ export default defineConfig({
 		structureTool({ structure }),
 		visionTool({ defaultApiVersion: apiVersion }),
 		cloudinarySchemaPlugin(),
+		colorInput(),
 	],
 });

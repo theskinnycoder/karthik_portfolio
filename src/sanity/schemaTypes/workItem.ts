@@ -126,9 +126,9 @@ export const workItem = defineType({
 					],
 					marks: {
 						decorators: [
-							{ title: "Strong", value: "strong" },
-							{ title: "Emphasis", value: "em" },
-							{ title: "Code", value: "code" },
+							{ title: "Italic", value: "em" },
+							{ title: "Strike", value: "s" },
+							{ title: "Underline", value: "underline" },
 						],
 						annotations: [
 							{
@@ -150,6 +150,60 @@ export const workItem = defineType({
 										title: "Open in new tab",
 										type: "boolean",
 										initialValue: false,
+									}),
+								],
+							},
+							{
+								name: "textColor",
+								type: "object",
+								title: "Color",
+								fields: [
+									defineField({
+										name: "value",
+										title: "Color",
+										type: "color",
+										options: { disableAlpha: true },
+									}),
+								],
+							},
+							{
+								name: "fontWeight",
+								type: "object",
+								title: "Weight",
+								fields: [
+									defineField({
+										name: "value",
+										title: "Weight",
+										type: "string",
+										options: {
+											list: [
+												{ title: "Light 300", value: "300" },
+												{ title: "Regular 400", value: "400" },
+												{ title: "Medium 500", value: "500" },
+												{ title: "Semibold 600", value: "600" },
+												{ title: "Bold 700", value: "700" },
+											],
+											layout: "radio",
+										},
+									}),
+								],
+							},
+							{
+								name: "fontFamily",
+								type: "object",
+								title: "Font family",
+								fields: [
+									defineField({
+										name: "value",
+										title: "Family",
+										type: "string",
+										options: {
+											list: [
+												{ title: "Inter Tight (sans)", value: "sans" },
+												{ title: "Caveat (script)", value: "serif" },
+											],
+											layout: "radio",
+										},
 									}),
 								],
 							},
@@ -302,58 +356,6 @@ export const workItem = defineType({
 								subtitle: parts.length > 0 ? parts.join(" · ") : undefined,
 							};
 						},
-					},
-				}),
-				defineArrayMember({
-					type: "object",
-					name: "contentCode",
-					title: "Code block",
-					fields: [
-						defineField({
-							name: "language",
-							title: "Language",
-							type: "string",
-							options: {
-								list: [
-									{ title: "TypeScript", value: "typescript" },
-									{ title: "JavaScript", value: "javascript" },
-									{ title: "TSX", value: "tsx" },
-									{ title: "JSX", value: "jsx" },
-									{ title: "CSS", value: "css" },
-									{ title: "HTML", value: "html" },
-									{ title: "JSON", value: "json" },
-									{ title: "Markdown", value: "markdown" },
-									{ title: "Bash", value: "bash" },
-									{ title: "Python", value: "python" },
-									{ title: "GROQ", value: "groq" },
-									{ title: "Plain text", value: "text" },
-								],
-							},
-							initialValue: "text",
-						}),
-						defineField({
-							name: "filename",
-							title: "Filename",
-							type: "string",
-							description: "Optional label shown above the code",
-						}),
-						defineField({
-							name: "code",
-							title: "Code",
-							type: "text",
-							rows: 10,
-							validation: (rule) => rule.required(),
-						}),
-					],
-					preview: {
-						select: { title: "filename", subtitle: "language", code: "code" },
-						prepare: ({ title, subtitle, code }) => ({
-							title: (title as string) || (subtitle as string) || "Code",
-							subtitle:
-								typeof code === "string"
-									? code.split("\n")[0].slice(0, 80)
-									: undefined,
-						}),
 					},
 				}),
 				defineArrayMember({

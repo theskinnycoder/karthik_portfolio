@@ -33,9 +33,6 @@ export function WorkArticle({ work }: WorkArticleProps) {
 			style={toBrandStyle(work.brand)}
 		>
 			<WorkBackLink />
-			<h1 className="text-3xl font-semibold text-foreground sm:text-4xl">
-				{work.title}
-			</h1>
 			{work.content.length > 0 && (
 				<PortableTextRenderer
 					value={work.content}

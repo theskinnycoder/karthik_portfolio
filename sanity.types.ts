@@ -57,12 +57,29 @@ export type WorkItem = {
 					| "h6"
 					| "blockquote";
 				listItem?: "bullet" | "number";
-				markDefs?: Array<{
-					href?: string;
-					openInNewTab?: boolean;
-					_type: "link";
-					_key: string;
-				}>;
+				markDefs?: Array<
+					| {
+							href?: string;
+							openInNewTab?: boolean;
+							_type: "link";
+							_key: string;
+					  }
+					| {
+							value?: Color;
+							_type: "textColor";
+							_key: string;
+					  }
+					| {
+							value?: "300" | "400" | "500" | "600" | "700";
+							_type: "fontWeight";
+							_key: string;
+					  }
+					| {
+							value?: "sans" | "serif";
+							_type: "fontFamily";
+							_key: string;
+					  }
+				>;
 				level?: number;
 				_type: "block";
 				_key: string;
@@ -97,25 +114,6 @@ export type WorkItem = {
 				timeline?: string;
 				tools?: Array<string>;
 				_type: "contentMeta";
-				_key: string;
-		  }
-		| {
-				language?:
-					| "typescript"
-					| "javascript"
-					| "tsx"
-					| "jsx"
-					| "css"
-					| "html"
-					| "json"
-					| "markdown"
-					| "bash"
-					| "python"
-					| "groq"
-					| "text";
-				filename?: string;
-				code?: string;
-				_type: "contentCode";
 				_key: string;
 		  }
 		| {
@@ -166,6 +164,15 @@ export type CloudinaryAsset = {
 	>;
 	access_mode?: string;
 	context?: CloudinaryAssetContext;
+};
+
+export type Color = {
+	_type: "color";
+	hex?: string;
+	alpha?: number;
+	hsl?: HslaColor;
+	hsv?: HsvaColor;
+	rgb?: RgbaColor;
 };
 
 export type Testimonial = {
@@ -304,6 +311,30 @@ export type Company = {
 	order?: number;
 };
 
+export type RgbaColor = {
+	_type: "rgbaColor";
+	r?: number;
+	g?: number;
+	b?: number;
+	a?: number;
+};
+
+export type HsvaColor = {
+	_type: "hsvaColor";
+	h?: number;
+	s?: number;
+	v?: number;
+	a?: number;
+};
+
+export type HslaColor = {
+	_type: "hslaColor";
+	h?: number;
+	s?: number;
+	l?: number;
+	a?: number;
+};
+
 export type CloudinaryAssetContextCustom = {
 	_type: "cloudinary.assetContextCustom";
 	alt?: string;
@@ -438,6 +469,7 @@ export type AllSanitySchemaTypes =
 	| WorkItem
 	| Slug
 	| CloudinaryAsset
+	| Color
 	| Testimonial
 	| Social
 	| SiteProfile
@@ -445,6 +477,9 @@ export type AllSanitySchemaTypes =
 	| Project
 	| Experience
 	| Company
+	| RgbaColor
+	| HsvaColor
+	| HslaColor
 	| CloudinaryAssetContextCustom
 	| CloudinaryAssetContext
 	| CloudinaryAssetDerived
@@ -620,33 +655,31 @@ export type WorkItemBySlugQueryResult = {
 					| "h6"
 					| "normal";
 				listItem?: "bullet" | "number";
-				markDefs?: Array<{
-					href?: string;
-					openInNewTab?: boolean;
-					_type: "link";
-					_key: string;
-				}>;
+				markDefs?: Array<
+					| {
+							value?: "sans" | "serif";
+							_type: "fontFamily";
+							_key: string;
+					  }
+					| {
+							value?: "300" | "400" | "500" | "600" | "700";
+							_type: "fontWeight";
+							_key: string;
+					  }
+					| {
+							href?: string;
+							openInNewTab?: boolean;
+							_type: "link";
+							_key: string;
+					  }
+					| {
+							value?: Color;
+							_type: "textColor";
+							_key: string;
+					  }
+				>;
 				level?: number;
 				_type: "block";
-				_key: string;
-		  }
-		| {
-				language?:
-					| "bash"
-					| "css"
-					| "groq"
-					| "html"
-					| "javascript"
-					| "json"
-					| "jsx"
-					| "markdown"
-					| "python"
-					| "text"
-					| "tsx"
-					| "typescript";
-				filename?: string;
-				code?: string;
-				_type: "contentCode";
 				_key: string;
 		  }
 		| {
