@@ -63,32 +63,38 @@ export const workItem = defineType({
 				"Short lede shown under the title on the case-study page (falls back to description if empty)",
 		}),
 		defineField({
-			name: "role",
-			title: "Role",
-			type: "string",
-			description: 'e.g. "Product Designer", "Design Lead"',
-			validation: (rule) => rule.required(),
-		}),
-		defineField({
-			name: "year",
-			title: "Year",
-			type: "string",
-			description: 'e.g. "2024" or "2023—present"',
-			validation: (rule) => rule.required(),
-		}),
-		defineField({
-			name: "duration",
-			title: "Duration",
-			type: "string",
-			description: 'Optional time spent, e.g. "3 months"',
-		}),
-		defineField({
-			name: "stack",
-			title: "Stack / Tools",
-			type: "array",
-			of: [{ type: "string" }],
-			options: { layout: "tags" },
-			description: "Tools, methods, or technologies used on the project",
+			name: "brand",
+			title: "Brand colors",
+			type: "object",
+			description:
+				"Optional per-case-study brand palette. Leave blank to use the site default.",
+			options: { collapsible: true, collapsed: true },
+			fields: [
+				defineField({
+					name: "primary",
+					title: "Primary",
+					type: "string",
+					description: "Hex, e.g. #2563EB",
+				}),
+				defineField({
+					name: "secondary",
+					title: "Secondary",
+					type: "string",
+					description: "Hex",
+				}),
+				defineField({
+					name: "accent",
+					title: "Accent",
+					type: "string",
+					description: "Hex",
+				}),
+				defineField({
+					name: "muted",
+					title: "Muted background",
+					type: "string",
+					description: "Hex, subtle fill",
+				}),
+			],
 		}),
 		defineField({
 			name: "liveUrl",
@@ -106,9 +112,12 @@ export const workItem = defineType({
 					type: "block",
 					styles: [
 						{ title: "Normal", value: "normal" },
+						{ title: "Heading 1", value: "h1" },
 						{ title: "Heading 2", value: "h2" },
 						{ title: "Heading 3", value: "h3" },
 						{ title: "Heading 4", value: "h4" },
+						{ title: "Heading 5", value: "h5" },
+						{ title: "Heading 6", value: "h6" },
 						{ title: "Quote", value: "blockquote" },
 					],
 					lists: [
@@ -117,9 +126,9 @@ export const workItem = defineType({
 					],
 					marks: {
 						decorators: [
-							{ title: "Strong", value: "strong" },
-							{ title: "Emphasis", value: "em" },
-							{ title: "Code", value: "code" },
+							{ title: "Italic", value: "em" },
+							{ title: "Strike", value: "s" },
+							{ title: "Underline", value: "underline" },
 						],
 						annotations: [
 							{
@@ -141,6 +150,60 @@ export const workItem = defineType({
 										title: "Open in new tab",
 										type: "boolean",
 										initialValue: false,
+									}),
+								],
+							},
+							{
+								name: "textColor",
+								type: "object",
+								title: "Color",
+								fields: [
+									defineField({
+										name: "value",
+										title: "Color",
+										type: "color",
+										options: { disableAlpha: true },
+									}),
+								],
+							},
+							{
+								name: "fontWeight",
+								type: "object",
+								title: "Weight",
+								fields: [
+									defineField({
+										name: "value",
+										title: "Weight",
+										type: "string",
+										options: {
+											list: [
+												{ title: "Light 300", value: "300" },
+												{ title: "Regular 400", value: "400" },
+												{ title: "Medium 500", value: "500" },
+												{ title: "Semibold 600", value: "600" },
+												{ title: "Bold 700", value: "700" },
+											],
+											layout: "radio",
+										},
+									}),
+								],
+							},
+							{
+								name: "fontFamily",
+								type: "object",
+								title: "Font family",
+								fields: [
+									defineField({
+										name: "value",
+										title: "Family",
+										type: "string",
+										options: {
+											list: [
+												{ title: "Inter Tight (sans)", value: "sans" },
+												{ title: "Caveat (script)", value: "serif" },
+											],
+											layout: "radio",
+										},
 									}),
 								],
 							},
@@ -193,6 +256,186 @@ export const workItem = defineType({
 							subtitle: "caption",
 							media: "asset",
 						},
+					},
+				}),
+				defineArrayMember({
+					type: "object",
+					name: "contentTestimonial",
+					title: "Testimonial",
+					fields: [
+						defineField({
+							name: "testimonial",
+							title: "Testimonial",
+							type: "reference",
+							to: [{ type: "testimonial" }],
+							validation: (rule) => rule.required(),
+						}),
+					],
+					preview: {
+						select: {
+							author: "testimonial.authorName",
+							quote: "testimonial.quote",
+						},
+						prepare: ({ author, quote }) => ({
+							title: (author as string) || "Testimonial",
+							subtitle: quote as string,
+						}),
+					},
+				}),
+				defineArrayMember({
+					type: "object",
+					name: "contentMeta",
+					title: "Meta panel",
+					fields: [
+						defineField({
+							name: "role",
+							title: "My Work",
+							type: "string",
+							description:
+								'e.g. "Product Research, User Flow, UX, High Fidelity"',
+						}),
+						defineField({
+							name: "team",
+							title: "Team",
+							type: "array",
+							of: [
+								defineArrayMember({
+									type: "object",
+									name: "teamMember",
+									fields: [
+										defineField({
+											name: "name",
+											title: "Name",
+											type: "string",
+											validation: (rule) => rule.required(),
+										}),
+										defineField({
+											name: "role",
+											title: "Role",
+											type: "string",
+											validation: (rule) => rule.required(),
+										}),
+										defineField({
+											name: "avatar",
+											title: "Avatar",
+											type: "cloudinary.asset",
+										}),
+									],
+									preview: {
+										select: {
+											title: "name",
+											subtitle: "role",
+											media: "avatar",
+										},
+									},
+								}),
+							],
+						}),
+						defineField({
+							name: "timeline",
+							title: "Time Line",
+							type: "string",
+							description: 'e.g. "2 Weeks · August 2023"',
+						}),
+						defineField({
+							name: "tools",
+							title: "Tools",
+							type: "array",
+							of: [{ type: "string" }],
+							options: { layout: "tags" },
+						}),
+					],
+					preview: {
+						select: { role: "role", timeline: "timeline" },
+						prepare: ({ role, timeline }) => {
+							const parts = [role, timeline].filter(
+								(p): p is string => typeof p === "string" && p.length > 0,
+							);
+							return {
+								title: "Meta panel",
+								subtitle: parts.length > 0 ? parts.join(" · ") : undefined,
+							};
+						},
+					},
+				}),
+				defineArrayMember({
+					type: "object",
+					name: "contentDivider",
+					title: "Divider",
+					fields: [
+						defineField({
+							name: "style",
+							title: "Style",
+							type: "string",
+							options: {
+								list: [
+									{ title: "Line", value: "line" },
+									{ title: "Space", value: "space" },
+								],
+								layout: "radio",
+							},
+							initialValue: "line",
+							validation: (rule) => rule.required(),
+						}),
+					],
+					preview: {
+						select: { style: "style" },
+						prepare: ({ style }) => ({
+							title: "Divider",
+							subtitle: style as string,
+						}),
+					},
+				}),
+				defineArrayMember({
+					type: "object",
+					name: "contentVideo",
+					title: "Video",
+					fields: [
+						defineField({
+							name: "asset",
+							title: "Video",
+							type: "cloudinary.asset",
+							validation: (rule) => rule.required(),
+						}),
+						defineField({
+							name: "caption",
+							title: "Caption",
+							type: "string",
+						}),
+						defineField({
+							name: "autoplay",
+							title: "Autoplay",
+							type: "boolean",
+							description:
+								"Auto-plays on load. Requires muted to be enabled in browsers.",
+							initialValue: false,
+						}),
+						defineField({
+							name: "loop",
+							title: "Loop",
+							type: "boolean",
+							initialValue: false,
+						}),
+						defineField({
+							name: "muted",
+							title: "Muted",
+							type: "boolean",
+							description: "Start muted. Required when autoplay is on.",
+							initialValue: true,
+						}),
+						defineField({
+							name: "controls",
+							title: "Show controls",
+							type: "boolean",
+							initialValue: true,
+						}),
+					],
+					preview: {
+						select: { title: "caption", media: "asset" },
+						prepare: ({ title, media }) => ({
+							title: (title as string) || "Video",
+							media: media as unknown as undefined,
+						}),
 					},
 				}),
 			],

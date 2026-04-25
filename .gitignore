@@ -43,6 +43,11 @@ next-env.d.ts
 # sanity
 /.sanity/
 /dist/
+# Generated intermediate for typegen; re-created by `bun run sanity:schema:extract`
+/schema.json
+
+# playwright mcp test artifacts (screenshots, console logs)
+.playwright-mcp/
 
 # claude code
 .claude/*

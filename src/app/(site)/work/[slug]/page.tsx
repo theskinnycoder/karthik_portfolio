@@ -44,9 +44,17 @@ export default async function WorkDetailPage({ params }: WorkDetailPageProps) {
 	const work = await getWorkItemBySlug(slug);
 	if (!work) notFound();
 
+	// Per-route warm light palette lives in globals.css under
+	// `[data-theme="work-detail"]`. Every descendant token (background,
+	// foreground, card, border, muted-foreground) flips to the Figma values.
 	return (
-		<main className="mx-auto flex w-full max-w-2xl flex-col gap-12 px-6 pt-16 pb-24">
-			<WorkArticle work={work} />
-		</main>
+		<div
+			data-theme="work-detail"
+			className="min-h-dvh bg-background text-foreground"
+		>
+			<main className="mx-auto flex w-full max-w-2xl flex-col gap-12 px-6 pt-16 pb-24">
+				<WorkArticle work={work} />
+			</main>
+		</div>
 	);
 }

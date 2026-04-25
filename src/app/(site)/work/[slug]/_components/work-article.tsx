@@ -1,46 +1,49 @@
+import type { CSSProperties } from "react";
 import { PortableTextRenderer } from "@/components/portable-text";
-import type { WorkItemDetailDTO } from "@/sanity/lib/dal";
+import type { BrandDTO, WorkItemDetailDTO } from "@/sanity/lib/dal";
 import { WorkBackLink } from "./work-back-link";
-import { WorkHero } from "./work-hero";
-import { WorkMeta } from "./work-meta";
+import { WorkPrevNext } from "./work-prev-next";
 
 interface WorkArticleProps {
 	work: WorkItemDetailDTO;
 }
 
+/**
+ * Brand colors are applied to the article root as CSS custom properties so
+ * every descendant (including portable-text blocks nested arbitrarily deep)
+ * can reference them via `var(--brand-primary, var(--color-foreground))`
+ * style fallbacks. Leaving brand unset falls back to the site's grayscale
+ * tokens automatically.
+ */
+function toBrandStyle(brand: BrandDTO): CSSProperties {
+	const style: Record<string, string> = {};
+	if (brand.primary) style["--brand-primary"] = brand.primary;
+	if (brand.secondary) style["--brand-secondary"] = brand.secondary;
+	if (brand.accent) style["--brand-accent"] = brand.accent;
+	if (brand.muted) style["--brand-muted"] = brand.muted;
+	return style as CSSProperties;
+}
+
 export function WorkArticle({ work }: WorkArticleProps) {
-	const lede = work.excerpt ?? work.description;
+	const hasNavigation = Boolean(work.prev || work.next);
 
 	return (
-		<article className="flex flex-col gap-10">
+		<article
+			className="flex flex-col gap-10"
+			style={toBrandStyle(work.brand)}
+		>
 			<WorkBackLink />
-			<header className="flex flex-col gap-6">
-				<WorkHero
-					src={work.heroImage}
-					alt={work.title}
-				/>
-				<div className="flex flex-col gap-3">
-					<span className="w-fit rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
-						{work.tag}
-					</span>
-					<h1 className="text-3xl font-semibold text-foreground sm:text-4xl">
-						{work.title}
-					</h1>
-					{lede && (
-						<p className="text-base font-light text-muted-foreground sm:text-lg">
-							{lede}
-						</p>
-					)}
-				</div>
-				<WorkMeta work={work} />
-			</header>
 			{work.content.length > 0 && (
-				<div className="flex flex-col gap-4">
-					<PortableTextRenderer
-						value={work.content}
-						variant="article"
-					/>
-				</div>
+				<PortableTextRenderer
+					value={work.content}
+					variant="article"
+				/>
+			)}
+			{hasNavigation && (
+				<WorkPrevNext
+					prev={work.prev}
+					next={work.next}
+				/>
 			)}
 		</article>
 	);

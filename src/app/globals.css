@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@plugin "@tailwindcss/typography";
 
 @theme inline {
 	--color-background: var(--background);
@@ -20,6 +21,7 @@
 	--color-primary: var(--primary);
 	--color-card-foreground: var(--card-foreground);
 	--color-card: var(--card);
+	--color-accent-coral: var(--accent-coral);
 	--radius-sm: calc(var(--radius) - 4px);
 	--radius-md: calc(var(--radius) - 2px);
 	--radius-lg: var(--radius);
@@ -46,6 +48,29 @@
 	--input: oklch(0.8452 0 0); /* #CCCCCC */
 	--ring: oklch(0.556 0 0); /* #737373 */
 	--radius: 0.875rem;
+	--accent-coral: #fb7482;
+}
+
+/* Warm light palette used only on /work/[slug]. Overrides the site-wide dark
+   :root tokens for descendants of elements carrying data-theme="work-detail".
+   Cards flip to white so testimonial / meta / prev-next surfaces match Figma,
+   and --accent-coral drives blockquote / callout accents. */
+[data-theme="work-detail"] {
+	--background: #faf9f6;
+	--foreground: #212121;
+	--card: #ffffff;
+	--card-foreground: #212121;
+	--muted: #f5f4f0;
+	--muted-foreground: #414141;
+	--border: #f2f0e9;
+	--input: #f2f0e9;
+	--ring: #808080;
+	--primary: #212121;
+	--primary-foreground: #faf9f6;
+	--secondary: #f5f4f0;
+	--secondary-foreground: #212121;
+	--accent: #f5f4f0;
+	--accent-foreground: #212121;
 }
 
 @layer base {

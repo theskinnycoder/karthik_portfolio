@@ -33,8 +33,13 @@ export class CloudinaryMediaService {
 	/**
 	 * Build Cloudinary URL with transformations
 	 * Format: https://res.cloudinary.com/{cloud}/{resource_type}/{type}/{transforms}/{public_id}
+	 *
+	 * Returns "" when required fields are missing — matches the safety contract
+	 * of `getMediaUrl`, which guards against this before calling in.
 	 */
 	private buildUrl(asset: CloudinaryAsset, transforms: string): string {
+		if (!asset.public_id || !asset.resource_type || !asset.type) return "";
+
 		const parts = [
 			"https://res.cloudinary.com",
 			this.cloudName,
