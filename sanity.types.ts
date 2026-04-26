@@ -65,18 +65,8 @@ export type WorkItem = {
 							_key: string;
 					  }
 					| {
-							value?: Color;
+							hex?: string;
 							_type: "textColor";
-							_key: string;
-					  }
-					| {
-							value?: "300" | "400" | "500" | "600" | "700";
-							_type: "fontWeight";
-							_key: string;
-					  }
-					| {
-							value?: "sans" | "serif";
-							_type: "fontFamily";
 							_key: string;
 					  }
 				>;
@@ -164,15 +154,6 @@ export type CloudinaryAsset = {
 	>;
 	access_mode?: string;
 	context?: CloudinaryAssetContext;
-};
-
-export type Color = {
-	_type: "color";
-	hex?: string;
-	alpha?: number;
-	hsl?: HslaColor;
-	hsv?: HsvaColor;
-	rgb?: RgbaColor;
 };
 
 export type Testimonial = {
@@ -311,30 +292,6 @@ export type Company = {
 	order?: number;
 };
 
-export type RgbaColor = {
-	_type: "rgbaColor";
-	r?: number;
-	g?: number;
-	b?: number;
-	a?: number;
-};
-
-export type HsvaColor = {
-	_type: "hsvaColor";
-	h?: number;
-	s?: number;
-	v?: number;
-	a?: number;
-};
-
-export type HslaColor = {
-	_type: "hslaColor";
-	h?: number;
-	s?: number;
-	l?: number;
-	a?: number;
-};
-
 export type CloudinaryAssetContextCustom = {
 	_type: "cloudinary.assetContextCustom";
 	alt?: string;
@@ -469,7 +426,6 @@ export type AllSanitySchemaTypes =
 	| WorkItem
 	| Slug
 	| CloudinaryAsset
-	| Color
 	| Testimonial
 	| Social
 	| SiteProfile
@@ -477,9 +433,6 @@ export type AllSanitySchemaTypes =
 	| Project
 	| Experience
 	| Company
-	| RgbaColor
-	| HsvaColor
-	| HslaColor
 	| CloudinaryAssetContextCustom
 	| CloudinaryAssetContext
 	| CloudinaryAssetDerived
@@ -657,23 +610,13 @@ export type WorkItemBySlugQueryResult = {
 				listItem?: "bullet" | "number";
 				markDefs?: Array<
 					| {
-							value?: "sans" | "serif";
-							_type: "fontFamily";
-							_key: string;
-					  }
-					| {
-							value?: "300" | "400" | "500" | "600" | "700";
-							_type: "fontWeight";
-							_key: string;
-					  }
-					| {
 							href?: string;
 							openInNewTab?: boolean;
 							_type: "link";
 							_key: string;
 					  }
 					| {
-							value?: Color;
+							hex?: string;
 							_type: "textColor";
 							_key: string;
 					  }

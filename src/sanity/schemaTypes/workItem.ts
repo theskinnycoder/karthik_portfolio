@@ -1,5 +1,15 @@
 import { ComposeIcon } from "@sanity/icons";
 import { defineArrayMember, defineField, defineType } from "sanity";
+import {
+	CaseStudyContentPlugins,
+	FONT_SCRIPT_DECORATOR,
+	FontScriptDecorator,
+	FontScriptIcon,
+	WEIGHT_DECORATORS,
+	WEIGHT_TITLES,
+	weightDecoratorIcons,
+	weightDecoratorRenderers,
+} from "../components/case-study-content";
 
 export const workItem = defineType({
 	name: "workItem",
@@ -107,6 +117,11 @@ export const workItem = defineType({
 			title: "Content",
 			type: "array",
 			description: "Rich-text body for the case study",
+			components: {
+				portableText: {
+					plugins: CaseStudyContentPlugins,
+				},
+			},
 			of: [
 				defineArrayMember({
 					type: "block",
@@ -129,6 +144,18 @@ export const workItem = defineType({
 							{ title: "Italic", value: "em" },
 							{ title: "Strike", value: "s" },
 							{ title: "Underline", value: "underline" },
+							...WEIGHT_DECORATORS.map((w) => ({
+								title: WEIGHT_TITLES[w],
+								value: w,
+								icon: weightDecoratorIcons[w],
+								component: weightDecoratorRenderers[w],
+							})),
+							{
+								title: "Caveat (script)",
+								value: FONT_SCRIPT_DECORATOR,
+								icon: FontScriptIcon,
+								component: FontScriptDecorator,
+							},
 						],
 						annotations: [
 							{
@@ -150,60 +177,6 @@ export const workItem = defineType({
 										title: "Open in new tab",
 										type: "boolean",
 										initialValue: false,
-									}),
-								],
-							},
-							{
-								name: "textColor",
-								type: "object",
-								title: "Color",
-								fields: [
-									defineField({
-										name: "value",
-										title: "Color",
-										type: "color",
-										options: { disableAlpha: true },
-									}),
-								],
-							},
-							{
-								name: "fontWeight",
-								type: "object",
-								title: "Weight",
-								fields: [
-									defineField({
-										name: "value",
-										title: "Weight",
-										type: "string",
-										options: {
-											list: [
-												{ title: "Light 300", value: "300" },
-												{ title: "Regular 400", value: "400" },
-												{ title: "Medium 500", value: "500" },
-												{ title: "Semibold 600", value: "600" },
-												{ title: "Bold 700", value: "700" },
-											],
-											layout: "radio",
-										},
-									}),
-								],
-							},
-							{
-								name: "fontFamily",
-								type: "object",
-								title: "Font family",
-								fields: [
-									defineField({
-										name: "value",
-										title: "Family",
-										type: "string",
-										options: {
-											list: [
-												{ title: "Inter Tight (sans)", value: "sans" },
-												{ title: "Caveat (script)", value: "serif" },
-											],
-											layout: "radio",
-										},
 									}),
 								],
 							},

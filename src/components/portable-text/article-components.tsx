@@ -14,15 +14,22 @@ import {
 	ContentVideo,
 } from "./blocks";
 
-/**
- * Component map for case-study articles. The wrapping container applies the
- * `prose` utility (see PortableTextRenderer) so headings, paragraphs, lists
- * and decorators (em / s / underline) pick up typography-plugin defaults.
- *
- * Custom mark annotations (textColor, fontWeight, fontFamily) paint inline
- * styles so an author can override the prose defaults per-span from Studio.
- * Inline style beats prose's class selectors — authors always win.
- */
+const WEIGHT_DECORATOR_RENDERERS = {
+	weight300: 300,
+	weight400: 400,
+	weight500: 500,
+	weight600: 600,
+	weight700: 700,
+} as const;
+
+function makeWeightMark(weight: number) {
+	function WeightMark({ children }: { children?: React.ReactNode }) {
+		return <span style={{ fontWeight: weight }}>{children}</span>;
+	}
+	WeightMark.displayName = `WeightMark(${weight})`;
+	return WeightMark;
+}
+
 export const articleComponents: PortableTextComponents = {
 	marks: {
 		link: ({ value, children }) => {
@@ -38,24 +45,18 @@ export const articleComponents: PortableTextComponents = {
 				</a>
 			);
 		},
-		textColor: ({ value, children }) => {
-			const hex =
-				typeof value?.value?.hex === "string" ? value.value.hex : undefined;
-			return <span style={hex ? { color: hex } : undefined}>{children}</span>;
-		},
-		fontWeight: ({ value, children }) => {
-			const weight = typeof value?.value === "string" ? value.value : undefined;
-			return (
-				<span style={weight ? { fontWeight: weight } : undefined}>
-					{children}
-				</span>
-			);
-		},
+		fontScript: ({ children }) => (
+			<span style={{ fontFamily: "var(--font-serif)" }}>{children}</span>
+		),
+		// Legacy annotation marks from the previous schema. New content uses the
+		// fontScript decorator and weight300..700 decorators; these keep already-
+		// authored content rendering until it's re-saved.
 		fontFamily: ({ value, children }) => {
+			const v = value as { value?: string } | undefined;
 			const family =
-				value?.value === "serif"
+				v?.value === "serif"
 					? "var(--font-serif)"
-					: value?.value === "sans"
+					: v?.value === "sans"
 						? "var(--font-sans)"
 						: undefined;
 			return (
@@ -64,6 +65,20 @@ export const articleComponents: PortableTextComponents = {
 				</span>
 			);
 		},
+		fontWeight: ({ value, children }) => {
+			const v = value as { value?: string } | undefined;
+			const weight = typeof v?.value === "string" ? v.value : undefined;
+			return (
+				<span style={weight ? { fontWeight: weight } : undefined}>
+					{children}
+				</span>
+			);
+		},
+		weight300: makeWeightMark(WEIGHT_DECORATOR_RENDERERS.weight300),
+		weight400: makeWeightMark(WEIGHT_DECORATOR_RENDERERS.weight400),
+		weight500: makeWeightMark(WEIGHT_DECORATOR_RENDERERS.weight500),
+		weight600: makeWeightMark(WEIGHT_DECORATOR_RENDERERS.weight600),
+		weight700: makeWeightMark(WEIGHT_DECORATOR_RENDERERS.weight700),
 	},
 	types: {
 		contentImage: ({ value }: { value: ContentImageDTO }) => (

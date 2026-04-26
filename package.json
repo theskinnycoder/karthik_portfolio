@@ -23,7 +23,7 @@
 	},
 	"dependencies": {
 		"@gsap/react": "^2.1.2",
-		"@sanity/color-input": "^6.0.4",
+		"@portabletext/toolbar": "^4.0.36",
 		"@sanity/vision": "4",
 		"@t3-oss/env-nextjs": "^0.13.10",
 		"babel-plugin-react-compiler": "^1.0.0",
@@ -53,6 +53,7 @@
 		"@types/node": "^25.0.5",
 		"@types/react": "^19.2.8",
 		"@types/react-dom": "^19.2.3",
+		"agent-browser": "^0.26.0",
 		"eslint": "^9.39.2",
 		"eslint-config-next": "^16.1.1",
 		"prettier": "^3.7.4",
