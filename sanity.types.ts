@@ -12,19 +12,30 @@
  * ---------------------------------------------------------------------------------
  */
 
+export declare const internalGroqTypeReferenceTo: unique symbol;
+
 // Source: schema.json
+export type CompanyReference = {
+	_ref: string;
+	_type: "reference";
+	_weak?: boolean;
+	[internalGroqTypeReferenceTo]?: "company";
+};
+
+export type TestimonialReference = {
+	_ref: string;
+	_type: "reference";
+	_weak?: boolean;
+	[internalGroqTypeReferenceTo]?: "testimonial";
+};
+
 export type WorkItem = {
 	_id: string;
 	_type: "workItem";
 	_createdAt: string;
 	_updatedAt: string;
 	_rev: string;
-	company?: {
-		_ref: string;
-		_type: "reference";
-		_weak?: boolean;
-		[internalGroqTypeReferenceTo]?: "company";
-	};
+	company?: CompanyReference;
 	title?: string;
 	icon?: CloudinaryAsset;
 	tag?: string;
@@ -57,19 +68,12 @@ export type WorkItem = {
 					| "h6"
 					| "blockquote";
 				listItem?: "bullet" | "number";
-				markDefs?: Array<
-					| {
-							href?: string;
-							openInNewTab?: boolean;
-							_type: "link";
-							_key: string;
-					  }
-					| {
-							hex?: string;
-							_type: "textColor";
-							_key: string;
-					  }
-				>;
+				markDefs?: Array<{
+					href?: string;
+					openInNewTab?: boolean;
+					_type: "link";
+					_key: string;
+				}>;
 				level?: number;
 				_type: "block";
 				_key: string;
@@ -83,12 +87,7 @@ export type WorkItem = {
 				_key: string;
 		  }
 		| {
-				testimonial?: {
-					_ref: string;
-					_type: "reference";
-					_weak?: boolean;
-					[internalGroqTypeReferenceTo]?: "testimonial";
-				};
+				testimonial?: TestimonialReference;
 				_type: "contentTestimonial";
 				_key: string;
 		  }
@@ -165,12 +164,7 @@ export type Testimonial = {
 	quote?: string;
 	authorName?: string;
 	authorRole?: string;
-	company?: {
-		_ref: string;
-		_type: "reference";
-		_weak?: boolean;
-		[internalGroqTypeReferenceTo]?: "company";
-	};
+	company?: CompanyReference;
 	authorAvatar?: CloudinaryAsset;
 	order?: number;
 };
@@ -423,6 +417,8 @@ export type Geopoint = {
 };
 
 export type AllSanitySchemaTypes =
+	| CompanyReference
+	| TestimonialReference
 	| WorkItem
 	| Slug
 	| CloudinaryAsset
@@ -446,8 +442,8 @@ export type AllSanitySchemaTypes =
 	| SanityAssetSourceData
 	| SanityImageAsset
 	| Geopoint;
-export declare const internalGroqTypeReferenceTo: unique symbol;
-// Source: ./src/sanity/lib/queries.ts
+
+// Source: src/sanity/lib/queries.ts
 // Variable: testimonialsQuery
 // Query: *[_type == "testimonial"] | order(order asc) {    _id,    quote,    authorName,    authorRole,    authorAvatar,    company->{      _id,      name,      logo    }  }
 export type TestimonialsQueryResult = Array<{
@@ -462,6 +458,8 @@ export type TestimonialsQueryResult = Array<{
 		logo: CloudinaryAsset | null;
 	} | null;
 }>;
+
+// Source: src/sanity/lib/queries.ts
 // Variable: companiesQuery
 // Query: *[_type == "company"] | order(order asc) {    _id,    name,		logo,		website,		description	}
 export type CompaniesQueryResult = Array<{
@@ -471,6 +469,8 @@ export type CompaniesQueryResult = Array<{
 	website: string | null;
 	description: string | null;
 }>;
+
+// Source: src/sanity/lib/queries.ts
 // Variable: socialsQuery
 // Query: *[_type == "social"] | order(order asc) {    _id,    label,    href,    icon  }
 export type SocialsQueryResult = Array<{
@@ -479,6 +479,8 @@ export type SocialsQueryResult = Array<{
 	href: string | null;
 	icon: CloudinaryAsset | null;
 }>;
+
+// Source: src/sanity/lib/queries.ts
 // Variable: projectsQuery
 // Query: *[_type == "project"] | order(order asc) {    _id,    name,    image,    alt,    backgroundColor  }
 export type ProjectsQueryResult = Array<{
@@ -488,6 +490,8 @@ export type ProjectsQueryResult = Array<{
 	alt: string | null;
 	backgroundColor: string | null;
 }>;
+
+// Source: src/sanity/lib/queries.ts
 // Variable: experiencesQuery
 // Query: *[_type == "experience"] | order(order asc) {    _id,    company,    url,    role,    description  }
 export type ExperiencesQueryResult = Array<{
@@ -497,6 +501,8 @@ export type ExperiencesQueryResult = Array<{
 	role: string | null;
 	description: string | null;
 }>;
+
+// Source: src/sanity/lib/queries.ts
 // Variable: siteProfileQuery
 // Query: *[_type == "siteProfile"][0] {    _id,    name,    title,    bio  }
 export type SiteProfileQueryResult = {
@@ -522,6 +528,8 @@ export type SiteProfileQueryResult = {
 		_key: string;
 	}> | null;
 } | null;
+
+// Source: src/sanity/lib/queries.ts
 // Variable: workPageQuery
 // Query: *[_type == "company" && count(*[_type == "workItem" && references(^._id)]) > 0] | order(order asc) {    _id,    name,    logo,    website,    isCurrent,    workTagline,    workDescription,    "workItems": *[_type == "workItem" && references(^._id)] | order(order asc) {      _id,      title,      icon,      tag,      image,      description,      "slug": slug.current    }  }
 export type WorkPageQueryResult = Array<{
@@ -559,6 +567,8 @@ export type WorkPageQueryResult = Array<{
 		slug: string | null;
 	}>;
 }>;
+
+// Source: src/sanity/lib/queries.ts
 // Variable: sectionHeaderQuery
 // Query: *[_type == "sectionHeader" && slug.current == $slug][0] {    _id,    headingPrefix,    headingHighlight,    headingEmoji,    icon,    gradientFrom,    gradientTo,    video,    subheading  }
 export type SectionHeaderQueryResult = {
@@ -572,6 +582,8 @@ export type SectionHeaderQueryResult = {
 	video: CloudinaryAsset | null;
 	subheading: string | null;
 } | null;
+
+// Source: src/sanity/lib/queries.ts
 // Variable: workItemBySlugQuery
 // Query: *[_type == "workItem" && slug.current == $slug][0] {    _id,    title,    "slug": slug.current,    tag,    description,    excerpt,    liveUrl,    image,    heroImage,    brand,    content[] {      ...,      _type == "contentTestimonial" => {        _type,        _key,        "testimonial": testimonial->{          _id,          quote,          authorName,          authorRole,          authorAvatar,          company->{            _id,            name,            logo          }        }      }    },    "prev": *[_type == "workItem" && order < ^.order && defined(slug.current)]      | order(order desc)[0] {        title,        "slug": slug.current,        tag      },    "next": *[_type == "workItem" && order > ^.order && defined(slug.current)]      | order(order asc)[0] {        title,        "slug": slug.current,        tag      },    "company": company->{      _id,      name,      logo,      website    }  }
 export type WorkItemBySlugQueryResult = {
@@ -608,19 +620,12 @@ export type WorkItemBySlugQueryResult = {
 					| "h6"
 					| "normal";
 				listItem?: "bullet" | "number";
-				markDefs?: Array<
-					| {
-							href?: string;
-							openInNewTab?: boolean;
-							_type: "link";
-							_key: string;
-					  }
-					| {
-							hex?: string;
-							_type: "textColor";
-							_key: string;
-					  }
-				>;
+				markDefs?: Array<{
+					href?: string;
+					openInNewTab?: boolean;
+					_type: "link";
+					_key: string;
+				}>;
 				level?: number;
 				_type: "block";
 				_key: string;
@@ -696,6 +701,8 @@ export type WorkItemBySlugQueryResult = {
 		website: string | null;
 	} | null;
 } | null;
+
+// Source: src/sanity/lib/queries.ts
 // Variable: allWorkItemSlugsQuery
 // Query: *[_type == "workItem" && defined(slug.current)].slug.current
 export type AllWorkItemSlugsQueryResult = Array<string | null>;

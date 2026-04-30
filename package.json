@@ -39,7 +39,7 @@
 		"radix-ui": "^1.4.3",
 		"react": "^19.2.3",
 		"react-dom": "^19.2.3",
-		"sanity": "4",
+		"sanity": "^4.22.0",
 		"sanity-plugin-cloudinary": "^1.4.1",
 		"server-only": "^0.0.1",
 		"styled-components": "6",
@@ -48,6 +48,7 @@
 		"zod": "^4.3.5"
 	},
 	"devDependencies": {
+		"@sanity/cli": "^6.4.0",
 		"@tailwindcss/postcss": "^4.1.18",
 		"@tailwindcss/typography": "^0.5.19",
 		"@types/node": "^25.0.5",
