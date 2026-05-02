@@ -49,6 +49,10 @@ next-env.d.ts
 # playwright mcp test artifacts (screenshots, console logs)
 .playwright-mcp/
 
+# local visual-test scratch dirs
+/list-items
+/phase-tests
+
 # claude code
 .claude/*
 !.claude/settings.json

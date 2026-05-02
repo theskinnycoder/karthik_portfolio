@@ -54,6 +54,16 @@ const ARTICLE_PROSE = [
 
 	// HR
 	"prose-hr:border-border",
+
+	// Lists — markers inherit the body color/weight (Figma OL uses Light, UL uses
+	// Medium); items stack tightly like the design instead of prose's airy default.
+	"marker:text-foreground",
+	"prose-ol:marker:font-light prose-ul:marker:font-medium",
+	"prose-ul:my-2 prose-ol:my-2",
+	"prose-li:my-1 prose-li:leading-6",
+	// Nested marker hierarchy: 1. → a. → i.   and   • → ◦ → ▪
+	"[&_ol_ol]:list-[lower-alpha] [&_ol_ol_ol]:list-[lower-roman]",
+	"[&_ul_ul]:[list-style:circle] [&_ul_ul_ul]:[list-style:square]",
 ].join(" ");
 
 /**
