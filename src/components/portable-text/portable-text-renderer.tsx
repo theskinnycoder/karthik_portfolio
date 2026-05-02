@@ -11,6 +11,40 @@ interface PortableTextRendererProps {
 }
 
 /**
+ * Walks the content once and stamps each top-level numbered list block with
+ * an `_seq` number that continues across non-list blocks (callout
+ * blockquotes, intervening paragraphs). Counter resets on h1/h2/h3 because
+ * those mark a new logical section. The custom listItem.number renderer
+ * reads `_seq` and emits `<li value={seq}>` so browsers display the running
+ * count even when adjacent OL groups are split by callouts.
+ */
+function annotateNumberedListSequence<T extends { _type?: string }>(
+	blocks: T[],
+): T[] {
+	let counter = 0;
+	return blocks.map((block) => {
+		const b = block as PortableTextBlock & {
+			_seq?: number;
+			level?: number;
+			listItem?: string;
+			style?: string;
+		};
+		if (b._type !== "block") return block;
+		if (b.listItem === "number" && b.level === 1) {
+			counter += 1;
+			return { ...b, _seq: counter } as unknown as T;
+		}
+		if (
+			!b.listItem &&
+			(b.style === "h1" || b.style === "h2" || b.style === "h3")
+		) {
+			counter = 0;
+		}
+		return block;
+	});
+}
+
+/**
  * Typography shell for the `article` variant. We pin the font family
  * (Inter Tight via --font-sans), a modular type scale that gives each
  * heading clear separation from body and adjacent levels, and heading
@@ -76,10 +110,13 @@ export function PortableTextRenderer({
 	variant = "base",
 }: PortableTextRendererProps) {
 	if (variant === "article") {
+		const sequenced = annotateNumberedListSequence(
+			value as PortableTextBlock[],
+		);
 		return (
 			<div className={ARTICLE_PROSE}>
 				<PortableText
-					value={value as PortableTextBlock[]}
+					value={sequenced}
 					components={articleComponents}
 				/>
 			</div>

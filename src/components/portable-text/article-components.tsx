@@ -86,6 +86,16 @@ export const articleComponents: PortableTextComponents = {
 		),
 	},
 	listItem: {
+		// Continues numbering across callouts (the renderer pre-processor
+		// stamps each top-level numbered block with `_seq`).
+		number: ({ children, value }) => {
+			const seq = (value as { _seq?: number } | undefined)?._seq;
+			return seq != null ? (
+				<li value={seq}>{children}</li>
+			) : (
+				<li>{children}</li>
+			);
+		},
 		check: ({ children }) => (
 			<li className="my-1 flex gap-2 leading-6 before:flex-none before:content-['✔']">
 				<span>{children}</span>
