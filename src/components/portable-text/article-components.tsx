@@ -80,6 +80,18 @@ export const articleComponents: PortableTextComponents = {
 		weight600: makeWeightMark(WEIGHT_DECORATOR_RENDERERS.weight600),
 		weight700: makeWeightMark(WEIGHT_DECORATOR_RENDERERS.weight700),
 	},
+	list: {
+		check: ({ children }) => (
+			<ul className="my-2 list-none pl-0">{children}</ul>
+		),
+	},
+	listItem: {
+		check: ({ children }) => (
+			<li className="my-1 flex gap-2 leading-6 before:flex-none before:content-['✔']">
+				<span>{children}</span>
+			</li>
+		),
+	},
 	types: {
 		contentImage: ({ value }: { value: ContentImageDTO }) => (
 			<ContentImage value={value} />

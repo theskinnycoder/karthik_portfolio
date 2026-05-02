@@ -138,6 +138,7 @@ export const workItem = defineType({
 					lists: [
 						{ title: "Bullet", value: "bullet" },
 						{ title: "Numbered", value: "number" },
+						{ title: "Checkmark", value: "check" },
 					],
 					marks: {
 						decorators: [
