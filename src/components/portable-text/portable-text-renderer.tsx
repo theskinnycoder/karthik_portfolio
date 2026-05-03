@@ -23,7 +23,7 @@ function annotateNumberedListSequence<T extends { _type?: string }>(
 ): T[] {
 	let counter = 0;
 	return blocks.map((block) => {
-		const b = block as PortableTextBlock & {
+		const b = block as unknown as PortableTextBlock & {
 			_seq?: number;
 			level?: number;
 			listItem?: string;

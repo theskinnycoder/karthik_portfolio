@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -32,25 +31,14 @@ export function Navbar() {
 							key={item.href}
 							href={item.href}
 							className={cn(
-								"relative rounded-full px-3.5 py-1.5 text-base font-semibold tracking-[0.32px] transition-colors",
+								"rounded-full px-3.5 py-1.5 text-base font-semibold tracking-[0.32px] transition-colors",
 								isActive
 									? "text-foreground"
 									: "text-muted-foreground hover:text-foreground/80",
 							)}
 							aria-current={isActive ? "page" : undefined}
 						>
-							{isActive && (
-								<motion.span
-									layoutId="navbar-active-pill"
-									className="absolute inset-0 rounded-full bg-border"
-									transition={{
-										type: "spring",
-										stiffness: 380,
-										damping: 30,
-									}}
-								/>
-							)}
-							<span className="relative z-10">{item.label}</span>
+							{item.label}
 						</Link>
 					);
 				})}
