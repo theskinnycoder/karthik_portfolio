@@ -42,7 +42,20 @@ export type WorkItem = {
 	image?: CloudinaryAsset;
 	description?: string;
 	heroImage?: CloudinaryAsset;
-	excerpt?: string;
+	excerpt?: Array<{
+		children?: Array<{
+			marks?: Array<string>;
+			text?: string;
+			_type: "span";
+			_key: string;
+		}>;
+		style?: "normal";
+		listItem?: never;
+		markDefs?: null;
+		level?: number;
+		_type: "block";
+		_key: string;
+	}>;
 	brand?: {
 		primary?: string;
 		secondary?: string;
@@ -161,7 +174,20 @@ export type Testimonial = {
 	_createdAt: string;
 	_updatedAt: string;
 	_rev: string;
-	quote?: string;
+	quote?: Array<{
+		children?: Array<{
+			marks?: Array<string>;
+			text?: string;
+			_type: "span";
+			_key: string;
+		}>;
+		style?: "normal";
+		listItem?: never;
+		markDefs?: null;
+		level?: number;
+		_type: "block";
+		_key: string;
+	}>;
 	authorName?: string;
 	authorRole?: string;
 	company?: CompanyReference;
@@ -258,7 +284,6 @@ export type Company = {
 	name?: string;
 	logo?: CloudinaryAsset;
 	website?: string;
-	description?: string;
 	isCurrent?: boolean;
 	badge?: string;
 	workTagline?: string;
@@ -441,7 +466,20 @@ export type AllSanitySchemaTypes =
 // Query: *[_type == "testimonial"] | order(order asc) {    _id,    quote,    authorName,    authorRole,    authorAvatar,    company->{      _id,      name,      logo    }  }
 export type TestimonialsQueryResult = Array<{
 	_id: string;
-	quote: string | null;
+	quote: Array<{
+		children?: Array<{
+			marks?: Array<string>;
+			text?: string;
+			_type: "span";
+			_key: string;
+		}>;
+		style?: "normal";
+		listItem?: never;
+		markDefs?: null;
+		level?: number;
+		_type: "block";
+		_key: string;
+	}> | null;
 	authorName: string | null;
 	authorRole: string | null;
 	authorAvatar: CloudinaryAsset | null;
@@ -454,13 +492,12 @@ export type TestimonialsQueryResult = Array<{
 
 // Source: src/sanity/lib/queries.ts
 // Variable: companiesQuery
-// Query: *[_type == "company"] | order(order asc) {    _id,    name,		logo,		website,		description	}
+// Query: *[_type == "company"] | order(order asc) {    _id,    name,		logo,		website	}
 export type CompaniesQueryResult = Array<{
 	_id: string;
 	name: string | null;
 	logo: CloudinaryAsset | null;
 	website: string | null;
-	description: string | null;
 }>;
 
 // Source: src/sanity/lib/queries.ts
@@ -578,7 +615,20 @@ export type WorkItemBySlugQueryResult = {
 	slug: string | null;
 	tag: string | null;
 	description: string | null;
-	excerpt: string | null;
+	excerpt: Array<{
+		children?: Array<{
+			marks?: Array<string>;
+			text?: string;
+			_type: "span";
+			_key: string;
+		}>;
+		style?: "normal";
+		listItem?: never;
+		markDefs?: null;
+		level?: number;
+		_type: "block";
+		_key: string;
+	}> | null;
 	liveUrl: string | null;
 	image: CloudinaryAsset | null;
 	heroImage: CloudinaryAsset | null;
@@ -646,7 +696,20 @@ export type WorkItemBySlugQueryResult = {
 		| {
 				testimonial: {
 					_id: string;
-					quote: string | null;
+					quote: Array<{
+						children?: Array<{
+							marks?: Array<string>;
+							text?: string;
+							_type: "span";
+							_key: string;
+						}>;
+						style?: "normal";
+						listItem?: never;
+						markDefs?: null;
+						level?: number;
+						_type: "block";
+						_key: string;
+					}> | null;
 					authorName: string | null;
 					authorRole: string | null;
 					authorAvatar: CloudinaryAsset | null;
@@ -698,7 +761,7 @@ import "@sanity/client";
 declare module "@sanity/client" {
 	interface SanityQueries {
 		'\n  *[_type == "testimonial"] | order(order asc) {\n    _id,\n    quote,\n    authorName,\n    authorRole,\n    authorAvatar,\n    company->{\n      _id,\n      name,\n      logo\n    }\n  }\n': TestimonialsQueryResult;
-		'\n  *[_type == "company"] | order(order asc) {\n    _id,\n    name,\n\t\tlogo,\n\t\twebsite,\n\t\tdescription\n\t}\n': CompaniesQueryResult;
+		'\n  *[_type == "company"] | order(order asc) {\n    _id,\n    name,\n\t\tlogo,\n\t\twebsite\n\t}\n': CompaniesQueryResult;
 		'\n  *[_type == "social"] | order(order asc) {\n    _id,\n    label,\n    href,\n    icon\n  }\n': SocialsQueryResult;
 		'\n  *[_type == "project"] | order(order asc) {\n    _id,\n    name,\n    image,\n    alt,\n    backgroundColor\n  }\n': ProjectsQueryResult;
 		'\n  *[_type == "experience"] | order(order asc) {\n    _id,\n    company,\n    url,\n    role,\n    description\n  }\n': ExperiencesQueryResult;

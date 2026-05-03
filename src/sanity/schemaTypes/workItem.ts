@@ -1,7 +1,7 @@
 import { ComposeIcon } from "@sanity/icons";
 import { defineArrayMember, defineField, defineType } from "sanity";
 import { CaseStudyContentPlugins } from "../components/case-study-content";
-import { articleBlock } from "../rich-text";
+import { articleBlock, inlineBlock } from "../rich-text";
 
 export const workItem = defineType({
 	name: "workItem",
@@ -59,10 +59,10 @@ export const workItem = defineType({
 		defineField({
 			name: "excerpt",
 			title: "Excerpt",
-			type: "text",
-			rows: 3,
+			type: "array",
+			of: [inlineBlock()],
 			description:
-				"Short lede shown under the title on the case-study page (falls back to description if empty)",
+				"Short lede shown under the title on the case-study page (falls back to description if empty). Use the colorForeground decorator to highlight phrases against the dimmed paragraph color.",
 		}),
 		defineField({
 			name: "brand",

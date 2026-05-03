@@ -1,4 +1,5 @@
 import { MediaImage } from "@/components/media";
+import { PortableTextRenderer } from "@/components/portable-text";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import type { ContentTestimonialDTO } from "@/sanity/lib/dal";
 
@@ -16,8 +17,11 @@ export function ContentTestimonial({ value }: ContentTestimonialProps) {
 
 	return (
 		<figure className="my-8 flex flex-col gap-6 rounded-2xl border border-[var(--brand-primary,var(--color-border))] bg-card p-6">
-			<blockquote className="text-lg leading-relaxed font-light text-card-foreground/60 italic">
-				&ldquo;{testimonial.quote}&rdquo;
+			<blockquote className="text-lg leading-relaxed font-light text-card-foreground/60 italic before:content-['“'] after:content-['”']">
+				<PortableTextRenderer
+					value={testimonial.quote}
+					variant="base"
+				/>
 			</blockquote>
 			<figcaption className="flex items-center gap-3">
 				<Avatar className="size-10">

@@ -1,4 +1,5 @@
 import { MediaImage } from "@/components/media";
+import { PortableTextRenderer } from "@/components/portable-text";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import type { TestimonialDTO } from "@/sanity/lib/dal";
 
@@ -11,9 +12,12 @@ export function TestimonialCard({
 }: TestimonialDTO) {
 	return (
 		<div className="flex h-full flex-col gap-6 rounded-[18px] border border-border p-4.5">
-			<p className="flex-1 text-base font-light text-muted-foreground">
-				{quote}
-			</p>
+			<div className="flex-1 text-base font-light text-muted-foreground">
+				<PortableTextRenderer
+					value={quote}
+					variant="base"
+				/>
+			</div>
 
 			<div className="flex items-center gap-3">
 				<Avatar className="size-10">

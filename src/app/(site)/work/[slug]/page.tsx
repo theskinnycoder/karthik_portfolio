@@ -1,5 +1,6 @@
 "use cache";
 
+import { toPlainText } from "@portabletext/toolkit";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cachePageLife } from "@/lib/caching";
@@ -27,7 +28,9 @@ export async function generateMetadata({
 	const { slug } = await params;
 	const work = await getWorkItemBySlug(slug);
 	if (!work) return {};
-	const description = work.excerpt ?? work.description;
+	const description = work.excerpt
+		? toPlainText(work.excerpt)
+		: work.description;
 	return {
 		title: `${work.title} · Karthik`,
 		description,

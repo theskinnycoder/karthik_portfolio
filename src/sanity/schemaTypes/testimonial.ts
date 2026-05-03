@@ -1,5 +1,6 @@
 import { StarIcon } from "@sanity/icons";
 import { defineField, defineType } from "sanity";
+import { inlineBlock } from "../rich-text";
 
 export const testimonial = defineType({
 	name: "testimonial",
@@ -10,8 +11,10 @@ export const testimonial = defineType({
 		defineField({
 			name: "quote",
 			title: "Quote",
-			type: "text",
-			rows: 4,
+			type: "array",
+			of: [inlineBlock()],
+			description:
+				"Quote body. Use the colorForeground decorator to highlight emphasized phrases.",
 			validation: (rule) => rule.required(),
 		}),
 		defineField({

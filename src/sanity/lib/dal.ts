@@ -69,11 +69,10 @@ export interface CompanyDTO {
 	name: string;
 	logo: string;
 	website?: string;
-	description?: string;
 }
 
 export interface TestimonialDTO {
-	quote: string;
+	quote: PortableTextBlock[];
 	authorName: string;
 	authorRole: string;
 	authorAvatar: string;
@@ -188,7 +187,7 @@ export interface WorkItemDetailDTO {
 	slug: string;
 	tag: string;
 	description: string;
-	excerpt?: string;
+	excerpt?: PortableTextBlock[];
 	brand: BrandDTO;
 	liveUrl?: string;
 	heroImage: string;
@@ -234,13 +233,12 @@ function toCompanyDTO(data: CompanyRaw): CompanyDTO {
 		name: data.name ?? "",
 		logo: getMediaUrl(data.logo),
 		website: data.website ?? undefined,
-		description: data.description ?? undefined,
 	};
 }
 
 function toTestimonialDTO(data: TestimonialRaw): TestimonialDTO {
 	return {
-		quote: data.quote ?? "",
+		quote: (data.quote ?? []) as PortableTextBlock[],
 		authorName: data.authorName ?? "",
 		authorRole: data.authorRole ?? "",
 		authorAvatar: getMediaUrl(data.authorAvatar),
@@ -431,7 +429,7 @@ function toWorkItemDetailDTO(data: WorkItemDetailRaw): WorkItemDetailDTO {
 		slug: data.slug ?? "",
 		tag: data.tag ?? "",
 		description: data.description ?? "",
-		excerpt: data.excerpt ?? undefined,
+		excerpt: (data.excerpt ?? undefined) as PortableTextBlock[] | undefined,
 		brand: {
 			primary: data.brand?.primary ?? undefined,
 			secondary: data.brand?.secondary ?? undefined,

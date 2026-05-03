@@ -20,8 +20,7 @@ export const companiesQuery = groq`
     _id,
     name,
 		logo,
-		website,
-		description
+		website
 	}
 `;
 

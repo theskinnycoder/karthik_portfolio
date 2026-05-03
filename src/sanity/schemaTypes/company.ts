@@ -28,13 +28,6 @@ export const company = defineType({
 			description: "Company website URL",
 		}),
 		defineField({
-			name: "description",
-			title: "Description",
-			type: "text",
-			rows: 2,
-			description: "Brief description of the company",
-		}),
-		defineField({
 			name: "isCurrent",
 			title: "Currently Working Here",
 			type: "boolean",
