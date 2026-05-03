@@ -6,9 +6,9 @@
 		"node": "24.x"
 	},
 	"scripts": {
-		"dev": "bun --bun next dev --turbopack",
-		"build": "bun --bun next build",
-		"start": "bun --bun next start",
+		"dev": "next dev --turbopack",
+		"build": "next build",
+		"start": "next start",
 		"lint:check": "bunx eslint",
 		"lint:fix": "bunx eslint --fix",
 		"format:check": "bunx prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md}\"",

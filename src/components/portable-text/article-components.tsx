@@ -86,6 +86,7 @@ export const articleComponents: PortableTextComponents = {
 		),
 	},
 	listItem: {
+		bullet: ({ children }) => <li>{children}</li>,
 		// Continues numbering across callouts (the renderer pre-processor
 		// stamps each top-level numbered block with `_seq`).
 		number: ({ children, value }) => {
