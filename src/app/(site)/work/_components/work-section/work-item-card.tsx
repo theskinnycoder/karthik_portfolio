@@ -11,7 +11,7 @@ export function WorkItemCard({ item }: WorkItemCardProps) {
 	return (
 		<Link href={`/work/${item.slug}`}>
 			<div className="flex flex-col gap-3 rounded-[20px] border border-border bg-card p-3.5">
-				<div className="flex items-center gap-2">
+				<div className="flex items-center gap-1.5">
 					{item.icon && (
 						<MediaImage
 							src={item.icon}
@@ -21,10 +21,10 @@ export function WorkItemCard({ item }: WorkItemCardProps) {
 							className="size-4"
 						/>
 					)}
-					<span className="text-sm font-medium text-foreground">
+					<span className="text-sm leading-prose font-medium tracking-prose text-foreground">
 						{item.title}
 					</span>
-					<span className="ml-auto rounded-full border border-border bg-background px-2.5 py-0.5 text-xs text-muted-foreground">
+					<span className="ml-auto rounded-full border border-border bg-card px-3 py-1 text-xs font-light tracking-prose text-foreground">
 						{item.tag}
 					</span>
 				</div>
@@ -38,10 +38,10 @@ export function WorkItemCard({ item }: WorkItemCardProps) {
 					/>
 				</div>
 				<div className="flex items-center gap-2">
-					<p className="flex-1 truncate text-sm font-light text-muted-foreground">
+					<p className="flex-1 truncate text-sm leading-prose font-light tracking-prose text-muted-foreground">
 						{item.description}
 					</p>
-					<div className="flex size-[30px] shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#c8ed97] to-[#47d9b8]">
+					<div className="flex size-[30px] shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-[#c8ed97] to-[#47d9b8]">
 						<ArrowUpRight className="size-4 text-background" />
 					</div>
 				</div>

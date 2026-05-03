@@ -21,7 +21,10 @@
 	--color-primary: var(--primary);
 	--color-card-foreground: var(--card-foreground);
 	--color-card: var(--card);
+	--color-paragraph: var(--paragraph);
 	--color-accent-coral: var(--accent-coral);
+	--leading-prose: 1.5625rem;
+	--tracking-prose: 0.02em;
 	--radius-sm: calc(var(--radius) - 4px);
 	--radius-md: calc(var(--radius) - 2px);
 	--radius-lg: var(--radius);
@@ -42,6 +45,7 @@
 	--secondary-foreground: oklch(0.985 0 0); /* #FAFAFA */
 	--muted: oklch(0.269 0 0); /* #262626 */
 	--muted-foreground: oklch(0.8452 0 0); /* #CCCCCC */
+	--paragraph: oklch(0.7405 0 0); /* #B3B3B3 */
 	--accent: oklch(0.87 0 0); /* #D4D4D4 */
 	--accent-foreground: oklch(0.205 0 0); /* #171717 */
 	--border: oklch(0.2478 0 0); /* #212121 */
@@ -62,6 +66,7 @@
 	--card-foreground: #212121;
 	--muted: #f5f4f0;
 	--muted-foreground: #414141;
+	--paragraph: #595959;
 	--border: #f2f0e9;
 	--input: #f2f0e9;
 	--ring: #808080;

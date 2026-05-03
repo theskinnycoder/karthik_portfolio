@@ -21,7 +21,7 @@ export function CompanyHeader({
 	workDescription,
 }: CompanyHeaderProps) {
 	return (
-		<div className="flex flex-col gap-3">
+		<div className="flex flex-col gap-6">
 			<div className="flex items-center gap-3">
 				<MediaImage
 					src={logo}
@@ -36,15 +36,21 @@ export function CompanyHeader({
 					</CompanyBadge>
 				)}
 			</div>
-			{workTagline && (
-				<p className="text-lg font-semibold text-foreground">{workTagline}</p>
-			)}
-			{workDescription && (
-				<div className="text-sm font-light text-muted-foreground">
-					<PortableTextRenderer
-						value={workDescription}
-						variant="base"
-					/>
+			{(workTagline || workDescription) && (
+				<div className="flex flex-col gap-3">
+					{workTagline && (
+						<p className="text-lg font-semibold text-foreground">
+							{workTagline}
+						</p>
+					)}
+					{workDescription && (
+						<div className="text-base leading-prose font-light tracking-prose text-paragraph">
+							<PortableTextRenderer
+								value={workDescription}
+								variant="base"
+							/>
+						</div>
+					)}
 				</div>
 			)}
 		</div>

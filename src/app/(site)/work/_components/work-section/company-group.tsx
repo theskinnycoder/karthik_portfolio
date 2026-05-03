@@ -18,8 +18,8 @@ export function CompanyGroup({ company }: CompanyGroupProps) {
 				workDescription={company.workDescription}
 			/>
 			<div className="flex flex-col gap-2">
-				<p className="text-xs font-medium tracking-wide text-muted-foreground">
-					My key recipe at {company.name}
+				<p className="text-base leading-5 font-semibold text-muted-foreground">
+					My key recipe at <span className="lowercase">{company.name}</span>
 				</p>
 				<div className="flex flex-col gap-4">
 					{company.workItems.map((item) => (

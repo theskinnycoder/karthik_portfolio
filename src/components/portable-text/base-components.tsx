@@ -11,7 +11,7 @@ export const baseComponents: PortableTextComponents = {
 	},
 	marks: {
 		strong: ({ children }) => (
-			<span className="font-medium text-foreground">{children}</span>
+			<span className="text-foreground">{children}</span>
 		),
 	},
 };
