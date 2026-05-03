@@ -1,6 +1,5 @@
 "use cache";
 
-import { AutoScrollNext } from "@/components/auto-scroll-next";
 import { cachePageLife } from "@/lib/caching";
 import { getHomePageSections } from "@/sanity/lib/dal";
 import type { HomeSectionKey } from "@/sanity/schemaTypes/homePage";
@@ -30,7 +29,6 @@ export default async function Page() {
 					return <Section key={key} />;
 				})}
 			</div>
-			<AutoScrollNext href="/work" />
 		</main>
 	);
 }

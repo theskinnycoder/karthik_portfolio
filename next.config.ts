@@ -8,9 +8,6 @@ const nextConfig = {
 	typedRoutes: true,
 	cacheComponents: true,
 	reactStrictMode: true,
-	experimental: {
-		viewTransition: true,
-	},
 	images: {
 		remotePatterns: [
 			{
