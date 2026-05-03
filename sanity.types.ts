@@ -67,7 +67,7 @@ export type WorkItem = {
 					| "h5"
 					| "h6"
 					| "blockquote";
-				listItem?: "bullet" | "number";
+				listItem?: "bullet" | "number" | "check";
 				markDefs?: Array<{
 					href?: string;
 					openInNewTab?: boolean;
@@ -619,7 +619,7 @@ export type WorkItemBySlugQueryResult = {
 					| "h5"
 					| "h6"
 					| "normal";
-				listItem?: "bullet" | "number";
+				listItem?: "bullet" | "check" | "number";
 				markDefs?: Array<{
 					href?: string;
 					openInNewTab?: boolean;
