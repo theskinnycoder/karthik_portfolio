@@ -23,6 +23,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({
 	params,
 }: WorkDetailPageProps): Promise<Metadata> {
+	cachePageLife();
 	const { slug } = await params;
 	const work = await getWorkItemBySlug(slug);
 	if (!work) return {};
