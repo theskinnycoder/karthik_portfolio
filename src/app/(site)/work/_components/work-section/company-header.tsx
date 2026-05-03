@@ -1,11 +1,13 @@
 import type { PortableTextBlock } from "next-sanity";
 import { MediaImage } from "@/components/media";
 import { PortableTextRenderer } from "@/components/portable-text";
+import { CompanyBadge } from "./company-badge";
 
 interface CompanyHeaderProps {
 	logo: string;
 	name: string;
 	isCurrent: boolean;
+	badge?: string;
 	workTagline?: string;
 	workDescription?: PortableTextBlock[];
 }
@@ -14,6 +16,7 @@ export function CompanyHeader({
 	logo,
 	name,
 	isCurrent,
+	badge,
 	workTagline,
 	workDescription,
 }: CompanyHeaderProps) {
@@ -27,12 +30,10 @@ export function CompanyHeader({
 					height={32}
 					className="h-8 w-auto object-contain"
 				/>
-				{isCurrent && (
-					<span className="rounded-full border border-border bg-card px-3 py-1 text-xs font-medium">
-						<span className="bg-gradient-to-r from-[#c8ed97] to-[#47d9b8] bg-clip-text text-transparent">
-							Current
-						</span>
-					</span>
+				{badge && (
+					<CompanyBadge tone={isCurrent ? "current" : "past"}>
+						{badge}
+					</CompanyBadge>
 				)}
 			</div>
 			{workTagline && (

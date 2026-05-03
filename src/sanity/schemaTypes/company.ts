@@ -40,6 +40,13 @@ export const company = defineType({
 			initialValue: false,
 		}),
 		defineField({
+			name: "badge",
+			title: "Badge",
+			type: "string",
+			description:
+				'Pill shown next to the logo on the work page (e.g. "Current" or "Mar 2023 to Aug 2024"). Tone follows "Currently Working Here": gradient when on, muted when off.',
+		}),
+		defineField({
 			name: "workTagline",
 			title: "Work Tagline",
 			type: "string",

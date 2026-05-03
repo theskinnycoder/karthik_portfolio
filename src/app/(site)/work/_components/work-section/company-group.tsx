@@ -13,6 +13,7 @@ export function CompanyGroup({ company }: CompanyGroupProps) {
 				logo={company.logo}
 				name={company.name}
 				isCurrent={company.isCurrent}
+				badge={company.badge}
 				workTagline={company.workTagline}
 				workDescription={company.workDescription}
 			/>

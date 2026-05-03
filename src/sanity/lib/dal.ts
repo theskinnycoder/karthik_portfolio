@@ -203,6 +203,7 @@ export interface WorkPageCompanyDTO {
 	logo: string;
 	website?: string;
 	isCurrent: boolean;
+	badge?: string;
 	workTagline?: string;
 	workDescription?: PortableTextBlock[];
 	workItems: WorkItemDTO[];
@@ -293,6 +294,7 @@ function toWorkPageCompanyDTO(data: WorkPageCompanyRaw): WorkPageCompanyDTO {
 		logo: getMediaUrl(data.logo),
 		website: data.website ?? undefined,
 		isCurrent: data.isCurrent ?? false,
+		badge: data.badge ?? undefined,
 		workTagline: data.workTagline ?? undefined,
 		workDescription: (data.workDescription ?? undefined) as
 			| PortableTextBlock[]

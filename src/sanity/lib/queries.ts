@@ -71,6 +71,7 @@ export const workPageQuery = groq`
     logo,
     website,
     isCurrent,
+    badge,
     workTagline,
     workDescription,
     "workItems": *[_type == "workItem" && references(^._id)] | order(order asc) {
