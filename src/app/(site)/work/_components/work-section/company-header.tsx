@@ -21,8 +21,8 @@ export function CompanyHeader({
 	workDescription,
 }: CompanyHeaderProps) {
 	return (
-		<div className="flex flex-col gap-6">
-			<div className="flex items-center gap-3">
+		<>
+			<div className="sticky top-0 z-10 -mx-6 flex items-center gap-3 bg-background/95 px-6 py-3 backdrop-blur-sm">
 				<MediaImage
 					src={logo}
 					alt={`${name} logo`}
@@ -53,6 +53,6 @@ export function CompanyHeader({
 					)}
 				</div>
 			)}
-		</div>
+		</>
 	);
 }
