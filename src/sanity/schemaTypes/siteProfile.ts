@@ -1,5 +1,6 @@
 import { UserIcon } from "@sanity/icons";
-import { defineArrayMember, defineField, defineType } from "sanity";
+import { defineField, defineType } from "sanity";
+import { inlineBlock } from "../rich-text";
 
 export const siteProfile = defineType({
 	name: "siteProfile",
@@ -24,8 +25,9 @@ export const siteProfile = defineType({
 			name: "bio",
 			title: "Biography",
 			type: "array",
-			of: [defineArrayMember({ type: "block" })],
-			description: "Rich text bio - use bold for highlighted text",
+			of: [inlineBlock()],
+			description:
+				"Rich text bio. Use the colorForeground decorator to highlight phrases against the dimmed paragraph color.",
 			validation: (rule) => rule.required(),
 		}),
 	],

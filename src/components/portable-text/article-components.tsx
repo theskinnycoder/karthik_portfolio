@@ -13,25 +13,11 @@ import {
 	ContentTestimonial,
 	ContentVideo,
 } from "./blocks";
-
-const WEIGHT_DECORATOR_RENDERERS = {
-	weight300: 300,
-	weight400: 400,
-	weight500: 500,
-	weight600: 600,
-	weight700: 700,
-} as const;
-
-function makeWeightMark(weight: number) {
-	function WeightMark({ children }: { children?: React.ReactNode }) {
-		return <span style={{ fontWeight: weight }}>{children}</span>;
-	}
-	WeightMark.displayName = `WeightMark(${weight})`;
-	return WeightMark;
-}
+import { inlineMarks } from "./inline-marks";
 
 export const articleComponents: PortableTextComponents = {
 	marks: {
+		...inlineMarks,
 		link: ({ value, children }) => {
 			const href = typeof value?.href === "string" ? value.href : "#";
 			const openInNewTab = Boolean(value?.openInNewTab);
@@ -45,11 +31,8 @@ export const articleComponents: PortableTextComponents = {
 				</a>
 			);
 		},
-		fontScript: ({ children }) => (
-			<span style={{ fontFamily: "var(--font-serif)" }}>{children}</span>
-		),
 		// Legacy annotation marks from the previous schema. New content uses the
-		// fontScript decorator and weight300..700 decorators; these keep already-
+		// fontScript + weight300..700 + color* decorators; these keep already-
 		// authored content rendering until it's re-saved.
 		fontFamily: ({ value, children }) => {
 			const v = value as { value?: string } | undefined;
@@ -74,11 +57,6 @@ export const articleComponents: PortableTextComponents = {
 				</span>
 			);
 		},
-		weight300: makeWeightMark(WEIGHT_DECORATOR_RENDERERS.weight300),
-		weight400: makeWeightMark(WEIGHT_DECORATOR_RENDERERS.weight400),
-		weight500: makeWeightMark(WEIGHT_DECORATOR_RENDERERS.weight500),
-		weight600: makeWeightMark(WEIGHT_DECORATOR_RENDERERS.weight600),
-		weight700: makeWeightMark(WEIGHT_DECORATOR_RENDERERS.weight700),
 	},
 	list: {
 		check: ({ children }) => (
