@@ -1,5 +1,6 @@
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
+import type { CSSProperties } from "react";
 import { MediaImage } from "@/components/media";
 import type { WorkItemDTO } from "@/sanity/lib/dal";
 
@@ -7,7 +8,17 @@ interface WorkItemCardProps {
 	item: WorkItemDTO;
 }
 
+const DEFAULT_BRAND_FROM = "#c8ed97";
+const DEFAULT_BRAND_TO = "#47d9b8";
+
 export function WorkItemCard({ item }: WorkItemCardProps) {
+	const from = item.brandFrom ?? DEFAULT_BRAND_FROM;
+	const to = item.brandTo ?? item.brandFrom ?? DEFAULT_BRAND_TO;
+	const ctaStyle = {
+		"--brand-from": from,
+		"--brand-to": to,
+	} as CSSProperties;
+
 	return (
 		<Link href={`/work/${item.slug}`}>
 			<div className="flex flex-col gap-3 rounded-[20px] border border-border bg-card p-3.5">
@@ -41,7 +52,10 @@ export function WorkItemCard({ item }: WorkItemCardProps) {
 					<p className="flex-1 truncate text-sm leading-prose font-light tracking-prose text-muted-foreground">
 						{item.description}
 					</p>
-					<div className="flex size-[30px] shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-[#c8ed97] to-[#47d9b8]">
+					<div
+						style={ctaStyle}
+						className="flex size-[30px] shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-[var(--brand-from)] to-[var(--brand-to)]"
+					>
 						<ArrowUpRight className="size-4 text-background" />
 					</div>
 				</div>

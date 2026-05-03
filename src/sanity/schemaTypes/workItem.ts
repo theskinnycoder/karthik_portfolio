@@ -69,20 +69,22 @@ export const workItem = defineType({
 			title: "Brand colors",
 			type: "object",
 			description:
-				"Optional per-case-study brand palette. Leave blank to use the site default.",
+				"Optional per-work brand palette. Drives the case-study border accent and the work-card CTA gradient. Leave blank for the site default.",
 			options: { collapsible: true, collapsed: true },
 			fields: [
 				defineField({
 					name: "primary",
 					title: "Primary",
 					type: "string",
-					description: "Hex, e.g. #2563EB",
+					description:
+						"Hex, e.g. #2563EB. Card CTA gradient start (and case-study accent).",
 				}),
 				defineField({
 					name: "secondary",
 					title: "Secondary",
 					type: "string",
-					description: "Hex",
+					description:
+						"Hex. Card CTA gradient end. Leave blank for a solid swatch using primary.",
 				}),
 				defineField({
 					name: "accent",

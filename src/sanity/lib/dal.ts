@@ -112,6 +112,8 @@ export interface WorkItemDTO {
 	image: string;
 	description: string;
 	slug: string;
+	brandFrom?: string;
+	brandTo?: string;
 }
 
 export interface TeamMemberDTO {
@@ -283,6 +285,8 @@ function toWorkItemCardDTO(data: WorkItemCardRaw): WorkItemDTO {
 		image: getMediaUrl(data.image),
 		description: data.description ?? "",
 		slug: data.slug ?? "",
+		brandFrom: data.brandFrom ?? undefined,
+		brandTo: data.brandTo ?? undefined,
 	};
 }
 

@@ -557,7 +557,7 @@ export type SiteProfileQueryResult = {
 
 // Source: src/sanity/lib/queries.ts
 // Variable: workPageQuery
-// Query: *[_type == "company" && count(*[_type == "workItem" && references(^._id)]) > 0] | order(order asc) {    _id,    name,    logo,    website,    isCurrent,    badge,    workTagline,    workDescription,    "workItems": *[_type == "workItem" && references(^._id)] | order(order asc) {      _id,      title,      icon,      tag,      image,      description,      "slug": slug.current    }  }
+// Query: *[_type == "company" && count(*[_type == "workItem" && references(^._id)]) > 0] | order(order asc) {    _id,    name,    logo,    website,    isCurrent,    badge,    workTagline,    workDescription,    "workItems": *[_type == "workItem" && references(^._id)] | order(order asc) {      _id,      title,      icon,      tag,      image,      description,      "slug": slug.current,      "brandFrom": brand.primary,      "brandTo": brand.secondary    }  }
 export type WorkPageQueryResult = Array<{
 	_id: string;
 	name: string | null;
@@ -588,6 +588,8 @@ export type WorkPageQueryResult = Array<{
 		image: CloudinaryAsset | null;
 		description: string | null;
 		slug: string | null;
+		brandFrom: string | null;
+		brandTo: string | null;
 	}>;
 }>;
 
@@ -766,7 +768,7 @@ declare module "@sanity/client" {
 		'\n  *[_type == "project"] | order(order asc) {\n    _id,\n    name,\n    image,\n    alt,\n    backgroundColor\n  }\n': ProjectsQueryResult;
 		'\n  *[_type == "experience"] | order(order asc) {\n    _id,\n    company,\n    url,\n    role,\n    description\n  }\n': ExperiencesQueryResult;
 		'\n  *[_type == "siteProfile"][0] {\n    _id,\n    name,\n    title,\n    bio\n  }\n': SiteProfileQueryResult;
-		'\n  *[_type == "company" && count(*[_type == "workItem" && references(^._id)]) > 0] | order(order asc) {\n    _id,\n    name,\n    logo,\n    website,\n    isCurrent,\n    badge,\n    workTagline,\n    workDescription,\n    "workItems": *[_type == "workItem" && references(^._id)] | order(order asc) {\n      _id,\n      title,\n      icon,\n      tag,\n      image,\n      description,\n      "slug": slug.current\n    }\n  }\n': WorkPageQueryResult;
+		'\n  *[_type == "company" && count(*[_type == "workItem" && references(^._id)]) > 0] | order(order asc) {\n    _id,\n    name,\n    logo,\n    website,\n    isCurrent,\n    badge,\n    workTagline,\n    workDescription,\n    "workItems": *[_type == "workItem" && references(^._id)] | order(order asc) {\n      _id,\n      title,\n      icon,\n      tag,\n      image,\n      description,\n      "slug": slug.current,\n      "brandFrom": brand.primary,\n      "brandTo": brand.secondary\n    }\n  }\n': WorkPageQueryResult;
 		'\n  *[_type == "sectionHeader" && slug.current == $slug][0] {\n    _id,\n    headingPrefix,\n    headingHighlight,\n    headingEmoji,\n    icon,\n    gradientFrom,\n    gradientTo,\n    video,\n    subheading\n  }\n': SectionHeaderQueryResult;
 		'\n  *[_type == "workItem" && slug.current == $slug][0] {\n    _id,\n    title,\n    "slug": slug.current,\n    tag,\n    description,\n    excerpt,\n    liveUrl,\n    image,\n    heroImage,\n    brand,\n    content[] {\n      ...,\n      _type == "contentTestimonial" => {\n        _type,\n        _key,\n        "testimonial": testimonial->{\n          _id,\n          quote,\n          authorName,\n          authorRole,\n          authorAvatar,\n          company->{\n            _id,\n            name,\n            logo\n          }\n        }\n      }\n    },\n    "prev": *[_type == "workItem" && order < ^.order && defined(slug.current)]\n      | order(order desc)[0] {\n        title,\n        "slug": slug.current,\n        tag\n      },\n    "next": *[_type == "workItem" && order > ^.order && defined(slug.current)]\n      | order(order asc)[0] {\n        title,\n        "slug": slug.current,\n        tag\n      },\n    "company": company->{\n      _id,\n      name,\n      logo,\n      website\n    }\n  }\n': WorkItemBySlugQueryResult;
 		'\n  *[_type == "workItem" && defined(slug.current)].slug.current\n': AllWorkItemSlugsQueryResult;
