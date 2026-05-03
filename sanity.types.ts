@@ -262,6 +262,15 @@ export type Project = {
 	order?: number;
 };
 
+export type HomePage = {
+	_id: string;
+	_type: "homePage";
+	_createdAt: string;
+	_updatedAt: string;
+	_rev: string;
+	sections?: Array<"intro" | "experience" | "otherWorks" | "testimonials">;
+};
+
 export type Experience = {
 	_id: string;
 	_type: "experience";
@@ -445,6 +454,7 @@ export type AllSanitySchemaTypes =
 	| SiteProfile
 	| SectionHeader
 	| Project
+	| HomePage
 	| Experience
 	| Company
 	| CloudinaryAssetContextCustom
@@ -553,6 +563,15 @@ export type SiteProfileQueryResult = {
 		_type: "block";
 		_key: string;
 	}> | null;
+} | null;
+
+// Source: src/sanity/lib/queries.ts
+// Variable: homePageQuery
+// Query: *[_type == "homePage"][0] {    sections  }
+export type HomePageQueryResult = {
+	sections: Array<
+		"experience" | "intro" | "otherWorks" | "testimonials"
+	> | null;
 } | null;
 
 // Source: src/sanity/lib/queries.ts
@@ -768,6 +787,7 @@ declare module "@sanity/client" {
 		'\n  *[_type == "project"] | order(order asc) {\n    _id,\n    name,\n    image,\n    alt,\n    backgroundColor\n  }\n': ProjectsQueryResult;
 		'\n  *[_type == "experience"] | order(order asc) {\n    _id,\n    company,\n    url,\n    role,\n    description\n  }\n': ExperiencesQueryResult;
 		'\n  *[_type == "siteProfile"][0] {\n    _id,\n    name,\n    title,\n    bio\n  }\n': SiteProfileQueryResult;
+		'\n  *[_type == "homePage"][0] {\n    sections\n  }\n': HomePageQueryResult;
 		'\n  *[_type == "company" && count(*[_type == "workItem" && references(^._id)]) > 0] | order(order asc) {\n    _id,\n    name,\n    logo,\n    website,\n    isCurrent,\n    badge,\n    workTagline,\n    workDescription,\n    "workItems": *[_type == "workItem" && references(^._id)] | order(order asc) {\n      _id,\n      title,\n      icon,\n      tag,\n      image,\n      description,\n      "slug": slug.current,\n      "brandFrom": brand.primary,\n      "brandTo": brand.secondary\n    }\n  }\n': WorkPageQueryResult;
 		'\n  *[_type == "sectionHeader" && slug.current == $slug][0] {\n    _id,\n    headingPrefix,\n    headingHighlight,\n    headingEmoji,\n    icon,\n    gradientFrom,\n    gradientTo,\n    video,\n    subheading\n  }\n': SectionHeaderQueryResult;
 		'\n  *[_type == "workItem" && slug.current == $slug][0] {\n    _id,\n    title,\n    "slug": slug.current,\n    tag,\n    description,\n    excerpt,\n    liveUrl,\n    image,\n    heroImage,\n    brand,\n    content[] {\n      ...,\n      _type == "contentTestimonial" => {\n        _type,\n        _key,\n        "testimonial": testimonial->{\n          _id,\n          quote,\n          authorName,\n          authorRole,\n          authorAvatar,\n          company->{\n            _id,\n            name,\n            logo\n          }\n        }\n      }\n    },\n    "prev": *[_type == "workItem" && order < ^.order && defined(slug.current)]\n      | order(order desc)[0] {\n        title,\n        "slug": slug.current,\n        tag\n      },\n    "next": *[_type == "workItem" && order > ^.order && defined(slug.current)]\n      | order(order asc)[0] {\n        title,\n        "slug": slug.current,\n        tag\n      },\n    "company": company->{\n      _id,\n      name,\n      logo,\n      website\n    }\n  }\n': WorkItemBySlugQueryResult;

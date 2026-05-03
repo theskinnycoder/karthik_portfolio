@@ -13,6 +13,7 @@ export const DOCUMENT_TYPE_TO_TAGS = {
 	siteProfile: ["siteProfile"],
 	sectionHeader: ["sectionHeaders"],
 	workItem: ["workItems"],
+	homePage: ["homePage"],
 } as const;
 
 /**

@@ -63,6 +63,13 @@ export const siteProfileQuery = groq`
   }
 `;
 
+// Singleton - section order for the home page
+export const homePageQuery = groq`
+  *[_type == "homePage"][0] {
+    sections
+  }
+`;
+
 export const workPageQuery = groq`
   *[_type == "company" && count(*[_type == "workItem" && references(^._id)]) > 0] | order(order asc) {
     _id,

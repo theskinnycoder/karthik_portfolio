@@ -6,6 +6,7 @@ import type {
 	AllWorkItemSlugsQueryResult,
 	CompaniesQueryResult,
 	ExperiencesQueryResult,
+	HomePageQueryResult,
 	ProjectsQueryResult,
 	SectionHeaderQueryResult,
 	SiteProfileQueryResult,
@@ -14,11 +15,16 @@ import type {
 	WorkItemBySlugQueryResult,
 	WorkPageQueryResult,
 } from "~/sanity.types";
+import {
+	HOME_SECTION_KEYS,
+	type HomeSectionKey,
+} from "../schemaTypes/homePage";
 import { sanityFetch } from "./fetch";
 import {
 	allWorkItemSlugsQuery,
 	companiesQuery,
 	experiencesQuery,
+	homePageQuery,
 	projectsQuery,
 	sectionHeaderQuery,
 	siteProfileQuery,
@@ -565,4 +571,19 @@ export async function getAllWorkItemSlugs(): Promise<string[]> {
 		query: allWorkItemSlugsQuery,
 	});
 	return slugs.filter((s): s is string => s !== null);
+}
+
+const DEFAULT_HOME_SECTIONS: readonly HomeSectionKey[] = HOME_SECTION_KEYS;
+
+export async function getHomePageSections(): Promise<HomeSectionKey[]> {
+	await tagResource("homePage");
+
+	const data = await sanityFetch<HomePageQueryResult>({
+		query: homePageQuery,
+	});
+	const allowed = new Set<string>(HOME_SECTION_KEYS);
+	const ordered = (data?.sections ?? []).filter((key): key is HomeSectionKey =>
+		allowed.has(key),
+	);
+	return ordered.length > 0 ? ordered : [...DEFAULT_HOME_SECTIONS];
 }
