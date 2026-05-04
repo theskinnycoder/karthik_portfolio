@@ -16,15 +16,27 @@ export function ContentTestimonial({ value }: ContentTestimonialProps) {
 	const initials = getInitials(testimonial.authorName);
 
 	return (
-		<figure className="my-8 flex flex-col gap-6 rounded-2xl border border-[var(--brand-primary,var(--color-border))] bg-card p-6">
-			<blockquote className="text-lg leading-relaxed font-light text-card-foreground/60 italic before:content-['“'] after:content-['”']">
-				<PortableTextRenderer
-					value={testimonial.quote}
-					variant="base"
-				/>
-			</blockquote>
+		<figure className="not-prose my-8 flex flex-col gap-[18px] rounded-[18px] border border-border bg-card px-3.5 py-4.5">
+			<div className="flex flex-col gap-4">
+				{testimonial.company.logo && (
+					<MediaImage
+						src={testimonial.company.logo}
+						alt={testimonial.company.name}
+						width={0}
+						height={0}
+						className="h-[18px] w-auto shrink-0 self-start"
+						sizes="100vw"
+					/>
+				)}
+				<blockquote className="text-[14px] leading-[22px] font-normal text-muted-foreground">
+					<PortableTextRenderer
+						value={testimonial.quote}
+						variant="base"
+					/>
+				</blockquote>
+			</div>
 			<figcaption className="flex items-center gap-3">
-				<Avatar className="size-10">
+				<Avatar className="size-[35px]">
 					<AvatarImage
 						src={testimonial.authorAvatar}
 						alt={testimonial.authorName}
@@ -32,25 +44,13 @@ export function ContentTestimonial({ value }: ContentTestimonialProps) {
 					/>
 					<AvatarFallback>{initials}</AvatarFallback>
 				</Avatar>
-				<div className="flex flex-col">
-					<span className="text-base font-semibold text-card-foreground">
+				<div className="flex flex-col gap-1">
+					<span className="text-xs font-semibold text-foreground">
 						{testimonial.authorName}
 					</span>
-					<div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-						<span className="text-xs font-light text-card-foreground/60">
-							{testimonial.authorRole}
-						</span>
-						{testimonial.company.logo && (
-							<MediaImage
-								src={testimonial.company.logo}
-								alt={testimonial.company.name}
-								width={0}
-								height={0}
-								className="h-3.5 w-auto shrink-0"
-								sizes="100vw"
-							/>
-						)}
-					</div>
+					<span className="text-xs font-normal text-foreground">
+						{testimonial.authorRole}
+					</span>
 				</div>
 			</figcaption>
 		</figure>
