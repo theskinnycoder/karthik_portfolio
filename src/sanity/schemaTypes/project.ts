@@ -20,10 +20,16 @@ export const project = defineType({
 			validation: (rule) => rule.required(),
 		}),
 		defineField({
-			name: "alt",
-			title: "Alt Text",
+			name: "description",
+			title: "Description",
 			type: "string",
 			description: "Accessibility description for the image",
+			validation: (rule) => rule.required(),
+		}),
+		defineField({
+			name: "url",
+			title: "Project URL",
+			type: "url",
 			validation: (rule) => rule.required(),
 		}),
 		defineField({
