@@ -1,13 +1,14 @@
 "use client";
 
-import * as React from "react";
 import AutoScroll from "embla-carousel-auto-scroll";
+import * as React from "react";
 
 import {
 	Carousel,
 	CarouselContent,
 	CarouselItem,
 } from "@/components/ui/carousel";
+import useIsMobile from "@/hooks/use-media-query";
 import type { TestimonialDTO } from "@/sanity/lib/dal";
 import { TestimonialCard } from "./testimonial-card";
 
@@ -16,6 +17,8 @@ export function TestimonialsCarousel({
 }: {
 	testimonials: TestimonialDTO[];
 }) {
+	const isMobile = useIsMobile()
+
 	const plugin = React.useRef(
 		AutoScroll({
 			speed: 1,
@@ -36,7 +39,7 @@ export function TestimonialsCarousel({
 	];
 
 	return (
-		<div className="w-full self-center md:w-screen md:[mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+		<div className="w-full self-center md:[mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
 			<Carousel
 				opts={{
 					align: "start",
@@ -47,6 +50,7 @@ export function TestimonialsCarousel({
 				}}
 				plugins={[plugin.current]}
 				className="w-full"
+				orientation={isMobile ? "vertical" : "horizontal"}
 			>
 				<CarouselContent className="items-stretch">
 					{duplicatedTestimonials.map((testimonial, index) => (
