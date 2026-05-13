@@ -5,7 +5,7 @@ export async function CompanyLogos() {
 	const companies = await getCompanies();
 
 	return (
-		<div className="flex flex-wrap items-center gap-x-16 gap-y-4 md:gap-x-8">
+		<div className="flex flex-wrap items-center gap-x-4 gap-y-4 md:gap-x-6">
 			{companies.map((company) => (
 				<MediaImage
 					key={company.name}
