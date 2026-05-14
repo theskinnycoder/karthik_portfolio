@@ -38,10 +38,10 @@ export function TestimonialCard({
 					<span className="text-base font-semibold text-foreground">
 						{authorName}
 					</span>
-					<div className="flex flex-col gap-1 md:flex-row md:items-center">
+					<div className="flex gap-1 items-center">
 						<span className="text-xs font-light text-muted-foreground">
 							{authorRole}
-							<span className="hidden md:inline"> at</span>
+							<span> at</span>
 						</span>
 						<MediaImage
 							src={company.logo}

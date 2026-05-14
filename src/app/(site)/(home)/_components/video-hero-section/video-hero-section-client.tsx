@@ -4,8 +4,8 @@ import { Pause, Play } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState } from "react";
 
-export function VideoHeroSectionClient({ availability }: {
-    availability: boolean
+export function VideoHeroSectionClient({ availabilityMessage }: {
+    availabilityMessage: string
 }) {
     const videoRef = useRef<HTMLVideoElement>(null);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -20,12 +20,6 @@ export function VideoHeroSectionClient({ availability }: {
         }
         setIsPlaying(!isPlaying);
     }
-
-
-
-    const disclaimerText = availability ?
-        "Back on the market and open to opportunities,keeping this video up" :
-        "I am no longer looking for a job but keeping this video up"
 
     return (
         <section className="flex flex-col items-end md:items-center">
@@ -71,12 +65,12 @@ export function VideoHeroSectionClient({ availability }: {
                         </div>
                     </div>
 
-                    {/* arrow.gif — pointing at the circle */}
+                    {/* Indicator.gif — pointing at the circle */}
                     <Image
-                        src="/arrow.gif"
+                        src="/Indicator.gif"
                         alt=""
-                        width={135}
-                        height={135}
+                        width={155}
+                        height={155}
                         className="pointer-events-none absolute -bottom-4 -left-8 z-10"
                         unoptimized
                     />
@@ -98,8 +92,8 @@ export function VideoHeroSectionClient({ availability }: {
             </div>
 
             {/* Disclaimer text */}
-            <p className="mt-4 max-w-50 text-center font-serif text-base font-semibold text-balance text-[#cccccc] md:-mr-16 md:text-xl">
-                ({disclaimerText})
+            <p className="mt-4 max-w-60 text-center font-serif text-base font-semibold text-balance text-[#cccccc] mr-4 md:-mr-16 md:text-xl">
+                ({availabilityMessage})
             </p>
         </section>
     );
