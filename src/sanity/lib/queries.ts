@@ -38,8 +38,9 @@ export const projectsQuery = groq`
     _id,
     name,
     image,
-    alt,
-    backgroundColor
+    description,
+    backgroundColor,
+    url
   }
 `;
 
@@ -59,7 +60,8 @@ export const siteProfileQuery = groq`
     _id,
     name,
     title,
-    bio
+    bio,
+    availabilityMessage
   }
 `;
 

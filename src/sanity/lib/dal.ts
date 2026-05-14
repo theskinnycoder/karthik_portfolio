@@ -110,7 +110,7 @@ export interface SiteProfileDTO {
 	name: string;
 	title: string;
 	bio: PortableTextBlock[];
-	availability: boolean;
+	availabilityMessage: string;
 }
 
 export interface WorkItemDTO {
@@ -520,11 +520,12 @@ export async function getSiteProfile(): Promise<SiteProfileDTO | null> {
 		query: siteProfileQuery,
 	});
 	if (!profile) return null;
+
 	return {
 		name: profile.name ?? "",
 		title: profile.title ?? "",
 		bio: (profile.bio ?? []) as unknown as PortableTextBlock[],
-		availability: profile.availability ?? false,
+		availabilityMessage: profile.availabilityMessage ?? "",
 	};
 }
 

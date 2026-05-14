@@ -22,10 +22,10 @@ export const siteProfile = defineType({
 			validation: (rule) => rule.required(),
 		}),
 		defineField({
-			name: "availability",
-			title: "Availability",
-			type: "boolean",
-			description: "Show your availability for work opportunities",
+			name: "availabilityMessage",
+			title: "Availability Message",
+			type: "string",
+			description: 'e.g., "I\'m currently available for new opportunities"',
 			validation: (rule) => rule.required(),
 		}),
 		defineField({

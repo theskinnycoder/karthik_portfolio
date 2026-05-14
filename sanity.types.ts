@@ -564,7 +564,7 @@ export type SiteProfileQueryResult = {
 		_type: "block";
 		_key: string;
 	}> | null;
-	availability:boolean | null
+	availabilityMessage:string | null
 } | null;
 
 // Source: src/sanity/lib/queries.ts
