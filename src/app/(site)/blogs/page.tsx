@@ -1,8 +1,9 @@
-export default function BlogsPage() {
-	return (
-		<div className="flex h-dvh flex-col items-center justify-center gap-2">
-			<h1 className="text-4xl font-bold">Blogs</h1>
-			<p className="text-xl text-muted-foreground">Work in progress!</p>
-		</div>
-	);
+"use cache";
+
+import { cachePageLife } from "@/lib/caching";
+import { SitePage } from "../_components/site-page";
+
+export default async function BlogsPage() {
+	cachePageLife();
+	return <SitePage initialSection="blogs" />;
 }
