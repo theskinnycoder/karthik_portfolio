@@ -8,6 +8,7 @@ import {
 	CarouselContent,
 	CarouselItem,
 } from "@/components/ui/carousel";
+import { ProgressiveBlur } from "@/components/ui/progressive-blur";
 import type { TestimonialDTO } from "@/sanity/lib/dal";
 import { TestimonialCard } from "./testimonial-card";
 
@@ -30,7 +31,7 @@ export function TestimonialsCarousel({
 	);
 
 	return (
-		<div className="w-full self-center md:[mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+		<div className="-mx-6 w-[calc(100%+3rem)] self-center">
 			<div className="flex w-full flex-col gap-4 md:hidden">
 				{testimonials.map((testimonial, index) => (
 					<div key={`${testimonial.authorName}-${index}`} className="w-full">
@@ -45,7 +46,7 @@ export function TestimonialsCarousel({
 				))}
 			</div>
 
-			<div className="hidden md:block">
+			<div className="relative hidden md:block">
 				<Carousel
 					opts={{
 						align: "start",
@@ -74,6 +75,18 @@ export function TestimonialsCarousel({
 						))}
 					</CarouselContent>
 				</Carousel>
+				<ProgressiveBlur
+					direction="left"
+					blurLayers={8}
+					blurIntensity={0.5}
+					className="absolute inset-y-0 left-0 z-10 w-24"
+				/>
+				<ProgressiveBlur
+					direction="right"
+					blurLayers={8}
+					blurIntensity={0.5}
+					className="absolute inset-y-0 right-0 z-10 w-24"
+				/>
 			</div>
 		</div>
 	);
