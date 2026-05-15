@@ -20,8 +20,11 @@ export function WorkItemCard({ item }: WorkItemCardProps) {
 	} as CSSProperties;
 
 	return (
-		<Link href={`/work/${item.slug}`}>
-			<div className="flex flex-col gap-3 rounded-[20px] border border-border bg-card p-3.5">
+		<Link
+			href={`/work/${item.slug}`}
+			className="block"
+		>
+			<div className="flex flex-col gap-3 rounded-[20px] border border-border bg-card p-3.5 md:h-[520px]">
 				<div className="flex items-center gap-1.5">
 					{item.icon && (
 						<MediaImage
@@ -32,20 +35,20 @@ export function WorkItemCard({ item }: WorkItemCardProps) {
 							className="size-4"
 						/>
 					)}
-					<span className="text-sm leading-prose font-medium tracking-prose text-foreground">
+					<span className="min-w-0 truncate text-sm leading-prose font-medium tracking-prose text-foreground">
 						{item.title}
 					</span>
-					<span className="ml-auto rounded-full border border-border bg-card px-3 py-1 text-xs font-light tracking-prose text-foreground">
+					<span className="ml-auto shrink-0 rounded-full border border-border bg-card px-3 py-2 text-xs font-light tracking-prose whitespace-nowrap text-foreground">
 						{item.tag}
 					</span>
 				</div>
-				<div className="overflow-hidden rounded-xl">
+				<div className="overflow-hidden rounded-xl md:relative md:flex-1">
 					<MediaImage
 						src={item.image}
 						alt={item.title}
 						width={600}
 						height={340}
-						className="w-full object-cover"
+						className="w-full object-cover md:absolute md:inset-0 md:h-full md:w-full"
 					/>
 				</div>
 				<div className="flex items-center gap-2">

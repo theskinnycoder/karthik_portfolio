@@ -31,10 +31,13 @@ export function TestimonialsCarousel({
 	);
 
 	return (
-		<div className="-mx-6 w-[calc(100%+3rem)] self-center">
+		<div className="self-center md:-mx-11 md:w-[calc(100%+5.5rem)]">
 			<div className="flex w-full flex-col gap-4 md:hidden">
 				{testimonials.map((testimonial, index) => (
-					<div key={`${testimonial.authorName}-${index}`} className="w-full">
+					<div
+						key={`${testimonial.authorName}-${index}`}
+						className="w-full"
+					>
 						<TestimonialCard
 							authorAvatar={testimonial.authorAvatar}
 							authorName={testimonial.authorName}

@@ -8,8 +8,8 @@ const companyBadgeVariants = cva(
 	{
 		variants: {
 			tone: {
-				current: "px-3.5 py-2 text-sm",
-				past: "px-3 py-1.5 text-xs text-muted-foreground",
+				current: "px-3.5 py-1.5 text-sm",
+				past: "px-3.5 py-1.5 text-xs text-muted-foreground",
 			},
 		},
 		defaultVariants: {
