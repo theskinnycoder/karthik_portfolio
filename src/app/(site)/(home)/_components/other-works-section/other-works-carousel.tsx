@@ -8,6 +8,7 @@ import {
 	CarouselContent,
 	CarouselItem,
 } from "@/components/ui/carousel";
+import { ProgressiveBlur } from "@/components/ui/progressive-blur";
 import type { ProjectDTO } from "@/sanity/lib/dal";
 import { ProductCard } from "./product-card";
 
@@ -33,7 +34,7 @@ export function OtherWorksCarousel({ projects }: OtherWorksCarouselProps) {
 	const duplicatedProjects = Array.from({ length: 6 }, () => projects).flat();
 
 	return (
-		<div className="w-full self-center md:[mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+		<div className="relative -mx-6 w-[calc(100%+3rem)] self-center">
 			<Carousel
 				dir="rtl"
 				opts={{
@@ -64,6 +65,18 @@ export function OtherWorksCarousel({ projects }: OtherWorksCarouselProps) {
 					))}
 				</CarouselContent>
 			</Carousel>
+			<ProgressiveBlur
+				direction="left"
+				blurLayers={8}
+				blurIntensity={0.5}
+				className="absolute inset-y-0 left-0 z-10 hidden w-24 md:block"
+			/>
+			<ProgressiveBlur
+				direction="right"
+				blurLayers={8}
+				blurIntensity={0.5}
+				className="absolute inset-y-0 right-0 z-10 hidden w-24 md:block"
+			/>
 		</div>
 	);
 }

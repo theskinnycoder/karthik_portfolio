@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import {
 	motion,
 	useAnimationFrame,
@@ -120,7 +121,11 @@ export default function GradientText({
 
 	return (
 		<motion.div
-			className={`relative mx-auto flex max-w-fit flex-row items-center justify-center overflow-hidden rounded-4xl font-medium backdrop-blur transition-shadow duration-500 ${showBorder ? "px-2 py-1" : ""} ${className}`}
+			className={cn(
+				"relative mx-auto flex max-w-fit flex-row items-center justify-center overflow-hidden rounded-4xl font-medium backdrop-blur transition-shadow duration-500",
+				showBorder && "px-2 py-1",
+				className,
+			)}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
 		>
@@ -142,7 +147,7 @@ export default function GradientText({
 				</motion.div>
 			)}
 			<motion.div
-				className="relative z-2 inline-block bg-clip-text text-transparent"
+				className="relative z-2 inline-block bg-clip-text pr-2.5 text-transparent"
 				style={{
 					...gradientStyle,
 					backgroundPosition,

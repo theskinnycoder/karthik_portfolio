@@ -31,11 +31,11 @@ export function HeroHeader({
 					{headingPrefix && (
 						<span className="text-muted-foreground">{headingPrefix} </span>
 					)}
-					<div className="inline-flex items-baseline space-x-2 md:inline">
+					<div className="inline-flex items-baseline md:inline">
 						<GradientText
 							colors={[gradientFrom, gradientTo]}
 							direction="horizontal"
-							className="mx-0 inline-flex! rounded-none font-serif text-4xl"
+							className="mx-0 inline-flex! overflow-visible rounded-none font-serif text-4xl"
 						>
 							{headingHighlight}
 						</GradientText>
@@ -45,11 +45,11 @@ export function HeroHeader({
 								alt=""
 								width={20}
 								height={20}
-								className="inline"
+								className="ml-2 inline"
 								loading="eager"
 							/>
 						) : headingEmoji ? (
-							<span> {headingEmoji}</span>
+							<span className="ml-0.5">{headingEmoji}</span>
 						) : null}
 					</div>
 				</h2>

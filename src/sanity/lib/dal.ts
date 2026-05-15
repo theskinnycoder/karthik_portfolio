@@ -317,8 +317,8 @@ function toWorkPageCompanyDTO(data: WorkPageCompanyRaw): WorkPageCompanyDTO {
 function toSectionHeaderDTO(data: SectionHeaderRaw): SectionHeaderDTO {
 	return {
 		headingPrefix: data.headingPrefix ?? undefined,
-		headingHighlight: data.headingHighlight ?? "",
-		headingEmoji: data.headingEmoji ?? undefined,
+		headingHighlight: data.headingHighlight?.trim() ?? "",
+		headingEmoji: data.headingEmoji?.trim() || undefined,
 		icon: data.icon ? getMediaUrl(data.icon) : undefined,
 		gradientFrom: data.gradientFrom ?? undefined,
 		gradientTo: data.gradientTo ?? undefined,
