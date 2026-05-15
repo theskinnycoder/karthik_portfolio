@@ -35,7 +35,7 @@ export async function SitePage({
 		<main className="flex flex-col">
 			<section
 				id="about"
-				className="mx-auto flex w-full max-w-5xl flex-col gap-16 px-6 pt-16 pb-16 md:border-x md:border-zinc-800 md:px-11"
+				className="mx-auto flex w-full max-w-5xl flex-col gap-16 px-6 pt-16 pb-16 md:border-x md:border-zinc-900 md:px-11"
 			>
 				<VideoHeroSection />
 				<div className="flex w-full flex-col gap-32 md:gap-40">
@@ -48,14 +48,14 @@ export async function SitePage({
 
 			<section
 				id="work"
-				className="mx-auto flex w-full max-w-5xl flex-col gap-16 px-6 pt-8 pb-24 md:border-x md:border-zinc-800 md:px-11"
+				className="mx-auto flex w-full max-w-5xl flex-col gap-16 px-6 pt-8 pb-24 md:border-x md:border-zinc-900 md:px-11"
 			>
 				<WorkSection />
 			</section>
 
 			<section
 				id="blogs"
-				className="mx-auto flex h-dvh w-full max-w-5xl flex-col items-center justify-center gap-2 px-6 md:border-x md:border-zinc-800 md:px-11"
+				className="mx-auto flex h-dvh w-full max-w-5xl flex-col items-center justify-center gap-2 px-6 md:border-x md:border-zinc-900 md:px-11"
 			>
 				<BlogsSection />
 			</section>
