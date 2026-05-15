@@ -527,8 +527,9 @@ export type ProjectsQueryResult = Array<{
 	_id: string;
 	name: string | null;
 	image: CloudinaryAsset | null;
-	alt: string | null;
+	description: string | null;
 	backgroundColor: string | null;
+	url:string|null
 }>;
 
 // Source: src/sanity/lib/queries.ts
@@ -563,6 +564,7 @@ export type SiteProfileQueryResult = {
 		_type: "block";
 		_key: string;
 	}> | null;
+	availabilityMessage:string | null
 } | null;
 
 // Source: src/sanity/lib/queries.ts

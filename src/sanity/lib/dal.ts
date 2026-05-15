@@ -1,7 +1,7 @@
-import type { PortableTextBlock } from "next-sanity";
-import "server-only";
 import { tagResource } from "@/lib/caching";
 import { getMediaUrl } from "@/lib/media";
+import type { PortableTextBlock } from "next-sanity";
+import "server-only";
 import type {
 	AllWorkItemSlugsQueryResult,
 	CompaniesQueryResult,
@@ -94,8 +94,9 @@ export interface SocialDTO {
 export interface ProjectDTO {
 	name: string;
 	image: string;
-	alt: string;
+	description: string;
 	backgroundColor: string;
+	url: string;
 }
 
 export interface ExperienceDTO {
@@ -109,6 +110,7 @@ export interface SiteProfileDTO {
 	name: string;
 	title: string;
 	bio: PortableTextBlock[];
+	availabilityMessage: string;
 }
 
 export interface WorkItemDTO {
@@ -269,8 +271,9 @@ function toProjectDTO(data: ProjectRaw): ProjectDTO {
 	return {
 		name: data.name ?? "",
 		image: getMediaUrl(data.image),
-		alt: data.alt ?? "",
+		description: data.description ?? "",
 		backgroundColor: data.backgroundColor ?? "",
+		url: data.url ?? "",
 	};
 }
 
@@ -517,10 +520,12 @@ export async function getSiteProfile(): Promise<SiteProfileDTO | null> {
 		query: siteProfileQuery,
 	});
 	if (!profile) return null;
+
 	return {
 		name: profile.name ?? "",
 		title: profile.title ?? "",
 		bio: (profile.bio ?? []) as unknown as PortableTextBlock[],
+		availabilityMessage: profile.availabilityMessage ?? "",
 	};
 }
 

@@ -1,7 +1,7 @@
 "use client";
 
-import * as React from "react";
 import AutoScroll from "embla-carousel-auto-scroll";
+import * as React from "react";
 
 import {
 	Carousel,
@@ -33,7 +33,7 @@ export function OtherWorksCarousel({ projects }: OtherWorksCarouselProps) {
 	const duplicatedProjects = Array.from({ length: 6 }, () => projects).flat();
 
 	return (
-		<div className="w-full self-center md:w-screen md:[mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+		<div className="w-full self-center md:[mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
 			<Carousel
 				dir="rtl"
 				opts={{
@@ -51,12 +51,13 @@ export function OtherWorksCarousel({ projects }: OtherWorksCarouselProps) {
 					{duplicatedProjects.map((project, index) => (
 						<CarouselItem
 							key={`${project.name}-${index}`}
-							className="basis-[85%] md:basis-1/4 lg:basis-1/5"
+							className="basis-[85%] md:basis-1/4 lg:basis-[40%]"
 						>
 							<ProductCard
 								image={project.image}
 								name={project.name}
-								alt={project.alt}
+								description={project.description}
+								navigateUrl={project.url}
 								backgroundColor={project.backgroundColor}
 							/>
 						</CarouselItem>

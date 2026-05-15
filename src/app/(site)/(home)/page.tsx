@@ -21,7 +21,7 @@ export default async function Page() {
 	const sections = await getHomePageSections();
 
 	return (
-		<main className="mx-auto flex w-full max-w-2xl flex-col gap-16 px-6 pt-16 pb-24">
+		<main className="mx-auto flex w-full border-x border-zinc-800 max-w-5xl flex-col gap-16 px-6 pt-16 pb-24">
 			<VideoHeroSection />
 			<div className="flex w-full flex-col gap-32 md:gap-40">
 				{sections.map((key) => {

@@ -1,6 +1,6 @@
 import { CaseIcon } from "@sanity/icons";
 import { defineField, defineType } from "sanity";
-import { inlineBlock } from "../rich-text";
+import { articleBlock } from "../rich-text";
 
 export const company = defineType({
 	name: "company",
@@ -51,7 +51,7 @@ export const company = defineType({
 			name: "workDescription",
 			title: "Work Description",
 			type: "array",
-			of: [inlineBlock()],
+			of: [articleBlock()],
 			description:
 				"Description shown on the work page. Use the colorForeground decorator to highlight phrases against the dimmed paragraph color.",
 		}),
