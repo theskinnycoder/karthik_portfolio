@@ -34,7 +34,7 @@ export function OtherWorksCarousel({ projects }: OtherWorksCarouselProps) {
 	const duplicatedProjects = Array.from({ length: 6 }, () => projects).flat();
 
 	return (
-		<div className="relative -mx-6 w-[calc(100%+3rem)] self-center">
+		<div className="relative -mx-6 w-[calc(100%+3rem)] self-center md:-mx-11 md:w-[calc(100%+5.5rem)]">
 			<Carousel
 				dir="rtl"
 				opts={{
