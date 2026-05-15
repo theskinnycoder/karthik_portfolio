@@ -1,17 +1,40 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const NAV_ITEMS = [
-	{ label: "About", href: "/" },
-	{ label: "Work", href: "/work" },
-	{ label: "Blogs", href: "/blogs" },
+	{ label: "About", href: "/", section: "about" },
+	{ label: "Work", href: "/work", section: "work" },
+	{ label: "Blogs", href: "/blogs", section: "blogs" },
 ] as const;
+
+const PATHNAME_TO_SECTION: Record<string, string> = {
+	"/": "about",
+	"/work": "work",
+	"/blogs": "blogs",
+};
 
 export function Navbar() {
 	const pathname = usePathname();
+	const [activeSection, setActiveSection] = useState(
+		PATHNAME_TO_SECTION[pathname] ?? "about",
+	);
+
+	useEffect(() => {
+		const handler = (e: Event) => {
+			const { section } = (e as CustomEvent<{ section: string }>).detail;
+			setActiveSection(section);
+		};
+		window.addEventListener("sectionchange", handler);
+		return () => window.removeEventListener("sectionchange", handler);
+	}, []);
+
+	const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, section: string) => {
+		e.preventDefault();
+		document.getElementById(section)?.scrollIntoView({ behavior: "smooth" });
+	};
 
 	return (
 		<nav
@@ -21,15 +44,13 @@ export function Navbar() {
 		>
 			<div className="flex items-center rounded-full border border-border bg-card p-2">
 				{NAV_ITEMS.map((item) => {
-					const isActive =
-						item.href === "/"
-							? pathname === "/"
-							: pathname.startsWith(item.href);
+					const isActive = activeSection === item.section;
 
 					return (
-						<Link
+						<a
 							key={item.href}
 							href={item.href}
+							onClick={(e) => handleClick(e, item.section)}
 							className={cn(
 								"rounded-full px-3.5 py-1.5 text-base font-semibold tracking-[0.32px] transition-colors",
 								isActive
@@ -39,7 +60,7 @@ export function Navbar() {
 							aria-current={isActive ? "page" : undefined}
 						>
 							{item.label}
-						</Link>
+						</a>
 					);
 				})}
 			</div>
