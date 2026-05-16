@@ -31,66 +31,45 @@ export function TestimonialsCarousel({
 	);
 
 	return (
-		<div className="self-center md:-mx-11 md:w-[calc(100%+5.5rem)]">
-			<div className="flex w-full flex-col gap-4 md:hidden">
-				{testimonials.map((testimonial, index) => (
-					<div
-						key={`${testimonial.authorName}-${index}`}
-						className="w-full"
-					>
-						<TestimonialCard
-							authorAvatar={testimonial.authorAvatar}
-							authorName={testimonial.authorName}
-							authorRole={testimonial.authorRole}
-							company={testimonial.company}
-							quote={testimonial.quote}
-						/>
-					</div>
-				))}
-			</div>
-
-			<div className="relative hidden md:block">
-				<Carousel
-					opts={{
-						align: "start",
-						loop: true,
-						breakpoints: {
-							"(min-width: 768px)": { dragFree: true },
-						},
-					}}
-					plugins={[plugin.current]}
-					className="w-full"
-				>
-					<CarouselContent className="items-stretch">
-						{testimonials.map((testimonial, index) => (
-							<CarouselItem
-								key={`${testimonial.authorName}-${index}`}
-								className="basis-1/2 lg:basis-1/3"
-							>
-								<TestimonialCard
-									authorAvatar={testimonial.authorAvatar}
-									authorName={testimonial.authorName}
-									authorRole={testimonial.authorRole}
-									company={testimonial.company}
-									quote={testimonial.quote}
-								/>
-							</CarouselItem>
-						))}
-					</CarouselContent>
-				</Carousel>
-				<ProgressiveBlur
-					direction="left"
-					blurLayers={8}
-					blurIntensity={0.5}
-					className="absolute inset-y-0 left-0 z-10 w-24"
-				/>
-				<ProgressiveBlur
-					direction="right"
-					blurLayers={8}
-					blurIntensity={0.5}
-					className="absolute inset-y-0 right-0 z-10 w-24"
-				/>
-			</div>
+		<div className="relative -mx-6 w-[calc(100%+3rem)] self-center md:-mx-11 md:w-[calc(100%+5.5rem)]">
+			<Carousel
+				opts={{
+					align: "start",
+					loop: true,
+					dragFree: true,
+				}}
+				plugins={[plugin.current]}
+				className="w-full"
+			>
+				<CarouselContent className="items-stretch">
+					{testimonials.map((testimonial, index) => (
+						<CarouselItem
+							key={`${testimonial.authorName}-${index}`}
+							className="basis-[85%] md:basis-1/2 lg:basis-[45%]"
+						>
+							<TestimonialCard
+								authorAvatar={testimonial.authorAvatar}
+								authorName={testimonial.authorName}
+								authorRole={testimonial.authorRole}
+								company={testimonial.company}
+								quote={testimonial.quote}
+							/>
+						</CarouselItem>
+					))}
+				</CarouselContent>
+			</Carousel>
+			<ProgressiveBlur
+				direction="left"
+				blurLayers={8}
+				blurIntensity={0.5}
+				className="absolute inset-y-0 left-0 z-10 hidden w-24 md:block"
+			/>
+			<ProgressiveBlur
+				direction="right"
+				blurLayers={8}
+				blurIntensity={0.5}
+				className="absolute inset-y-0 right-0 z-10 hidden w-24 md:block"
+			/>
 		</div>
 	);
 }

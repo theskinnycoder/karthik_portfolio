@@ -22,9 +22,9 @@ export function WorkItemCard({ item }: WorkItemCardProps) {
 	return (
 		<Link
 			href={`/work/${item.slug}`}
-			className="block"
+			className="block h-full w-full"
 		>
-			<div className="flex flex-col gap-3 rounded-[20px] border border-border bg-card p-3.5 md:h-[520px]">
+			<div className="flex h-full flex-col gap-3 rounded-[20px] border border-border bg-card p-3.5">
 				<div className="flex items-center gap-1.5">
 					{item.icon && (
 						<MediaImage
@@ -42,16 +42,15 @@ export function WorkItemCard({ item }: WorkItemCardProps) {
 						{item.tag}
 					</span>
 				</div>
-				<div className="overflow-hidden rounded-xl md:relative md:flex-1">
+				<div className="relative aspect-[11/10] overflow-hidden rounded-xl">
 					<MediaImage
 						src={item.image}
 						alt={item.title}
-						width={600}
-						height={340}
-						className="w-full object-cover md:absolute md:inset-0 md:h-full md:w-full"
+						fill
+						className="object-cover object-center"
 					/>
 				</div>
-				<div className="flex items-center gap-2">
+				<div className="mt-auto flex items-center gap-2">
 					<p className="flex-1 truncate text-sm leading-prose font-light tracking-prose text-muted-foreground">
 						{item.description}
 					</p>
