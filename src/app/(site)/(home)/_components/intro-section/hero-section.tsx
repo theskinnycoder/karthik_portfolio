@@ -1,3 +1,5 @@
+"use client";
+
 import SplitText from "@/components/SplitText";
 
 interface HeroSectionProps {

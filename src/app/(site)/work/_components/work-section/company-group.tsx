@@ -31,7 +31,7 @@ export function CompanyGroup({ company }: CompanyGroupProps) {
 					className="pointer-events-none absolute top-0 left-36 w-20"
 					unoptimized
 				/>
-				<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+				<div className="grid grid-cols-1 justify-items-center gap-4 md:grid-cols-2">
 					{company.workItems.map((item) => (
 						<WorkItemCard
 							key={item.slug}

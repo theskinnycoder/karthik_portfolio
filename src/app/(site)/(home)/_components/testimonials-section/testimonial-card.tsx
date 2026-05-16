@@ -38,7 +38,7 @@ export function TestimonialCard({
 					<span className="text-base font-semibold text-foreground">
 						{authorName}
 					</span>
-					<div className="flex gap-1 items-center">
+					<div className="flex items-center gap-1">
 						<span className="text-xs font-light text-muted-foreground">
 							{authorRole}
 							<span> at</span>
