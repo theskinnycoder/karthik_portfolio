@@ -31,12 +31,15 @@ export function TestimonialsCarousel({
 	);
 
 	return (
-		<div className="relative -mx-6 w-[calc(100%+3rem)] self-center md:-mx-11 md:w-[calc(100%+5.5rem)]">
+		<div className="relative -mx-6 w-[calc(100%+3rem)] self-center md:-mx-[1.125rem] md:w-[calc(100%+2.25rem)]">
 			<Carousel
 				opts={{
 					align: "start",
 					loop: true,
 					dragFree: true,
+					breakpoints: {
+						"(max-width: 767px)": { loop: false },
+					},
 				}}
 				plugins={[plugin.current]}
 				className="w-full"

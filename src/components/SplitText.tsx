@@ -1,9 +1,5 @@
 "use client";
 
-import { useGSAP } from "@gsap/react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { SplitText as GSAPSplitText } from "gsap/SplitText";
 import {
 	type CSSProperties,
 	type ElementType,
@@ -13,8 +9,6 @@ import {
 	useState,
 } from "react";
 
-gsap.registerPlugin(ScrollTrigger, GSAPSplitText, useGSAP);
-
 export interface SplitTextProps {
 	text: string;
 	className?: string;
@@ -22,14 +16,15 @@ export interface SplitTextProps {
 	duration?: number;
 	ease?: string | ((t: number) => number);
 	splitType?: "chars" | "words" | "lines" | "words, chars";
-	from?: gsap.TweenVars;
-	to?: gsap.TweenVars;
+	from?: Record<string, unknown>;
+	to?: Record<string, unknown>;
 	threshold?: number;
 	rootMargin?: string;
 	startDelay?: number;
 	tag?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "span";
 	textAlign?: CSSProperties["textAlign"];
 	onLetterAnimationComplete?: () => void;
+	onLastCharStart?: () => void;
 }
 
 const SplitText: FC<SplitTextProps> = ({
@@ -47,43 +42,49 @@ const SplitText: FC<SplitTextProps> = ({
 	tag = "p",
 	textAlign = "center",
 	onLetterAnimationComplete,
+	onLastCharStart,
 }) => {
-	const ref = useRef<HTMLParagraphElement>(null);
+	const ref = useRef<HTMLElement>(null);
 	const animationCompletedRef = useRef(false);
 	const onCompleteRef = useRef(onLetterAnimationComplete);
+	const onLastCharStartRef = useRef(onLastCharStart);
 	const [fontsLoaded, setFontsLoaded] = useState<boolean>(false);
 
-	// Keep callback ref updated
 	useEffect(() => {
 		onCompleteRef.current = onLetterAnimationComplete;
 	}, [onLetterAnimationComplete]);
 
 	useEffect(() => {
+		onLastCharStartRef.current = onLastCharStart;
+	}, [onLastCharStart]);
+
+	useEffect(() => {
 		if (document.fonts.status === "loaded") {
-			// Fonts already loaded, update state via microtask to avoid synchronous setState in effect
 			queueMicrotask(() => setFontsLoaded(true));
 		} else {
-			document.fonts.ready.then(() => {
-				setFontsLoaded(true);
-			});
+			document.fonts.ready.then(() => setFontsLoaded(true));
 		}
 	}, []);
 
-	useGSAP(
-		() => {
-			if (!ref.current || !text || !fontsLoaded) return;
-			// Prevent re-animation if already completed
-			if (animationCompletedRef.current) return;
-			const el = ref.current as HTMLElement & {
-				_rbsplitInstance?: GSAPSplitText;
-			};
+	useEffect(() => {
+		if (!ref.current || !text || !fontsLoaded) return;
+		if (animationCompletedRef.current) return;
 
-			if (el._rbsplitInstance) {
-				try {
-					el._rbsplitInstance.revert();
-				} catch {}
-				el._rbsplitInstance = undefined;
-			}
+		const el = ref.current;
+		let destroyed = false;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		let splitInstance: any;
+
+		// Dynamic imports keep GSAP out of the server bundle entirely,
+		// preventing Date.now() being called during Next.js cache prerender.
+		Promise.all([
+			import("gsap"),
+			import("gsap/ScrollTrigger"),
+			import("gsap/SplitText"),
+		]).then(([{ gsap }, { ScrollTrigger }, { SplitText: GSAPSplitText }]) => {
+			if (destroyed || !ref.current) return;
+
+			gsap.registerPlugin(ScrollTrigger, GSAPSplitText);
 
 			const startPct = (1 - threshold) * 100;
 			const marginMatch = /^(-?\d+(?:\.\d+)?)(px|em|rem|%)?$/.exec(rootMargin);
@@ -97,19 +98,8 @@ const SplitText: FC<SplitTextProps> = ({
 						: `+=${marginValue}${marginUnit}`;
 			const start = `top ${startPct}%${sign}`;
 			let targets: Element[] = [];
-			const assignTargets = (self: GSAPSplitText) => {
-				if (
-					splitType.includes("chars") &&
-					(self as GSAPSplitText).chars?.length
-				)
-					targets = (self as GSAPSplitText).chars;
-				if (!targets.length && splitType.includes("words") && self.words.length)
-					targets = self.words;
-				if (!targets.length && splitType.includes("lines") && self.lines.length)
-					targets = self.lines;
-				if (!targets.length) targets = self.chars || self.words || self.lines;
-			};
-			const splitInstance = new GSAPSplitText(el, {
+
+			splitInstance = new GSAPSplitText(el, {
 				type: splitType,
 				smartWrap: true,
 				autoSplit: splitType === "lines",
@@ -117,8 +107,16 @@ const SplitText: FC<SplitTextProps> = ({
 				wordsClass: "split-word",
 				charsClass: "split-char",
 				reduceWhiteSpace: false,
-				onSplit: (self: GSAPSplitText) => {
-					assignTargets(self);
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				onSplit: (self: any) => {
+					if (splitType.includes("chars") && self.chars?.length)
+						targets = self.chars;
+					if (!targets.length && splitType.includes("words") && self.words.length)
+						targets = self.words;
+					if (!targets.length && splitType.includes("lines") && self.lines.length)
+						targets = self.lines;
+					if (!targets.length) targets = self.chars || self.words || self.lines;
+
 					return gsap.fromTo(
 						targets,
 						{ ...from },
@@ -134,6 +132,14 @@ const SplitText: FC<SplitTextProps> = ({
 								once: true,
 								fastScrollEnd: true,
 								anticipatePin: 0.4,
+								onEnter: () => {
+									if (onLastCharStartRef.current) {
+										gsap.delayedCall(
+											startDelay + (targets.length - 1) * (delay / 1000),
+											onLastCharStartRef.current,
+										);
+									}
+								},
 							},
 							onComplete: () => {
 								animationCompletedRef.current = true;
@@ -145,55 +151,47 @@ const SplitText: FC<SplitTextProps> = ({
 					);
 				},
 			});
-			el._rbsplitInstance = splitInstance;
-			return () => {
-				ScrollTrigger.getAll().forEach((st) => {
-					if (st.trigger === el) st.kill();
+
+			(el as HTMLElement & { _rbsplitInstance?: unknown })._rbsplitInstance =
+				splitInstance;
+		});
+
+		return () => {
+			destroyed = true;
+			if (splitInstance) {
+				import("gsap/ScrollTrigger").then(({ ScrollTrigger }) => {
+					ScrollTrigger.getAll().forEach((st) => {
+						if (st.trigger === el) st.kill();
+					});
 				});
 				try {
 					splitInstance.revert();
 				} catch {}
-				el._rbsplitInstance = undefined;
-			};
-		},
-		{
-			dependencies: [
-				text,
-				delay,
-				duration,
-				ease,
-				splitType,
-				JSON.stringify(from),
-				JSON.stringify(to),
-				threshold,
-				rootMargin,
-				fontsLoaded,
-			],
-			scope: ref,
-		},
-	);
-
-	const renderTag = () => {
-		const style: CSSProperties = {
-			textAlign,
-			wordWrap: "break-word",
-			willChange: "transform, opacity",
+				(el as HTMLElement & { _rbsplitInstance?: unknown })._rbsplitInstance =
+					undefined;
+			}
 		};
-		const classes = `split-parent overflow-hidden inline-block whitespace-normal ${className}`;
-		const Tag = (tag || "p") as ElementType;
+	// JSON.stringify stabilises object identity for from/to without needing deep-equal
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [text, delay, duration, ease, splitType, JSON.stringify(from), JSON.stringify(to), threshold, rootMargin, fontsLoaded, startDelay]);
 
-		return (
-			<Tag
-				ref={ref}
-				style={style}
-				className={classes}
-			>
-				{text}
-			</Tag>
-		);
+	const style: CSSProperties = {
+		textAlign,
+		wordWrap: "break-word",
+		willChange: "transform, opacity",
 	};
+	const classes = `split-parent overflow-hidden inline-block whitespace-normal ${className}`;
+	const Tag = (tag || "p") as ElementType;
 
-	return renderTag();
+	return (
+		<Tag
+			ref={ref as React.RefObject<HTMLElement>}
+			style={style}
+			className={classes}
+		>
+			{text}
+		</Tag>
+	);
 };
 
 export default SplitText;

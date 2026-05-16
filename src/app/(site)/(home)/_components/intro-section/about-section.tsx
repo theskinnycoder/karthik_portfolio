@@ -39,7 +39,7 @@ export function AboutSection({ bio }: AboutSectionProps) {
 			{bio ? (
 				<PortableTextRenderer
 					value={bio}
-					variant="base"
+					variant="article"
 				/>
 			) : (
 				<FallbackBio />

@@ -1,4 +1,4 @@
-import { ArrowUpRight } from "lucide-react";
+import { inlineMarks } from "@/components/portable-text/inline-marks";
 import {
 	Item,
 	ItemActions,
@@ -6,12 +6,44 @@ import {
 	ItemDescription,
 	ItemTitle,
 } from "@/components/ui/item";
+import { ArrowUpRight } from "lucide-react";
+import { PortableText, type PortableTextBlock } from "next-sanity";
+
+/**
+ * Renders PortableText blocks without a wrapping block element.
+ * All block styles (normal, h1–h6, blockquote) collapse to a fragment so the
+ * text flows inline inside ItemTitle, ItemDescription, and span contexts —
+ * no invalid nested block HTML.
+ */
+const stripBlock = ({ children }: { children?: React.ReactNode }) => <>{children}</>;
+const inlineBlockComponents = {
+	block: {
+		normal: stripBlock,
+		h1: stripBlock,
+		h2: stripBlock,
+		h3: stripBlock,
+		h4: stripBlock,
+		h5: stripBlock,
+		h6: stripBlock,
+		blockquote: stripBlock,
+	},
+	marks: inlineMarks,
+};
+
+function InlinePortableText({ value }: { value: PortableTextBlock[] }) {
+	return (
+		<PortableText
+			value={value}
+			components={inlineBlockComponents}
+		/>
+	);
+}
 
 export interface ExperienceItemProps {
-	company: string;
+	company: PortableTextBlock[];
 	url: string;
-	description: string;
-	role: string;
+	description: PortableTextBlock[];
+	role: PortableTextBlock[];
 }
 
 export function ExperienceItem({
@@ -29,16 +61,16 @@ export function ExperienceItem({
 			>
 				<ItemContent>
 					<ItemTitle className="text-base font-semibold text-foreground">
-						{company}
-						<ArrowUpRight className="size-4" />
+						<InlinePortableText value={company} />
+						<ArrowUpRight className="size-4 shrink-0" />
 					</ItemTitle>
 					<ItemDescription className="text-sm font-light">
-						{description}
+						<InlinePortableText value={description} />
 					</ItemDescription>
 				</ItemContent>
 				<ItemActions className="self-start md:self-center">
 					<span className="text-sm font-medium text-muted-foreground">
-						{role}
+						<InlinePortableText value={role} />
 					</span>
 				</ItemActions>
 			</a>
