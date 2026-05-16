@@ -54,7 +54,7 @@ export function Navbar() {
 								"rounded-full px-3.5 py-1.5 text-base font-semibold tracking-[0.32px] transition-colors",
 								isActive
 									? "text-foreground"
-									: "text-muted-foreground hover:text-foreground/80",
+									: "text-[oklch(70.94%_0_0)] hover:text-foreground/80",
 							)}
 							aria-current={isActive ? "page" : undefined}
 						>

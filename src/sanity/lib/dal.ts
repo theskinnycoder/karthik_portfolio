@@ -100,15 +100,15 @@ export interface ProjectDTO {
 }
 
 export interface ExperienceDTO {
-	company: string;
+	company: PortableTextBlock[];
 	url: string;
-	role: string;
-	description: string;
+	role: PortableTextBlock[];
+	description: PortableTextBlock[];
 }
 
 export interface SiteProfileDTO {
-	name: string;
-	title: string;
+	name: PortableTextBlock[];
+	title: PortableTextBlock[];
 	bio: PortableTextBlock[];
 	availabilityMessage: string;
 }
@@ -279,10 +279,10 @@ function toProjectDTO(data: ProjectRaw): ProjectDTO {
 
 function toExperienceDTO(data: ExperienceRaw): ExperienceDTO {
 	return {
-		company: data.company ?? "",
+		company: (data.company ?? []) as unknown as PortableTextBlock[],
 		url: data.url ?? "",
-		role: data.role ?? "",
-		description: data.description ?? "",
+		role: (data.role ?? []) as unknown as PortableTextBlock[],
+		description: (data.description ?? []) as unknown as PortableTextBlock[],
 	};
 }
 
@@ -522,8 +522,8 @@ export async function getSiteProfile(): Promise<SiteProfileDTO | null> {
 	if (!profile) return null;
 
 	return {
-		name: profile.name ?? "",
-		title: profile.title ?? "",
+		name: (profile.name ?? []) as unknown as PortableTextBlock[],
+		title: (profile.title ?? []) as unknown as PortableTextBlock[],
 		bio: (profile.bio ?? []) as unknown as PortableTextBlock[],
 		availabilityMessage: profile.availabilityMessage ?? "",
 	};

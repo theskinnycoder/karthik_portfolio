@@ -5,7 +5,7 @@ export async function VideoHeroSection() {
 	const profile = await getSiteProfile();
 	return (
 		<VideoHeroSectionClient
-			availabilityMessage={profile?.availabilityMessage as string}
+			availabilityMessage={profile?.availabilityMessage ?? ""}
 		/>
 	);
 }

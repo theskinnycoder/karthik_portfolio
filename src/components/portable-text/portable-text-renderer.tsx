@@ -60,8 +60,7 @@ function annotateNumberedListSequence<T extends { _type?: string }>(
 const ARTICLE_PROSE = [
 	"prose prose-neutral max-w-none font-sans",
 
-	// Responsive text sizes (arbitrary rem so only font-size is set; line-height
-	// inherits the plugin's per-element default).
+	// Responsive text sizes.
 	"prose-p:text-base md:prose-p:text-[1.0625rem] lg:prose-p:text-[1.125rem]",
 	"prose-blockquote:text-base md:prose-blockquote:text-[1.0625rem] lg:prose-blockquote:text-[1.125rem]",
 	"prose-h1:text-[1.875rem] md:prose-h1:text-[2.25rem] lg:prose-h1:text-[2.75rem]",
@@ -71,13 +70,28 @@ const ARTICLE_PROSE = [
 	"prose-h5:text-[1.0625rem] md:prose-h5:text-[1.125rem] lg:prose-h5:text-[1.25rem]",
 	"prose-h6:text-base md:prose-h6:text-[1.0625rem] lg:prose-h6:text-[1.125rem]",
 
-	// Heading margins — larger headings get a bit more breathing room above.
-	"prose-h1:mt-0 prose-h1:mb-8",
-	"prose-h2:mt-12 prose-h2:mb-5",
-	"prose-h3:mt-10 prose-h3:mb-4",
-	"prose-h4:mt-8 prose-h4:mb-3",
-	"prose-h5:mt-6 prose-h5:mb-2",
-	"prose-h6:mt-6 prose-h6:mb-2",
+	// Heading line heights.
+	"prose-h1:leading-[1.8]",
+	"prose-h2:leading-[1.28]",
+	"prose-h3:leading-[1.5]",
+	"prose-h4:leading-[1.4]",
+	"prose-h5:leading-[1.5]",
+	"prose-h6:leading-[1.75]",
+
+	// Heading margins — kept proportional but half the article-level defaults so
+	// switching a paragraph to a heading never looks like a blank line was inserted.
+	// [&>*:first-child] strips the top margin from whichever element opens the content
+	// (heading or paragraph), preventing unexpected whitespace at the top.
+	"prose-h1:mt-0 prose-h1:mb-5",
+	"prose-h2:mt-0 prose-h2:mb-4",
+	"prose-h3:mt-0 prose-h3:mb-3",
+	"prose-h4:mt-0 prose-h4:mb-2",
+	"prose-h5:mt-0 prose-h5:mb-5",
+	"prose-h6:mt-0 prose-h6:mb-1",
+
+	// Paragraphs — only bottom margin so consecutive paragraphs don't double-stack
+	// (prose default is 1.25em top + 1.25em bottom which creates 2.5em between two <p>s).
+	"prose-p:mt-0 prose-p:mb-6",
 
 	// Blockquote structure only — text styling is author-driven like everywhere else.
 	"prose-blockquote:my-6 prose-blockquote:pl-3 prose-blockquote:not-italic",

@@ -1,6 +1,7 @@
 import { UserIcon } from "@sanity/icons";
 import { defineField, defineType } from "sanity";
-import { inlineBlock } from "../rich-text";
+import { CaseStudyContentPlugins } from "../components/case-study-content";
+import { articleBlock } from "../rich-text";
 
 export const siteProfile = defineType({
 	name: "siteProfile",
@@ -11,13 +12,25 @@ export const siteProfile = defineType({
 		defineField({
 			name: "name",
 			title: "Full Name",
-			type: "string",
+			type: "array",
+			of: [articleBlock()],
+			components: {
+				portableText: {
+					plugins: CaseStudyContentPlugins,
+				},
+			},
 			validation: (rule) => rule.required(),
 		}),
 		defineField({
 			name: "title",
 			title: "Professional Title",
-			type: "string",
+			type: "array",
+			of: [articleBlock()],
+			components: {
+				portableText: {
+					plugins: CaseStudyContentPlugins,
+				},
+			},
 			description: 'e.g., "Product Designer"',
 			validation: (rule) => rule.required(),
 		}),
@@ -32,13 +45,29 @@ export const siteProfile = defineType({
 			name: "bio",
 			title: "Biography",
 			type: "array",
-			of: [inlineBlock()],
+			of: [articleBlock()],
+			components: {
+				portableText: {
+					plugins: CaseStudyContentPlugins,
+				},
+			},
 			description:
-				"Rich text bio. Use the colorForeground decorator to highlight phrases against the dimmed paragraph color.",
+				"Rich text bio. Supports headings, lists, and links. Use color decorators to highlight phrases.",
 			validation: (rule) => rule.required(),
 		}),
 	],
 	preview: {
-		select: { title: "name", subtitle: "title" },
+		select: { name: "name", title: "title" },
+		prepare({ name, title }: Record<string, unknown>) {
+			const pt = (v: unknown) =>
+				Array.isArray(v)
+					? v
+							.map((b: { children?: { text?: string }[] }) =>
+								(b.children ?? []).map((s) => s.text ?? "").join(""),
+							)
+							.join(" ")
+					: String(v ?? "");
+			return { title: pt(name) || "—", subtitle: pt(title) || undefined };
+		},
 	},
 });

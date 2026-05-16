@@ -17,8 +17,7 @@ function BlogsSection() {
 	);
 }
 
-const SECTION_REGISTRY: Record<HomeSectionKey, () => React.ReactNode> = {
-	intro: IntroSection,
+const SECTION_REGISTRY: Partial<Record<HomeSectionKey, () => React.ReactNode>> = {
 	experience: ExperienceSection,
 	otherWorks: OtherWorksSection,
 	testimonials: TestimonialsSection,
@@ -35,27 +34,33 @@ export async function SitePage({
 		<main className="flex flex-col">
 			<section
 				id="about"
-				className="mx-auto flex w-full max-w-5xl flex-col gap-16 px-6 pt-16 pb-16 md:border-x md:border-zinc-900 md:px-11"
+				className="mx-auto flex w-full max-w-5xl flex-col gap-16 pt-[7.5rem] pb-20"
 			>
-				<VideoHeroSection />
-				<div className="flex w-full flex-col gap-32 md:gap-40">
-					{sections.map((key) => {
-						const Section = SECTION_REGISTRY[key];
-						return <Section key={key} />;
-					})}
+				<div className="flex flex-col-reverse gap-16 px-6 md:px-[1.125rem] xl:grid xl:grid-cols-2 xl:items-start xl:gap-16">
+					<IntroSection />
+					<VideoHeroSection />
+				</div>
+				<div className="flex w-full flex-col gap-32 px-6 md:gap-40 md:px-[1.125rem]">
+					{sections
+						.filter((key) => key !== "intro")
+						.map((key) => {
+							const Section = SECTION_REGISTRY[key];
+							if (!Section) return null;
+							return <Section key={key} />;
+						})}
 				</div>
 			</section>
 
 			<section
 				id="work"
-				className="mx-auto flex w-full max-w-5xl flex-col gap-16 px-6 pt-8 pb-24 md:border-x md:border-zinc-900 md:px-11"
+				className="mx-auto flex w-full max-w-5xl flex-col gap-16 px-6 pt-8 pb-24 md:px-11"
 			>
 				<WorkSection />
 			</section>
 
 			<section
 				id="blogs"
-				className="mx-auto flex h-dvh w-full max-w-5xl flex-col items-center justify-center gap-2 px-6 md:border-x md:border-zinc-900 md:px-11"
+				className="mx-auto flex h-dvh w-full max-w-5xl flex-col items-center justify-center gap-2 px-6 md:px-11"
 			>
 				<BlogsSection />
 			</section>

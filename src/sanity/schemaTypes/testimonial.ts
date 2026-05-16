@@ -1,6 +1,7 @@
 import { StarIcon } from "@sanity/icons";
 import { defineField, defineType } from "sanity";
-import { inlineBlock } from "../rich-text";
+import { CaseStudyContentPlugins } from "../components/case-study-content";
+import { articleBlock } from "../rich-text";
 
 export const testimonial = defineType({
 	name: "testimonial",
@@ -12,7 +13,12 @@ export const testimonial = defineType({
 			name: "quote",
 			title: "Quote",
 			type: "array",
-			of: [inlineBlock()],
+			of: [articleBlock()],
+			components: {
+				portableText: {
+					plugins: CaseStudyContentPlugins,
+				},
+			},
 			description:
 				"Quote body. Use the colorForeground decorator to highlight emphasized phrases.",
 			validation: (rule) => rule.required(),

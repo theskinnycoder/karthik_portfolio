@@ -9,6 +9,7 @@ import {
 	CarouselItem,
 } from "@/components/ui/carousel";
 import { ProgressiveBlur } from "@/components/ui/progressive-blur";
+import useIsMobile from "@/hooks/use-media-query";
 import type { ProjectDTO } from "@/sanity/lib/dal";
 import { ProductCard } from "./product-card";
 
@@ -17,6 +18,8 @@ interface OtherWorksCarouselProps {
 }
 
 export function OtherWorksCarousel({ projects }: OtherWorksCarouselProps) {
+	const isMobile = useIsMobile();
+
 	const plugin = React.useRef(
 		AutoScroll({
 			speed: 1,
@@ -30,26 +33,28 @@ export function OtherWorksCarousel({ projects }: OtherWorksCarouselProps) {
 		}),
 	);
 
-	// Duplicate items to ensure enough slides for seamless looping
+	// Duplicate items only on desktop for seamless looping; mobile uses originals
 	const duplicatedProjects = Array.from({ length: 6 }, () => projects).flat();
+	const displayedProjects = isMobile ? projects : duplicatedProjects;
 
 	return (
-		<div className="relative -mx-6 w-[calc(100%+3rem)] self-center md:-mx-11 md:w-[calc(100%+5.5rem)]">
+		<div className="relative -mx-6 w-[calc(100%+3rem)] self-center md:-mx-[1.125rem] md:w-[calc(100%+2.25rem)]">
 			<Carousel
 				dir="rtl"
 				opts={{
 					align: "start",
 					direction: "rtl",
 					loop: true,
+					dragFree: true,
 					breakpoints: {
-						"(min-width: 768px)": { dragFree: true },
+						"(max-width: 767px)": { loop: false },
 					},
 				}}
 				plugins={[plugin.current]}
 				className="w-full"
 			>
 				<CarouselContent className="items-stretch">
-					{duplicatedProjects.map((project, index) => (
+					{displayedProjects.map((project, index) => (
 						<CarouselItem
 							key={`${project.name}-${index}`}
 							className="basis-[85%] md:basis-1/4 lg:basis-[40%]"

@@ -1,4 +1,5 @@
 import { getSiteProfile } from "@/sanity/lib/dal";
+import { toPlainText } from "next-sanity";
 import { AboutSection } from "./about-section";
 import { CompanyLogos } from "./company-logos-section";
 import { HeroSection } from "./hero-section";
@@ -8,18 +9,14 @@ export async function IntroSection() {
 	const profile = await getSiteProfile();
 
 	return (
-		<section className="flex flex-col gap-7">
+		<section className="flex flex-col gap-8">
 			<HeroSection
-				name={profile?.name ?? "Karthik Panchala"}
-				title={profile?.title ?? "Product Designer"}
+				name={profile?.name ? toPlainText(profile.name) : "Karthik Panchala"}
+				title={profile?.title ? toPlainText(profile.title) : "Product Designer"}
 			/>
-			<div className="flex flex-col gap-6">
-				<CompanyLogos />
-				<div className="flex flex-col gap-6">
-					<AboutSection bio={profile?.bio} />
-					<SocialLinks />
-				</div>
-			</div>
+			<CompanyLogos />
+			<AboutSection bio={profile?.bio} />
+			<SocialLinks />
 		</section>
 	);
 }
