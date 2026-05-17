@@ -67,7 +67,6 @@ export async function POST(request: NextRequest) {
 			});
 		}
 
-		// Revalidate with stale-while-revalidate behavior
 		for (const tag of tags) {
 			revalidateTag(tag, "max");
 		}
