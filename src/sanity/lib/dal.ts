@@ -524,9 +524,9 @@ export async function getSiteProfile(): Promise<SiteProfileDTO | null> {
 	if (!profile) return null;
 
 	return {
-		name: (profile.name ?? []) as unknown as PortableTextBlock[],
-		title: (profile.title ?? []) as unknown as PortableTextBlock[],
-		bio: (profile.bio ?? []) as unknown as PortableTextBlock[],
+		name: (profile.name ?? []) as PortableTextBlock[],
+		title: (profile.title ?? []) as PortableTextBlock[],
+		bio: (profile.bio ?? []) as PortableTextBlock[],
 		availabilityMessage: profile.availabilityMessage ?? "",
 		heroVideoUrl: getMediaUrl(profile.heroVideo),
 		heroPosterUrl: getVideoPosterUrl(profile.heroVideo),

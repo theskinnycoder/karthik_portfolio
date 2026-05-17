@@ -10,8 +10,8 @@ export async function IntroSection() {
 	return (
 		<section className="flex flex-col gap-8">
 			<HeroSection
-				name={profile?.name ?? []}
-				title={profile?.title ?? []}
+				name={profile?.name ?? null}
+				title={profile?.title ?? null}
 			/>
 			<CompanyLogos />
 			<AboutSection bio={profile?.bio} />

@@ -24,8 +24,8 @@ const fadeUp = {
 };
 
 interface HeroSectionProps {
-	name: PortableTextBlock[];
-	title: PortableTextBlock[];
+	name: PortableTextBlock[] | null;
+	title: PortableTextBlock[] | null;
 }
 
 export function HeroSection({ name, title }: HeroSectionProps) {
@@ -36,14 +36,22 @@ export function HeroSection({ name, title }: HeroSectionProps) {
 				transition={{ ease: "easeOut", duration: 0.6 }}
 				className="text-4xl font-semibold text-foreground"
 			>
-				<PortableText value={name} components={inlineComponents} />
+				{name?.length ? (
+					<PortableText value={name} components={inlineComponents} />
+				) : (
+					"Karthik Panchala"
+				)}
 			</motion.h1>
 			<motion.p
 				{...fadeUp}
 				transition={{ ease: "easeOut", duration: 0.6, delay: 0.15 }}
 				className="text-3xl font-semibold text-muted-foreground"
 			>
-				<PortableText value={title} components={inlineComponents} />
+				{title?.length ? (
+					<PortableText value={title} components={inlineComponents} />
+				) : (
+					"Product Designer"
+				)}
 			</motion.p>
 		</div>
 	);

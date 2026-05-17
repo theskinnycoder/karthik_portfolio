@@ -17,6 +17,7 @@ export function CompanyLogosClient({ companies }: CompanyLogosClientProps) {
 					<motion.div
 						initial={{ opacity: 0, y: 12 }}
 						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: true }}
 						transition={{ ease: "easeOut", duration: 0.5, delay: index * 0.1 }}
 					>
 						<MediaImage

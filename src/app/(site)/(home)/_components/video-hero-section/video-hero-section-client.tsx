@@ -20,7 +20,7 @@ function Caption({ message }: { message: string }) {
 			</>
 		);
 	return (
-		<p className="ml-10 min-[375px]:ml-16 md:ml-0 mt-4 w-[13.125rem] min-[375px]:w-[15.9375rem] min-[425px]:w-[17.8125rem] sm:w-[16.875rem] md:w-[22.5rem] text-center font-serif text-[1.125rem] leading-[1.1875rem] font-bold text-[#cccccc] md:text-xl">
+		<p className="ml-10 min-[375px]:ml-16 md:ml-0 mt-4 w-[13.125rem] min-[375px]:w-[15.9375rem] min-[425px]:w-[17.8125rem] sm:w-[16.875rem] md:w-[22.5rem] text-center font-serif text-[1.125rem] leading-[1.1875rem] font-bold text-muted-foreground md:text-xl">
 			{content}
 		</p>
 	);
@@ -70,7 +70,7 @@ export function VideoHeroSectionClient({
 					 *   768px+     circle 22.5rem  + ml-0           = 22.5rem  →  text -left-[6.875rem]
 					 *   (1280px+   switches to 2-col grid via site-page.tsx)
 					 */}
-					<p className="absolute top-32 -left-6 -rotate-16 font-serif text-xl leading-tight font-semibold text-[#cccccc] min-[375px]:top-[10.375rem] min-[375px]:-left-[0.875rem] min-[375px]:-rotate-[22deg] min-[375px]:text-2xl sm:top-52 sm:-left-12 sm:text-2xl md:top-[16.25rem] md:-left-[6.875rem] md:text-3xl">
+					<p className="absolute top-32 -left-6 -rotate-16 font-serif text-xl leading-tight font-semibold text-muted-foreground min-[375px]:top-[10.375rem] min-[375px]:-left-[0.875rem] min-[375px]:-rotate-[22deg] min-[375px]:text-2xl sm:top-52 sm:-left-12 sm:text-2xl md:top-[16.25rem] md:-left-[6.875rem] md:text-3xl">
 						Let me
 						<br />
 						introduce
