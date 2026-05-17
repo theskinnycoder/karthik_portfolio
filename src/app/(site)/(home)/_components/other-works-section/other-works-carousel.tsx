@@ -74,14 +74,16 @@ export function OtherWorksCarousel({ projects }: OtherWorksCarouselProps) {
 				direction="left"
 				blurLayers={8}
 				blurIntensity={0.5}
-				className="absolute inset-y-0 left-0 z-10 hidden w-24 md:block"
+				className="absolute inset-y-0 left-0 z-10 w-16 md:w-24"
 			/>
+			<div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-gradient-to-r from-background to-transparent" />
 			<ProgressiveBlur
 				direction="right"
 				blurLayers={8}
 				blurIntensity={0.5}
-				className="absolute inset-y-0 right-0 z-10 hidden w-24 md:block"
+				className="absolute inset-y-0 right-0 z-10 w-16 md:w-24"
 			/>
+			<div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-8 bg-gradient-to-l from-background to-transparent" />
 		</div>
 	);
 }

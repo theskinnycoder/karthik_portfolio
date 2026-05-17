@@ -181,9 +181,14 @@ export type Testimonial = {
 			_type: "span";
 			_key: string;
 		}>;
-		style?: "normal";
-		listItem?: never;
-		markDefs?: null;
+		style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+		listItem?: "bullet" | "number" | "check";
+		markDefs?: Array<{
+			href?: string;
+			openInNewTab?: boolean;
+			_type: "link";
+			_key: string;
+		}>;
 		level?: number;
 		_type: "block";
 		_key: string;
@@ -213,8 +218,46 @@ export type SiteProfile = {
 	_createdAt: string;
 	_updatedAt: string;
 	_rev: string;
-	name?: string;
-	title?: string;
+	name?: Array<{
+		children?: Array<{
+			marks?: Array<string>;
+			text?: string;
+			_type: "span";
+			_key: string;
+		}>;
+		style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+		listItem?: "bullet" | "number" | "check";
+		markDefs?: Array<{
+			href?: string;
+			openInNewTab?: boolean;
+			_type: "link";
+			_key: string;
+		}>;
+		level?: number;
+		_type: "block";
+		_key: string;
+	}>;
+	title?: Array<{
+		children?: Array<{
+			marks?: Array<string>;
+			text?: string;
+			_type: "span";
+			_key: string;
+		}>;
+		style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+		listItem?: "bullet" | "number" | "check";
+		markDefs?: Array<{
+			href?: string;
+			openInNewTab?: boolean;
+			_type: "link";
+			_key: string;
+		}>;
+		level?: number;
+		_type: "block";
+		_key: string;
+	}>;
+	availabilityMessage?: string;
+	heroVideo?: CloudinaryAsset;
 	bio?: Array<{
 		children?: Array<{
 			marks?: Array<string>;
@@ -222,9 +265,14 @@ export type SiteProfile = {
 			_type: "span";
 			_key: string;
 		}>;
-		style?: "normal";
-		listItem?: never;
-		markDefs?: null;
+		style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+		listItem?: "bullet" | "number" | "check";
+		markDefs?: Array<{
+			href?: string;
+			openInNewTab?: boolean;
+			_type: "link";
+			_key: string;
+		}>;
 		level?: number;
 		_type: "block";
 		_key: string;
@@ -257,7 +305,8 @@ export type Project = {
 	_rev: string;
 	name?: string;
 	image?: CloudinaryAsset;
-	alt?: string;
+	description?: string;
+	url?: string;
 	backgroundColor?: string;
 	order?: number;
 };
@@ -277,10 +326,64 @@ export type Experience = {
 	_createdAt: string;
 	_updatedAt: string;
 	_rev: string;
-	company?: string;
+	company?: Array<{
+		children?: Array<{
+			marks?: Array<string>;
+			text?: string;
+			_type: "span";
+			_key: string;
+		}>;
+		style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+		listItem?: "bullet" | "number" | "check";
+		markDefs?: Array<{
+			href?: string;
+			openInNewTab?: boolean;
+			_type: "link";
+			_key: string;
+		}>;
+		level?: number;
+		_type: "block";
+		_key: string;
+	}>;
 	url?: string;
-	role?: string;
-	description?: string;
+	role?: Array<{
+		children?: Array<{
+			marks?: Array<string>;
+			text?: string;
+			_type: "span";
+			_key: string;
+		}>;
+		style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+		listItem?: "bullet" | "number" | "check";
+		markDefs?: Array<{
+			href?: string;
+			openInNewTab?: boolean;
+			_type: "link";
+			_key: string;
+		}>;
+		level?: number;
+		_type: "block";
+		_key: string;
+	}>;
+	description?: Array<{
+		children?: Array<{
+			marks?: Array<string>;
+			text?: string;
+			_type: "span";
+			_key: string;
+		}>;
+		style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+		listItem?: "bullet" | "number" | "check";
+		markDefs?: Array<{
+			href?: string;
+			openInNewTab?: boolean;
+			_type: "link";
+			_key: string;
+		}>;
+		level?: number;
+		_type: "block";
+		_key: string;
+	}>;
 	order?: number;
 };
 
@@ -303,9 +406,14 @@ export type Company = {
 			_type: "span";
 			_key: string;
 		}>;
-		style?: "normal";
-		listItem?: never;
-		markDefs?: null;
+		style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+		listItem?: "bullet" | "number" | "check";
+		markDefs?: Array<{
+			href?: string;
+			openInNewTab?: boolean;
+			_type: "link";
+			_key: string;
+		}>;
 		level?: number;
 		_type: "block";
 		_key: string;
@@ -483,9 +591,14 @@ export type TestimonialsQueryResult = Array<{
 			_type: "span";
 			_key: string;
 		}>;
-		style?: "normal";
-		listItem?: never;
-		markDefs?: null;
+		style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+		listItem?: "bullet" | "check" | "number";
+		markDefs?: Array<{
+			href?: string;
+			openInNewTab?: boolean;
+			_type: "link";
+			_key: string;
+		}>;
 		level?: number;
 		_type: "block";
 		_key: string;
@@ -522,14 +635,14 @@ export type SocialsQueryResult = Array<{
 
 // Source: src/sanity/lib/queries.ts
 // Variable: projectsQuery
-// Query: *[_type == "project"] | order(order asc) {    _id,    name,    image,    alt,    backgroundColor  }
+// Query: *[_type == "project"] | order(order asc) {    _id,    name,    image,    description,    backgroundColor,    url  }
 export type ProjectsQueryResult = Array<{
 	_id: string;
 	name: string | null;
 	image: CloudinaryAsset | null;
 	description: string | null;
 	backgroundColor: string | null;
-	url:string|null
+	url: string | null;
 }>;
 
 // Source: src/sanity/lib/queries.ts
@@ -537,19 +650,109 @@ export type ProjectsQueryResult = Array<{
 // Query: *[_type == "experience"] | order(order asc) {    _id,    company,    url,    role,    description  }
 export type ExperiencesQueryResult = Array<{
 	_id: string;
-	company: string | null;
+	company: Array<{
+		children?: Array<{
+			marks?: Array<string>;
+			text?: string;
+			_type: "span";
+			_key: string;
+		}>;
+		style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+		listItem?: "bullet" | "check" | "number";
+		markDefs?: Array<{
+			href?: string;
+			openInNewTab?: boolean;
+			_type: "link";
+			_key: string;
+		}>;
+		level?: number;
+		_type: "block";
+		_key: string;
+	}> | null;
 	url: string | null;
-	role: string | null;
-	description: string | null;
+	role: Array<{
+		children?: Array<{
+			marks?: Array<string>;
+			text?: string;
+			_type: "span";
+			_key: string;
+		}>;
+		style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+		listItem?: "bullet" | "check" | "number";
+		markDefs?: Array<{
+			href?: string;
+			openInNewTab?: boolean;
+			_type: "link";
+			_key: string;
+		}>;
+		level?: number;
+		_type: "block";
+		_key: string;
+	}> | null;
+	description: Array<{
+		children?: Array<{
+			marks?: Array<string>;
+			text?: string;
+			_type: "span";
+			_key: string;
+		}>;
+		style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+		listItem?: "bullet" | "check" | "number";
+		markDefs?: Array<{
+			href?: string;
+			openInNewTab?: boolean;
+			_type: "link";
+			_key: string;
+		}>;
+		level?: number;
+		_type: "block";
+		_key: string;
+	}> | null;
 }>;
 
 // Source: src/sanity/lib/queries.ts
 // Variable: siteProfileQuery
-// Query: *[_type == "siteProfile"][0] {    _id,    name,    title,    bio  }
+// Query: *[_type == "siteProfile"][0] {    _id,    name,    title,    bio,    availabilityMessage,    heroVideo  }
 export type SiteProfileQueryResult = {
 	_id: string;
-	name: string | null;
-	title: string | null;
+	name: Array<{
+		children?: Array<{
+			marks?: Array<string>;
+			text?: string;
+			_type: "span";
+			_key: string;
+		}>;
+		style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+		listItem?: "bullet" | "check" | "number";
+		markDefs?: Array<{
+			href?: string;
+			openInNewTab?: boolean;
+			_type: "link";
+			_key: string;
+		}>;
+		level?: number;
+		_type: "block";
+		_key: string;
+	}> | null;
+	title: Array<{
+		children?: Array<{
+			marks?: Array<string>;
+			text?: string;
+			_type: "span";
+			_key: string;
+		}>;
+		style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+		listItem?: "bullet" | "check" | "number";
+		markDefs?: Array<{
+			href?: string;
+			openInNewTab?: boolean;
+			_type: "link";
+			_key: string;
+		}>;
+		level?: number;
+		_type: "block";
+		_key: string;
+	}> | null;
 	bio: Array<{
 		children?: Array<{
 			marks?: Array<string>;
@@ -557,14 +760,20 @@ export type SiteProfileQueryResult = {
 			_type: "span";
 			_key: string;
 		}>;
-		style?: "normal";
-		listItem?: never;
-		markDefs?: null;
+		style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+		listItem?: "bullet" | "check" | "number";
+		markDefs?: Array<{
+			href?: string;
+			openInNewTab?: boolean;
+			_type: "link";
+			_key: string;
+		}>;
 		level?: number;
 		_type: "block";
 		_key: string;
 	}> | null;
-	availabilityMessage:string | null
+	availabilityMessage: string | null;
+	heroVideo: CloudinaryAsset | null;
 } | null;
 
 // Source: src/sanity/lib/queries.ts
@@ -594,9 +803,14 @@ export type WorkPageQueryResult = Array<{
 			_type: "span";
 			_key: string;
 		}>;
-		style?: "normal";
-		listItem?: never;
-		markDefs?: null;
+		style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+		listItem?: "bullet" | "check" | "number";
+		markDefs?: Array<{
+			href?: string;
+			openInNewTab?: boolean;
+			_type: "link";
+			_key: string;
+		}>;
 		level?: number;
 		_type: "block";
 		_key: string;
@@ -726,9 +940,22 @@ export type WorkItemBySlugQueryResult = {
 							_type: "span";
 							_key: string;
 						}>;
-						style?: "normal";
-						listItem?: never;
-						markDefs?: null;
+						style?:
+							| "blockquote"
+							| "h1"
+							| "h2"
+							| "h3"
+							| "h4"
+							| "h5"
+							| "h6"
+							| "normal";
+						listItem?: "bullet" | "check" | "number";
+						markDefs?: Array<{
+							href?: string;
+							openInNewTab?: boolean;
+							_type: "link";
+							_key: string;
+						}>;
 						level?: number;
 						_type: "block";
 						_key: string;
@@ -786,9 +1013,9 @@ declare module "@sanity/client" {
 		'\n  *[_type == "testimonial"] | order(order asc) {\n    _id,\n    quote,\n    authorName,\n    authorRole,\n    authorAvatar,\n    company->{\n      _id,\n      name,\n      logo\n    }\n  }\n': TestimonialsQueryResult;
 		'\n  *[_type == "company"] | order(order asc) {\n    _id,\n    name,\n\t\tlogo,\n\t\twebsite\n\t}\n': CompaniesQueryResult;
 		'\n  *[_type == "social"] | order(order asc) {\n    _id,\n    label,\n    href,\n    icon\n  }\n': SocialsQueryResult;
-		'\n  *[_type == "project"] | order(order asc) {\n    _id,\n    name,\n    image,\n    alt,\n    backgroundColor\n  }\n': ProjectsQueryResult;
+		'\n  *[_type == "project"] | order(order asc) {\n    _id,\n    name,\n    image,\n    description,\n    backgroundColor,\n    url\n  }\n': ProjectsQueryResult;
 		'\n  *[_type == "experience"] | order(order asc) {\n    _id,\n    company,\n    url,\n    role,\n    description\n  }\n': ExperiencesQueryResult;
-		'\n  *[_type == "siteProfile"][0] {\n    _id,\n    name,\n    title,\n    bio\n  }\n': SiteProfileQueryResult;
+		'\n  *[_type == "siteProfile"][0] {\n    _id,\n    name,\n    title,\n    bio,\n    availabilityMessage,\n    heroVideo\n  }\n': SiteProfileQueryResult;
 		'\n  *[_type == "homePage"][0] {\n    sections\n  }\n': HomePageQueryResult;
 		'\n  *[_type == "company" && count(*[_type == "workItem" && references(^._id)]) > 0] | order(order asc) {\n    _id,\n    name,\n    logo,\n    website,\n    isCurrent,\n    badge,\n    workTagline,\n    workDescription,\n    "workItems": *[_type == "workItem" && references(^._id)] | order(order asc) {\n      _id,\n      title,\n      icon,\n      tag,\n      image,\n      description,\n      "slug": slug.current,\n      "brandFrom": brand.primary,\n      "brandTo": brand.secondary\n    }\n  }\n': WorkPageQueryResult;
 		'\n  *[_type == "sectionHeader" && slug.current == $slug][0] {\n    _id,\n    headingPrefix,\n    headingHighlight,\n    headingEmoji,\n    icon,\n    gradientFrom,\n    gradientTo,\n    video,\n    subheading\n  }\n': SectionHeaderQueryResult;

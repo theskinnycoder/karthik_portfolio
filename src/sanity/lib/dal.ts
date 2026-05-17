@@ -1,5 +1,4 @@
 import { tagResource } from "@/lib/caching";
-import type { CloudinaryAsset } from "@/lib/media";
 import { getMediaUrl, getVideoPosterUrl } from "@/lib/media";
 import type { PortableTextBlock } from "next-sanity";
 import "server-only";
@@ -524,14 +523,13 @@ export async function getSiteProfile(): Promise<SiteProfileDTO | null> {
 	});
 	if (!profile) return null;
 
-	const heroVideo = (profile as unknown as { heroVideo?: CloudinaryAsset | null }).heroVideo;
 	return {
 		name: (profile.name ?? []) as unknown as PortableTextBlock[],
 		title: (profile.title ?? []) as unknown as PortableTextBlock[],
 		bio: (profile.bio ?? []) as unknown as PortableTextBlock[],
 		availabilityMessage: profile.availabilityMessage ?? "",
-		heroVideoUrl: getMediaUrl(heroVideo),
-		heroPosterUrl: getVideoPosterUrl(heroVideo),
+		heroVideoUrl: getMediaUrl(profile.heroVideo),
+		heroPosterUrl: getVideoPosterUrl(profile.heroVideo),
 	};
 }
 

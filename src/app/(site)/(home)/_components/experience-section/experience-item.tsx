@@ -9,14 +9,25 @@ import {
 import { ArrowUpRight } from "lucide-react";
 import { PortableText, type PortableTextBlock } from "next-sanity";
 
-/**
- * Renders PortableText blocks without a wrapping block element.
- * All block styles (normal, h1–h6, blockquote) collapse to a fragment so the
- * text flows inline inside ItemTitle, ItemDescription, and span contexts —
- * no invalid nested block HTML.
- */
 const stripBlock = ({ children }: { children?: React.ReactNode }) => <>{children}</>;
-const inlineBlockComponents = {
+
+// Heading levels map to sized spans so Sanity heading choices affect font size.
+const sizedBlockComponents = {
+	block: {
+		normal: stripBlock,
+		h1: ({ children }: { children?: React.ReactNode }) => <span className="text-xl leading-snug">{children}</span>,
+		h2: ({ children }: { children?: React.ReactNode }) => <span className="text-lg leading-snug">{children}</span>,
+		h3: ({ children }: { children?: React.ReactNode }) => <span className="text-base leading-snug">{children}</span>,
+		h4: ({ children }: { children?: React.ReactNode }) => <span className="text-sm leading-snug">{children}</span>,
+		h5: ({ children }: { children?: React.ReactNode }) => <span className="text-xs leading-snug">{children}</span>,
+		h6: stripBlock,
+		blockquote: stripBlock,
+	},
+	marks: inlineMarks,
+};
+
+// Description keeps stripBlock — prose where font size changes would be disruptive.
+const descriptionBlockComponents = {
 	block: {
 		normal: stripBlock,
 		h1: stripBlock,
@@ -30,13 +41,12 @@ const inlineBlockComponents = {
 	marks: inlineMarks,
 };
 
-function InlinePortableText({ value }: { value: PortableTextBlock[] }) {
-	return (
-		<PortableText
-			value={value}
-			components={inlineBlockComponents}
-		/>
-	);
+function SizedPortableText({ value }: { value: PortableTextBlock[] }) {
+	return <PortableText value={value} components={sizedBlockComponents} />;
+}
+
+function DescriptionPortableText({ value }: { value: PortableTextBlock[] }) {
+	return <PortableText value={value} components={descriptionBlockComponents} />;
 }
 
 export interface ExperienceItemProps {
@@ -61,16 +71,16 @@ export function ExperienceItem({
 			>
 				<ItemContent>
 					<ItemTitle className="text-base font-semibold text-foreground">
-						<InlinePortableText value={company} />
+						<SizedPortableText value={company} />
 						<ArrowUpRight className="size-4 shrink-0" />
 					</ItemTitle>
 					<ItemDescription className="text-sm font-light">
-						<InlinePortableText value={description} />
+						<DescriptionPortableText value={description} />
 					</ItemDescription>
 				</ItemContent>
 				<ItemActions className="self-start md:self-center">
 					<span className="text-sm font-medium text-muted-foreground">
-						<InlinePortableText value={role} />
+						<SizedPortableText value={role} />
 					</span>
 				</ItemActions>
 			</a>

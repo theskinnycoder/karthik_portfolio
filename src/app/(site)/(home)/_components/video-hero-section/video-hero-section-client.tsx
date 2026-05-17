@@ -4,6 +4,28 @@ import { Pause, Play } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState } from "react";
 
+// ml + w match the "Main circle area" div at every breakpoint so that
+// text-center lands under the circle, not the inner div's midpoint.
+function Caption({ message }: { message: string }) {
+	const splitWord = " but ";
+	const idx = message.toLowerCase().indexOf(splitWord);
+	const content =
+		idx === -1 ? (
+			`(${message})`
+		) : (
+			<>
+				({message.slice(0, idx + 4)}
+				<br className="hidden min-[375px]:block" />
+				{message.slice(idx + 4)})
+			</>
+		);
+	return (
+		<p className="ml-10 min-[375px]:ml-16 md:ml-0 mt-4 w-[13.125rem] min-[375px]:w-[15.9375rem] min-[425px]:w-[17.8125rem] sm:w-[16.875rem] md:w-[22.5rem] text-center font-serif text-[1.125rem] leading-[1.1875rem] font-bold text-[#cccccc] md:text-xl">
+			{content}
+		</p>
+	);
+}
+
 export function VideoHeroSectionClient({
 	availabilityMessage,
 	heroVideoUrl,
@@ -31,28 +53,6 @@ export function VideoHeroSectionClient({
 		if (!videoRef.current) return;
 		videoRef.current.load();
 		setIsPlaying(false);
-	}
-
-	function Caption() {
-		const splitWord = " but ";
-		const idx = availabilityMessage.toLowerCase().indexOf(splitWord);
-		const content =
-			idx === -1 ? (
-				`(${availabilityMessage})`
-			) : (
-				<>
-					({availabilityMessage.slice(0, idx + 4)}
-					<br className="hidden min-[375px]:block" />
-					{availabilityMessage.slice(idx + 4)})
-				</>
-			);
-		// ml + w match the "Main circle area" div at every breakpoint so that
-		// text-center lands under the circle, not the inner div's midpoint.
-		return (
-			<p className="ml-10 min-[375px]:ml-16 md:ml-0 mt-4 w-[13.125rem] min-[375px]:w-[15.9375rem] min-[425px]:w-[17.8125rem] sm:w-[16.875rem] md:w-[22.5rem] text-center font-serif text-[1.125rem] leading-[1.1875rem] font-bold text-[#cccccc] md:text-xl">
-				{content}
-			</p>
-		);
 	}
 
 	return (
@@ -102,11 +102,7 @@ export function VideoHeroSectionClient({
 									className="absolute inset-0 size-full object-cover"
 									onEnded={handleEnded}
 								>
-									{heroVideoUrl ? (
-										<source src={heroVideoUrl} type="video/mp4" />
-									) : (
-										<source src="/Intro.mov" type="video/mp4" />
-									)}
+									<source src={heroVideoUrl || "/Intro.mov"} type="video/mp4" />
 								</video>
 							</div>
 						</div>
@@ -138,7 +134,7 @@ export function VideoHeroSectionClient({
 					</div>
 				</div>
 
-				<Caption />
+				<Caption message={availabilityMessage} />
 			</div>
 		</section>
 	);
