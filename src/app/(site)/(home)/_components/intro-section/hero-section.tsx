@@ -2,7 +2,11 @@
 
 import { inlineMarks } from "@/components/portable-text/inline-marks";
 import { motion } from "motion/react";
-import { PortableText, type PortableTextBlock, type PortableTextComponents } from "next-sanity";
+import {
+	PortableText,
+	type PortableTextBlock,
+	type PortableTextComponents,
+} from "next-sanity";
 
 const inlineComponents: PortableTextComponents = {
 	block: {
@@ -37,7 +41,10 @@ export function HeroSection({ name, title }: HeroSectionProps) {
 				className="text-4xl font-semibold text-foreground"
 			>
 				{name?.length ? (
-					<PortableText value={name} components={inlineComponents} />
+					<PortableText
+						value={name}
+						components={inlineComponents}
+					/>
 				) : (
 					"Karthik Panchala"
 				)}
@@ -48,7 +55,10 @@ export function HeroSection({ name, title }: HeroSectionProps) {
 				className="text-3xl font-semibold text-muted-foreground"
 			>
 				{title?.length ? (
-					<PortableText value={title} components={inlineComponents} />
+					<PortableText
+						value={title}
+						components={inlineComponents}
+					/>
 				) : (
 					"Product Designer"
 				)}

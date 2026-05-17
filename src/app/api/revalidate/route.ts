@@ -20,7 +20,10 @@ export async function GET() {
 		}
 	}
 
-	return NextResponse.json({ revalidated: true, message: "All cache tags flushed" });
+	return NextResponse.json({
+		revalidated: true,
+		message: "All cache tags flushed",
+	});
 }
 
 interface SanityWebhookPayload {

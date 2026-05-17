@@ -20,7 +20,7 @@ function Caption({ message }: { message: string }) {
 			</>
 		);
 	return (
-		<p className="ml-10 min-[375px]:ml-16 md:ml-0 mt-4 w-[13.125rem] min-[375px]:w-[15.9375rem] min-[425px]:w-[17.8125rem] sm:w-[16.875rem] md:w-[22.5rem] text-center font-serif text-[1.125rem] leading-[1.1875rem] font-bold text-muted-foreground md:text-xl">
+		<p className="mt-4 ml-10 w-[13.125rem] text-center font-serif text-[1.125rem] leading-[1.1875rem] font-bold text-muted-foreground min-[375px]:ml-16 min-[375px]:w-[15.9375rem] min-[425px]:w-[17.8125rem] sm:w-[16.875rem] md:ml-0 md:w-[22.5rem] md:text-xl">
 			{content}
 		</p>
 	);
@@ -56,7 +56,7 @@ export function VideoHeroSectionClient({
 	}
 
 	return (
-		<section className="flex flex-col items-end md:items-center xl:items-end -mx-2 md:mx-0">
+		<section className="-mx-2 flex flex-col items-end md:mx-0 md:items-center xl:items-end">
 			<div className="flex flex-col items-center md:translate-x-[7.8125rem] xl:translate-x-0">
 				<div className="relative">
 					{/*
@@ -102,7 +102,10 @@ export function VideoHeroSectionClient({
 									className="absolute inset-0 size-full object-cover"
 									onEnded={handleEnded}
 								>
-									<source src={heroVideoUrl || "/Intro.mov"} type="video/mp4" />
+									<source
+										src={heroVideoUrl || "/Intro.mov"}
+										type="video/mp4"
+									/>
 								</video>
 							</div>
 						</div>
@@ -130,7 +133,6 @@ export function VideoHeroSectionClient({
 								<Play className="size-8 fill-white text-white" />
 							)}
 						</button>
-
 					</div>
 				</div>
 

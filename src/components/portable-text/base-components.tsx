@@ -12,9 +12,7 @@ import { inlineMarks } from "./inline-marks";
  * (e.g. `text-paragraph` on the company description container). Decorators
  * override per-span.
  */
-const asP = ({ children }: { children?: React.ReactNode }) => (
-	<p>{children}</p>
-);
+const asP = ({ children }: { children?: React.ReactNode }) => <p>{children}</p>;
 
 export const baseComponents: PortableTextComponents = {
 	block: {

@@ -111,9 +111,17 @@ const SplitText: FC<SplitTextProps> = ({
 				onSplit: (self: any) => {
 					if (splitType.includes("chars") && self.chars?.length)
 						targets = self.chars;
-					if (!targets.length && splitType.includes("words") && self.words.length)
+					if (
+						!targets.length &&
+						splitType.includes("words") &&
+						self.words.length
+					)
 						targets = self.words;
-					if (!targets.length && splitType.includes("lines") && self.lines.length)
+					if (
+						!targets.length &&
+						splitType.includes("lines") &&
+						self.lines.length
+					)
 						targets = self.lines;
 					if (!targets.length) targets = self.chars || self.words || self.lines;
 
@@ -171,9 +179,21 @@ const SplitText: FC<SplitTextProps> = ({
 					undefined;
 			}
 		};
-	// JSON.stringify stabilises object identity for from/to without needing deep-equal
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [text, delay, duration, ease, splitType, JSON.stringify(from), JSON.stringify(to), threshold, rootMargin, fontsLoaded, startDelay]);
+		// JSON.stringify stabilises object identity for from/to without needing deep-equal
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [
+		text,
+		delay,
+		duration,
+		ease,
+		splitType,
+		JSON.stringify(from),
+		JSON.stringify(to),
+		threshold,
+		rootMargin,
+		fontsLoaded,
+		startDelay,
+	]);
 
 	const style: CSSProperties = {
 		textAlign,

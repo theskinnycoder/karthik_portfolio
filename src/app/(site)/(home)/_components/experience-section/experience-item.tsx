@@ -9,17 +9,29 @@ import {
 import { ArrowUpRight } from "lucide-react";
 import { PortableText, type PortableTextBlock } from "next-sanity";
 
-const stripBlock = ({ children }: { children?: React.ReactNode }) => <>{children}</>;
+const stripBlock = ({ children }: { children?: React.ReactNode }) => (
+	<>{children}</>
+);
 
 // Heading levels map to sized spans so Sanity heading choices affect font size.
 const sizedBlockComponents = {
 	block: {
 		normal: stripBlock,
-		h1: ({ children }: { children?: React.ReactNode }) => <span className="text-xl leading-snug">{children}</span>,
-		h2: ({ children }: { children?: React.ReactNode }) => <span className="text-lg leading-snug">{children}</span>,
-		h3: ({ children }: { children?: React.ReactNode }) => <span className="text-base leading-snug">{children}</span>,
-		h4: ({ children }: { children?: React.ReactNode }) => <span className="text-sm leading-snug">{children}</span>,
-		h5: ({ children }: { children?: React.ReactNode }) => <span className="text-xs leading-snug">{children}</span>,
+		h1: ({ children }: { children?: React.ReactNode }) => (
+			<span className="text-xl leading-snug">{children}</span>
+		),
+		h2: ({ children }: { children?: React.ReactNode }) => (
+			<span className="text-lg leading-snug">{children}</span>
+		),
+		h3: ({ children }: { children?: React.ReactNode }) => (
+			<span className="text-base leading-snug">{children}</span>
+		),
+		h4: ({ children }: { children?: React.ReactNode }) => (
+			<span className="text-sm leading-snug">{children}</span>
+		),
+		h5: ({ children }: { children?: React.ReactNode }) => (
+			<span className="text-xs leading-snug">{children}</span>
+		),
 		h6: stripBlock,
 		blockquote: stripBlock,
 	},
@@ -42,11 +54,21 @@ const descriptionBlockComponents = {
 };
 
 function SizedPortableText({ value }: { value: PortableTextBlock[] }) {
-	return <PortableText value={value} components={sizedBlockComponents} />;
+	return (
+		<PortableText
+			value={value}
+			components={sizedBlockComponents}
+		/>
+	);
 }
 
 function DescriptionPortableText({ value }: { value: PortableTextBlock[] }) {
-	return <PortableText value={value} components={descriptionBlockComponents} />;
+	return (
+		<PortableText
+			value={value}
+			components={descriptionBlockComponents}
+		/>
+	);
 }
 
 export interface ExperienceItemProps {

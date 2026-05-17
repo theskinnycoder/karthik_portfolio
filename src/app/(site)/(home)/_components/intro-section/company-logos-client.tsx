@@ -31,7 +31,10 @@ export function CompanyLogosClient({ companies }: CompanyLogosClientProps) {
 						/>
 					</motion.div>
 					{index === 1 && (
-						<div className="basis-full min-[425px]:hidden" aria-hidden="true" />
+						<div
+							className="basis-full min-[425px]:hidden"
+							aria-hidden="true"
+						/>
 					)}
 				</React.Fragment>
 			))}

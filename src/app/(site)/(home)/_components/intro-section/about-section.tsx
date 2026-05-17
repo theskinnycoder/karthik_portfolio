@@ -49,7 +49,10 @@ export function AboutSection({ bio }: AboutSectionProps) {
 					viewport={{ once: true, margin: "0px 0px -60px 0px" }}
 					transition={{ ease: "easeOut", duration: 0.6, delay: i * 0.1 }}
 				>
-					<PortableText value={[block]} components={articleComponents} />
+					<PortableText
+						value={[block]}
+						components={articleComponents}
+					/>
 				</motion.div>
 			))}
 		</div>

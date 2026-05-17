@@ -45,7 +45,8 @@ export const siteProfile = defineType({
 			name: "heroVideo",
 			title: "Hero Video",
 			type: "cloudinary.asset",
-			description: "Video shown in the circular video player on the home page hero section",
+			description:
+				"Video shown in the circular video player on the home page hero section",
 		}),
 		defineField({
 			name: "bio",
