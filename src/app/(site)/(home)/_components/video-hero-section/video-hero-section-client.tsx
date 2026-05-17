@@ -23,6 +23,30 @@ export function VideoHeroSectionClient({
 		setIsPlaying(!isPlaying);
 	}
 
+	// Caption rendered in two places: mobile (section-level, self-centered) and
+	// md+ (inside inner div, original flow). CSS show/hide keeps only one visible.
+	function Caption({ className }: { className?: string }) {
+		const splitWord = " but ";
+		const idx = availabilityMessage.toLowerCase().indexOf(splitWord);
+		const content =
+			idx === -1 ? (
+				`(${availabilityMessage})`
+			) : (
+				<>
+					({availabilityMessage.slice(0, idx + 4)}
+					<br />
+					{availabilityMessage.slice(idx + 5)})
+				</>
+			);
+		return (
+			<p
+				className={`mt-4 text-center font-serif text-base font-semibold text-[#cccccc] md:text-xl${className ? ` ${className}` : ""}`}
+			>
+				{content}
+			</p>
+		);
+	}
+
 	return (
 		<section className="flex flex-col items-end md:items-center xl:items-end">
 			<div className="flex flex-col items-center md:translate-x-[7.8125rem] xl:translate-x-0">
@@ -103,27 +127,12 @@ export function VideoHeroSectionClient({
 					</div>
 				</div>
 
-				{/* Disclaimer text — centered under the circle.
-				    Force line break after "but" so all viewports show:
-				    "(I am no longer looking for a job but
-				     keeping this video up)" */}
-				<p className="mt-4 text-center font-serif text-base font-semibold text-[#cccccc] md:text-xl">
-					{(() => {
-						const splitWord = " but ";
-						const idx = availabilityMessage.toLowerCase().indexOf(splitWord);
-						if (idx === -1) return `(${availabilityMessage})`;
-						const before = availabilityMessage.slice(0, idx + 4); // includes "but"
-						const after = availabilityMessage.slice(idx + 5); // after "but "
-						return (
-							<>
-								({before}
-								<br />
-								{after})
-							</>
-						);
-					})()}
-				</p>
+				{/* tablet+ — inside the inner div so it inherits the translate and items-center */}
+				<Caption className="hidden md:block" />
 			</div>
+
+			{/* mobile only — at section level with self-center to escape items-end */}
+			<Caption className="self-center md:hidden" />
 		</section>
 	);
 }
