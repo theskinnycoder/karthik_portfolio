@@ -20,7 +20,7 @@ const inlineComponents: PortableTextComponents = {
 const fadeUp = {
 	initial: { y: 48, opacity: 0 },
 	whileInView: { y: 0, opacity: 1 },
-	viewport: { once: false, margin: "0px 0px -40px 0px" },
+	viewport: { once: true, margin: "0px 0px -40px 0px" },
 };
 
 interface HeroSectionProps {

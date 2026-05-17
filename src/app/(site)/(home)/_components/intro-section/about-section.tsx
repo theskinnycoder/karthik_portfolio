@@ -46,8 +46,7 @@ export function AboutSection({ bio }: AboutSectionProps) {
 					key={(block as PortableTextBlock & { _key?: string })._key ?? i}
 					initial={{ y: 48, opacity: 0 }}
 					whileInView={{ y: 0, opacity: 1 }}
-					exit={{ y: -24, opacity: 0 }}
-					viewport={{ once: false, margin: "0px 0px -60px 0px" }}
+					viewport={{ once: true, margin: "0px 0px -60px 0px" }}
 					transition={{ ease: "easeOut", duration: 0.6, delay: i * 0.1 }}
 				>
 					<PortableText value={[block]} components={articleComponents} />
