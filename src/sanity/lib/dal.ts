@@ -1,6 +1,5 @@
-import { CACHE_LIFE } from "@/lib/caching";
+import { cacheSanityResource } from "@/lib/caching";
 import { getMediaUrl, getVideoPosterUrl } from "@/lib/media";
-import { cacheLife, cacheTag } from "next/cache";
 import type { PortableTextBlock } from "next-sanity";
 import "server-only";
 import type {
@@ -473,8 +472,7 @@ function toWorkItemDetailDTO(data: WorkItemDetailRaw): WorkItemDetailDTO {
 
 export async function getTestimonials(): Promise<TestimonialDTO[]> {
 	"use cache";
-	cacheLife(CACHE_LIFE);
-	cacheTag("testimonials");
+	cacheSanityResource("testimonial");
 	const testimonials = await sanityFetch<TestimonialsQueryResult>({
 		query: testimonialsQuery,
 	});
@@ -483,8 +481,7 @@ export async function getTestimonials(): Promise<TestimonialDTO[]> {
 
 export async function getCompanies(): Promise<CompanyDTO[]> {
 	"use cache";
-	cacheLife(CACHE_LIFE);
-	cacheTag("companies");
+	cacheSanityResource("company");
 	const companies = await sanityFetch<CompaniesQueryResult>({
 		query: companiesQuery,
 	});
@@ -493,8 +490,7 @@ export async function getCompanies(): Promise<CompanyDTO[]> {
 
 export async function getSocials(): Promise<SocialDTO[]> {
 	"use cache";
-	cacheLife(CACHE_LIFE);
-	cacheTag("socials");
+	cacheSanityResource("social");
 	const socials = await sanityFetch<SocialsQueryResult>({
 		query: socialsQuery,
 	});
@@ -503,8 +499,7 @@ export async function getSocials(): Promise<SocialDTO[]> {
 
 export async function getProjects(): Promise<ProjectDTO[]> {
 	"use cache";
-	cacheLife(CACHE_LIFE);
-	cacheTag("projects");
+	cacheSanityResource("project");
 	const projects = await sanityFetch<ProjectsQueryResult>({
 		query: projectsQuery,
 	});
@@ -513,8 +508,7 @@ export async function getProjects(): Promise<ProjectDTO[]> {
 
 export async function getExperiences(): Promise<ExperienceDTO[]> {
 	"use cache";
-	cacheLife(CACHE_LIFE);
-	cacheTag("experiences");
+	cacheSanityResource("experience");
 	const experiences = await sanityFetch<ExperiencesQueryResult>({
 		query: experiencesQuery,
 	});
@@ -523,8 +517,7 @@ export async function getExperiences(): Promise<ExperienceDTO[]> {
 
 export async function getSiteProfile(): Promise<SiteProfileDTO | null> {
 	"use cache";
-	cacheLife(CACHE_LIFE);
-	cacheTag("siteProfile");
+	cacheSanityResource("siteProfile");
 	const profile = await sanityFetch<SiteProfileQueryResult>({
 		query: siteProfileQuery,
 	});
@@ -544,8 +537,7 @@ export async function getSectionHeader(
 	slug: string,
 ): Promise<SectionHeaderDTO | null> {
 	"use cache";
-	cacheLife(CACHE_LIFE);
-	cacheTag("sectionHeaders");
+	cacheSanityResource("sectionHeader");
 	const header = await sanityFetch<SectionHeaderQueryResult>({
 		query: sectionHeaderQuery,
 		params: { slug },
@@ -556,8 +548,7 @@ export async function getSectionHeader(
 
 export async function getWorkPageCompanies(): Promise<WorkPageCompanyDTO[]> {
 	"use cache";
-	cacheLife(CACHE_LIFE);
-	cacheTag("workItems", "companies");
+	cacheSanityResource("workItem", "company");
 	const companies = await sanityFetch<WorkPageQueryResult>({
 		query: workPageQuery,
 	});
@@ -568,8 +559,7 @@ export async function getWorkItemBySlug(
 	slug: string,
 ): Promise<WorkItemDetailDTO | null> {
 	"use cache";
-	cacheLife(CACHE_LIFE);
-	cacheTag("workItems", "companies", "testimonials");
+	cacheSanityResource("workItem", "company", "testimonial");
 	const data = await sanityFetch<WorkItemBySlugQueryResult>({
 		query: workItemBySlugQuery,
 		params: { slug },
@@ -580,8 +570,7 @@ export async function getWorkItemBySlug(
 
 export async function getAllWorkItemSlugs(): Promise<string[]> {
 	"use cache";
-	cacheLife(CACHE_LIFE);
-	cacheTag("workItems");
+	cacheSanityResource("workItem");
 	const slugs = await sanityFetch<AllWorkItemSlugsQueryResult>({
 		query: allWorkItemSlugsQuery,
 	});
@@ -592,8 +581,7 @@ const DEFAULT_HOME_SECTIONS: readonly HomeSectionKey[] = HOME_SECTION_KEYS;
 
 export async function getHomePageSections(): Promise<HomeSectionKey[]> {
 	"use cache";
-	cacheLife(CACHE_LIFE);
-	cacheTag("homePage");
+	cacheSanityResource("homePage");
 	const data = await sanityFetch<HomePageQueryResult>({
 		query: homePageQuery,
 	});
