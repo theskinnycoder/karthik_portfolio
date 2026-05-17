@@ -1,6 +1,7 @@
-import { tagResource } from "@/lib/caching";
+import { CACHE_LIFE, tagResource } from "@/lib/caching";
 import { getMediaUrl, getVideoPosterUrl } from "@/lib/media";
 import type { PortableTextBlock } from "next-sanity";
+import { cacheLife, cacheTag } from "next/cache";
 import "server-only";
 import type {
 	AllWorkItemSlugsQueryResult,
@@ -547,8 +548,10 @@ export async function getSectionHeader(
 }
 
 export async function getWorkPageCompanies(): Promise<WorkPageCompanyDTO[]> {
-	await tagResource("workItem");
-	await tagResource("company");
+	"use cache";
+	cacheLife(CACHE_LIFE);
+	cacheTag("workItems");
+	cacheTag("companies");
 
 	const companies = await sanityFetch<WorkPageQueryResult>({
 		query: workPageQuery,
@@ -559,11 +562,13 @@ export async function getWorkPageCompanies(): Promise<WorkPageCompanyDTO[]> {
 export async function getWorkItemBySlug(
 	slug: string,
 ): Promise<WorkItemDetailDTO | null> {
+	"use cache";
 	// Tag all three — the detail page embeds testimonial references inline, so
 	// edits to an embedded testimonial doc should bust this page's cache.
-	await tagResource("workItem");
-	await tagResource("company");
-	await tagResource("testimonial");
+	cacheLife(CACHE_LIFE);
+	cacheTag("workItems");
+	cacheTag("companies");
+	cacheTag("testimonials");
 
 	const data = await sanityFetch<WorkItemBySlugQueryResult>({
 		query: workItemBySlugQuery,
@@ -574,7 +579,9 @@ export async function getWorkItemBySlug(
 }
 
 export async function getAllWorkItemSlugs(): Promise<string[]> {
-	await tagResource("workItem");
+	"use cache";
+	cacheLife(CACHE_LIFE);
+	cacheTag("workItems");
 
 	const slugs = await sanityFetch<AllWorkItemSlugsQueryResult>({
 		query: allWorkItemSlugsQuery,
