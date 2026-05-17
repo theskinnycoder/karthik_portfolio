@@ -38,12 +38,11 @@ export function cachePageLife() {
 }
 
 /**
- * Tag a resource with the cache tags for a given document type
- * Applies "use cache" + cacheTag() + cacheLife() pattern
+ * Apply the default cache life and tags inside an existing "use cache" boundary.
  */
-export async function tagResource(type: keyof typeof DOCUMENT_TYPE_TO_TAGS) {
-	"use cache";
-
+export function cacheSanityResource(
+	...types: Array<keyof typeof DOCUMENT_TYPE_TO_TAGS>
+) {
 	cacheLife(CACHE_LIFE);
-	cacheTag(getTags(type)[0]);
+	cacheTag(...types.flatMap(getTags));
 }

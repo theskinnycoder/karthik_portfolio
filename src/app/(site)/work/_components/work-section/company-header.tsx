@@ -44,12 +44,10 @@ export function CompanyHeader({
 						</p>
 					)}
 					{workDescription && (
-						<div className="text-base leading-prose font-light tracking-prose text-paragraph">
-							<PortableTextRenderer
-								value={workDescription}
-								variant="base"
-							/>
-						</div>
+						<PortableTextRenderer
+							value={workDescription}
+							variant="article"
+						/>
 					)}
 				</div>
 			)}

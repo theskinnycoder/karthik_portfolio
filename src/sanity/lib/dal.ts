@@ -1,5 +1,5 @@
-import { tagResource } from "@/lib/caching";
-import { getMediaUrl } from "@/lib/media";
+import { cacheSanityResource } from "@/lib/caching";
+import { getMediaUrl, getVideoPosterUrl } from "@/lib/media";
 import type { PortableTextBlock } from "next-sanity";
 import "server-only";
 import type {
@@ -111,6 +111,8 @@ export interface SiteProfileDTO {
 	title: PortableTextBlock[];
 	bio: PortableTextBlock[];
 	availabilityMessage: string;
+	heroVideoUrl: string;
+	heroPosterUrl: string;
 }
 
 export interface WorkItemDTO {
@@ -469,8 +471,8 @@ function toWorkItemDetailDTO(data: WorkItemDetailRaw): WorkItemDetailDTO {
  */
 
 export async function getTestimonials(): Promise<TestimonialDTO[]> {
-	await tagResource("testimonial");
-
+	"use cache";
+	cacheSanityResource("testimonial");
 	const testimonials = await sanityFetch<TestimonialsQueryResult>({
 		query: testimonialsQuery,
 	});
@@ -478,8 +480,8 @@ export async function getTestimonials(): Promise<TestimonialDTO[]> {
 }
 
 export async function getCompanies(): Promise<CompanyDTO[]> {
-	await tagResource("company");
-
+	"use cache";
+	cacheSanityResource("company");
 	const companies = await sanityFetch<CompaniesQueryResult>({
 		query: companiesQuery,
 	});
@@ -487,8 +489,8 @@ export async function getCompanies(): Promise<CompanyDTO[]> {
 }
 
 export async function getSocials(): Promise<SocialDTO[]> {
-	await tagResource("social");
-
+	"use cache";
+	cacheSanityResource("social");
 	const socials = await sanityFetch<SocialsQueryResult>({
 		query: socialsQuery,
 	});
@@ -496,8 +498,8 @@ export async function getSocials(): Promise<SocialDTO[]> {
 }
 
 export async function getProjects(): Promise<ProjectDTO[]> {
-	await tagResource("project");
-
+	"use cache";
+	cacheSanityResource("project");
 	const projects = await sanityFetch<ProjectsQueryResult>({
 		query: projectsQuery,
 	});
@@ -505,8 +507,8 @@ export async function getProjects(): Promise<ProjectDTO[]> {
 }
 
 export async function getExperiences(): Promise<ExperienceDTO[]> {
-	await tagResource("experience");
-
+	"use cache";
+	cacheSanityResource("experience");
 	const experiences = await sanityFetch<ExperiencesQueryResult>({
 		query: experiencesQuery,
 	});
@@ -514,26 +516,28 @@ export async function getExperiences(): Promise<ExperienceDTO[]> {
 }
 
 export async function getSiteProfile(): Promise<SiteProfileDTO | null> {
-	await tagResource("siteProfile");
-
+	"use cache";
+	cacheSanityResource("siteProfile");
 	const profile = await sanityFetch<SiteProfileQueryResult>({
 		query: siteProfileQuery,
 	});
 	if (!profile) return null;
 
 	return {
-		name: (profile.name ?? []) as unknown as PortableTextBlock[],
-		title: (profile.title ?? []) as unknown as PortableTextBlock[],
-		bio: (profile.bio ?? []) as unknown as PortableTextBlock[],
+		name: (profile.name ?? []) as PortableTextBlock[],
+		title: (profile.title ?? []) as PortableTextBlock[],
+		bio: (profile.bio ?? []) as PortableTextBlock[],
 		availabilityMessage: profile.availabilityMessage ?? "",
+		heroVideoUrl: getMediaUrl(profile.heroVideo),
+		heroPosterUrl: getVideoPosterUrl(profile.heroVideo),
 	};
 }
 
 export async function getSectionHeader(
 	slug: string,
 ): Promise<SectionHeaderDTO | null> {
-	await tagResource("sectionHeader");
-
+	"use cache";
+	cacheSanityResource("sectionHeader");
 	const header = await sanityFetch<SectionHeaderQueryResult>({
 		query: sectionHeaderQuery,
 		params: { slug },
@@ -543,9 +547,8 @@ export async function getSectionHeader(
 }
 
 export async function getWorkPageCompanies(): Promise<WorkPageCompanyDTO[]> {
-	await tagResource("workItem");
-	await tagResource("company");
-
+	"use cache";
+	cacheSanityResource("workItem", "company");
 	const companies = await sanityFetch<WorkPageQueryResult>({
 		query: workPageQuery,
 	});
@@ -555,12 +558,8 @@ export async function getWorkPageCompanies(): Promise<WorkPageCompanyDTO[]> {
 export async function getWorkItemBySlug(
 	slug: string,
 ): Promise<WorkItemDetailDTO | null> {
-	// Tag all three — the detail page embeds testimonial references inline, so
-	// edits to an embedded testimonial doc should bust this page's cache.
-	await tagResource("workItem");
-	await tagResource("company");
-	await tagResource("testimonial");
-
+	"use cache";
+	cacheSanityResource("workItem", "company", "testimonial");
 	const data = await sanityFetch<WorkItemBySlugQueryResult>({
 		query: workItemBySlugQuery,
 		params: { slug },
@@ -570,8 +569,8 @@ export async function getWorkItemBySlug(
 }
 
 export async function getAllWorkItemSlugs(): Promise<string[]> {
-	await tagResource("workItem");
-
+	"use cache";
+	cacheSanityResource("workItem");
 	const slugs = await sanityFetch<AllWorkItemSlugsQueryResult>({
 		query: allWorkItemSlugsQuery,
 	});
@@ -581,8 +580,8 @@ export async function getAllWorkItemSlugs(): Promise<string[]> {
 const DEFAULT_HOME_SECTIONS: readonly HomeSectionKey[] = HOME_SECTION_KEYS;
 
 export async function getHomePageSections(): Promise<HomeSectionKey[]> {
-	await tagResource("homePage");
-
+	"use cache";
+	cacheSanityResource("homePage");
 	const data = await sanityFetch<HomePageQueryResult>({
 		query: homePageQuery,
 	});

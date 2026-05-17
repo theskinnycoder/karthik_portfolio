@@ -57,7 +57,7 @@ function annotateNumberedListSequence<T extends { _type?: string }>(
  * hierarchy body < h6 < h5 < h4 < h3 < h2 < h1 reads cleanly at every
  * breakpoint without the headings collapsing into the paragraph size.
  */
-const ARTICLE_PROSE = [
+export const ARTICLE_PROSE = [
 	"prose prose-neutral max-w-none font-sans",
 
 	// Responsive text sizes.

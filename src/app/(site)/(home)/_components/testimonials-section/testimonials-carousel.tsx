@@ -67,12 +67,14 @@ export function TestimonialsCarousel({
 				blurIntensity={0.5}
 				className="absolute inset-y-0 left-0 z-10 hidden w-24 md:block"
 			/>
+			<div className="pointer-events-none absolute inset-y-0 left-0 z-10 hidden w-8 bg-gradient-to-r from-background to-transparent md:block" />
 			<ProgressiveBlur
 				direction="right"
 				blurLayers={8}
 				blurIntensity={0.5}
 				className="absolute inset-y-0 right-0 z-10 hidden w-24 md:block"
 			/>
+			<div className="pointer-events-none absolute inset-y-0 right-0 z-10 hidden w-8 bg-gradient-to-l from-background to-transparent md:block" />
 		</div>
 	);
 }

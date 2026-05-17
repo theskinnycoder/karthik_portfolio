@@ -17,11 +17,12 @@ function BlogsSection() {
 	);
 }
 
-const SECTION_REGISTRY: Partial<Record<HomeSectionKey, () => React.ReactNode>> = {
-	experience: ExperienceSection,
-	otherWorks: OtherWorksSection,
-	testimonials: TestimonialsSection,
-};
+const SECTION_REGISTRY: Partial<Record<HomeSectionKey, () => React.ReactNode>> =
+	{
+		experience: ExperienceSection,
+		otherWorks: OtherWorksSection,
+		testimonials: TestimonialsSection,
+	};
 
 export async function SitePage({
 	initialSection = "about",
@@ -34,7 +35,7 @@ export async function SitePage({
 		<main className="flex flex-col">
 			<section
 				id="about"
-				className="mx-auto flex w-full max-w-5xl flex-col gap-16 pt-[7.5rem] pb-20"
+				className="mx-auto flex w-full max-w-5xl flex-col gap-16 pt-10 pb-20 md:pt-20 xl:pt-[7.5rem]"
 			>
 				<div className="flex flex-col-reverse gap-16 px-6 md:px-[1.125rem] xl:grid xl:grid-cols-2 xl:items-start xl:gap-16">
 					<IntroSection />

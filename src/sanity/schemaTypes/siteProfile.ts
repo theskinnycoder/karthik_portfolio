@@ -42,6 +42,13 @@ export const siteProfile = defineType({
 			validation: (rule) => rule.required(),
 		}),
 		defineField({
+			name: "heroVideo",
+			title: "Hero Video",
+			type: "cloudinary.asset",
+			description:
+				"Video shown in the circular video player on the home page hero section",
+		}),
+		defineField({
 			name: "bio",
 			title: "Biography",
 			type: "array",

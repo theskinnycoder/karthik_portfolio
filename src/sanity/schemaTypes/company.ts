@@ -1,5 +1,6 @@
 import { CaseIcon } from "@sanity/icons";
 import { defineField, defineType } from "sanity";
+import { CaseStudyContentPlugins } from "../components/case-study-content";
 import { articleBlock } from "../rich-text";
 
 export const company = defineType({
@@ -52,6 +53,11 @@ export const company = defineType({
 			title: "Work Description",
 			type: "array",
 			of: [articleBlock()],
+			components: {
+				portableText: {
+					plugins: CaseStudyContentPlugins,
+				},
+			},
 			description:
 				"Description shown on the work page. Use the colorForeground decorator to highlight phrases against the dimmed paragraph color.",
 		}),

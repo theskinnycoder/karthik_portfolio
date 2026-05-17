@@ -4,6 +4,28 @@ import { parseBody } from "next-sanity/webhook";
 import { revalidateTag } from "next/cache";
 import { type NextRequest, NextResponse } from "next/server";
 
+/**
+ * Development-only: flush all cache tags without a webhook signature.
+ * Hit GET /api/revalidate in the browser after publishing in Sanity Studio.
+ * Returns 404 in production.
+ */
+export async function GET() {
+	if (process.env.NODE_ENV !== "development") {
+		return NextResponse.json({ error: "Not found" }, { status: 404 });
+	}
+
+	for (const tags of Object.values(DOCUMENT_TYPE_TO_TAGS)) {
+		for (const tag of tags) {
+			revalidateTag(tag, "max");
+		}
+	}
+
+	return NextResponse.json({
+		revalidated: true,
+		message: "All cache tags flushed",
+	});
+}
+
 interface SanityWebhookPayload {
 	_type: keyof typeof DOCUMENT_TYPE_TO_TAGS;
 	_id: string;
@@ -48,7 +70,6 @@ export async function POST(request: NextRequest) {
 			});
 		}
 
-		// Revalidate with stale-while-revalidate behavior
 		for (const tag of tags) {
 			revalidateTag(tag, "max");
 		}
