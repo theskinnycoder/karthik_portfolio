@@ -6,8 +6,12 @@ import { useRef, useState } from "react";
 
 export function VideoHeroSectionClient({
 	availabilityMessage,
+	heroVideoUrl,
+	heroPosterUrl,
 }: {
 	availabilityMessage: string;
+	heroVideoUrl: string;
+	heroPosterUrl: string;
 }) {
 	const videoRef = useRef<HTMLVideoElement>(null);
 	const [isPlaying, setIsPlaying] = useState(false);
@@ -23,9 +27,13 @@ export function VideoHeroSectionClient({
 		setIsPlaying(!isPlaying);
 	}
 
-	// Caption rendered in two places: mobile (section-level, self-centered) and
-	// md+ (inside inner div, original flow). CSS show/hide keeps only one visible.
-	function Caption({ className }: { className?: string }) {
+	function handleEnded() {
+		if (!videoRef.current) return;
+		videoRef.current.load();
+		setIsPlaying(false);
+	}
+
+	function Caption() {
 		const splitWord = " but ";
 		const idx = availabilityMessage.toLowerCase().indexOf(splitWord);
 		const content =
@@ -34,34 +42,35 @@ export function VideoHeroSectionClient({
 			) : (
 				<>
 					({availabilityMessage.slice(0, idx + 4)}
-					<br />
-					{availabilityMessage.slice(idx + 5)})
+					<br className="hidden min-[375px]:block" />
+					{availabilityMessage.slice(idx + 4)})
 				</>
 			);
+		// ml + w match the "Main circle area" div at every breakpoint so that
+		// text-center lands under the circle, not the inner div's midpoint.
 		return (
-			<p
-				className={`mt-4 text-center font-serif text-base font-semibold text-[#cccccc] md:text-xl${className ? ` ${className}` : ""}`}
-			>
+			<p className="ml-10 min-[375px]:ml-16 md:ml-0 mt-4 w-[13.125rem] min-[375px]:w-[15.9375rem] min-[425px]:w-[17.8125rem] sm:w-[16.875rem] md:w-[22.5rem] text-center font-serif text-[1.125rem] leading-[1.1875rem] font-bold text-[#cccccc] md:text-xl">
 				{content}
 			</p>
 		);
 	}
 
 	return (
-		<section className="flex flex-col items-end md:items-center xl:items-end">
+		<section className="flex flex-col items-end md:items-center xl:items-end -mx-2 md:mx-0">
 			<div className="flex flex-col items-center md:translate-x-[7.8125rem] xl:translate-x-0">
 				<div className="relative">
 					{/*
 					 * "Let me introduce myself" — rotated, left of the circle
 					 *
 					 * Responsive tiers:
-					 *   < 375px    circle 12.5rem  + ml-10(2.5rem)  = 15rem    →  text -left-6
-					 *   375–639px  circle 13.75rem + ml-16(4rem)    = 17.75rem →  text -left-8
-					 *   640–767px  circle 16.875rem + ml-16(4rem)   = 20.875rem→  text -left-12
+					 *   < 375px    circle 11.25rem  + ml-10(2.5rem)  = 13.75rem  →  text -left-6
+					 *   375–424px  circle 13.125rem + ml-16(4rem)    = 17.125rem →  text -left-8
+					 *   425–639px  circle 14.375rem + ml-16(4rem)    = 18.375rem →  text -left-8
+					 *   640–767px  circle 16.875rem + ml-16(4rem)    = 20.875rem →  text -left-12
 					 *   768px+     circle 22.5rem  + ml-0           = 22.5rem  →  text -left-[6.875rem]
 					 *   (1280px+   switches to 2-col grid via site-page.tsx)
 					 */}
-					<p className="absolute top-32 -left-6 -rotate-16 font-serif text-xl leading-tight font-semibold text-[#cccccc] min-[375px]:top-36 min-[375px]:-left-8 sm:top-52 sm:-left-12 sm:text-2xl md:top-[16.25rem] md:-left-[6.875rem] md:text-3xl">
+					<p className="absolute top-32 -left-6 -rotate-16 font-serif text-xl leading-tight font-semibold text-[#cccccc] min-[375px]:top-[10.375rem] min-[375px]:-left-[0.875rem] min-[375px]:-rotate-[22deg] min-[375px]:text-2xl sm:top-52 sm:-left-12 sm:text-2xl md:top-[16.25rem] md:-left-[6.875rem] md:text-3xl">
 						Let me
 						<br />
 						introduce
@@ -72,7 +81,7 @@ export function VideoHeroSectionClient({
 					{/* Main circle area */}
 					<div className="relative ml-10 min-[375px]:ml-16 md:ml-0">
 						{/* circle.gif — animated ring overlay */}
-						<div className="relative size-[12.5rem] min-[375px]:size-[13.75rem] sm:size-[16.875rem] md:size-[22.5rem]">
+						<div className="relative size-[13.125rem] min-[375px]:size-[15.9375rem] min-[425px]:size-[17.8125rem] sm:size-[16.875rem] md:size-[22.5rem]">
 							<Image
 								src="/circle.gif"
 								alt=""
@@ -84,19 +93,20 @@ export function VideoHeroSectionClient({
 
 						{/* Circular video — positioned inside the ring */}
 						<div className="absolute inset-0 z-0 flex items-center justify-center">
-							<div className="relative size-[10.3125rem] translate-x-1 overflow-hidden rounded-full min-[375px]:size-[11.25rem] sm:size-56 md:size-[19.1875rem]">
+							<div className="relative size-[11.25rem] translate-x-1 overflow-hidden rounded-full min-[375px]:size-[13.75rem] min-[425px]:size-[15.625rem] sm:size-56 md:size-[19.1875rem]">
 								<video
 									ref={videoRef}
 									muted
-									loop
 									playsInline
+									poster={heroPosterUrl || undefined}
 									className="absolute inset-0 size-full object-cover"
-									onEnded={() => setIsPlaying(false)}
+									onEnded={handleEnded}
 								>
-									<source
-										src="/Intro.mov"
-										type="video/mp4"
-									/>
+									{heroVideoUrl ? (
+										<source src={heroVideoUrl} type="video/mp4" />
+									) : (
+										<source src="/Intro.mov" type="video/mp4" />
+									)}
 								</video>
 							</div>
 						</div>
@@ -124,15 +134,12 @@ export function VideoHeroSectionClient({
 								<Play className="size-8 fill-white text-white" />
 							)}
 						</button>
+
 					</div>
 				</div>
 
-				{/* tablet+ — inside the inner div so it inherits the translate and items-center */}
-				<Caption className="hidden md:block" />
+				<Caption />
 			</div>
-
-			{/* mobile only — at section level with self-center to escape items-end */}
-			<Caption className="self-center md:hidden" />
 		</section>
 	);
 }

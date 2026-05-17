@@ -24,6 +24,14 @@ export function getCloudinaryService(): CloudinaryMediaService {
  * Cloudinary URL (public_id / resource_type / type). Callers should treat ""
  * as "no asset" — `<MediaImage src="">` renders nothing.
  */
+export function getVideoPosterUrl(
+	asset: CloudinaryAsset | undefined | null,
+): string {
+	if (!asset?.public_id || !asset.resource_type || !asset.type) return "";
+	const service = getCloudinaryService();
+	return service.getVideoPosterUrl(asset);
+}
+
 export function getMediaUrl(
 	asset: CloudinaryAsset | undefined | null,
 	options?: { width?: number; height?: number },

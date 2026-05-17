@@ -61,7 +61,8 @@ export const siteProfileQuery = groq`
     name,
     title,
     bio,
-    availabilityMessage
+    availabilityMessage,
+    heroVideo
   }
 `;
 

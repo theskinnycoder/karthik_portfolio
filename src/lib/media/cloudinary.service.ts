@@ -30,6 +30,10 @@ export class CloudinaryMediaService {
 		return this.buildUrl(asset, transforms);
 	}
 
+	getVideoPosterUrl(asset: CloudinaryAsset): string {
+		return this.buildUrl({ ...asset, format: "jpg" }, "so_0,f_jpg,q_auto:best");
+	}
+
 	/**
 	 * Build Cloudinary URL with transformations
 	 * Format: https://res.cloudinary.com/{cloud}/{resource_type}/{type}/{transforms}/{public_id}
