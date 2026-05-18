@@ -1,3 +1,4 @@
+import { MediaImage } from "@/components/media";
 import useIsMobile from "@/hooks/use-media-query";
 import { motion } from "motion/react";
 import React from "react";
@@ -27,10 +28,11 @@ export function ProductCard({
 			onMouseLeave={() => setIsHover(false)}
 			onClick={() => window.open(navigateUrl, "_blank")}
 		>
-			{/* eslint-disable-next-line @next/next/no-img-element */}
-			<img
+			<MediaImage
 				src={image}
 				alt={description}
+				width={400}
+				height={380}
 				className="block h-full w-auto"
 			/>
 

@@ -10,6 +10,6 @@ export async function sanityFetch<T>({
 	params?: QueryParams;
 }): Promise<T> {
 	return client.fetch<T>(query, params, {
-		cache: "force-cache",
+		cache: process.env.NODE_ENV === "development" ? "no-store" : "force-cache",
 	});
 }

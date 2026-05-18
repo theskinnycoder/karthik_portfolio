@@ -49,7 +49,7 @@ export function Navbar() {
 			aria-label="Main navigation"
 			aria-hidden={isHidden}
 		>
-			<div className="flex items-center rounded-full border border-border bg-black px-[0.875rem] py-2 shadow-[0_4px_12px_rgba(0,0,0,0.5)]">
+			<div className="flex items-center rounded-full border border-border bg-background px-[0.875rem] py-2 shadow-[0_4px_12px_rgba(0,0,0,0.5)]">
 				{NAV_ITEMS.map((item) => {
 					const isActive = activeSection === item.section;
 
