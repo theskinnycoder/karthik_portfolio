@@ -71,7 +71,7 @@ export const ARTICLE_PROSE = [
 	"prose-h6:text-base md:prose-h6:text-[1.0625rem] lg:prose-h6:text-[1.125rem]",
 
 	// Heading line heights.
-	"prose-h1:leading-[1.8]",
+	"prose-h1:leading-[1.4]",
 	"prose-h2:leading-[1.28]",
 	"prose-h3:leading-[1.5]",
 	"prose-h4:leading-[1.4]",

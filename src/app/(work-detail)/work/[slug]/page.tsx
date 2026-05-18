@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { cachePageLife } from "@/lib/caching";
 import { getAllWorkItemSlugs, getWorkItemBySlug } from "@/sanity/lib/dal";
 import { WorkArticle } from "./_components/work-article";
+import { WorkBackLink } from "./_components/work-back-link";
 
 interface WorkDetailPageProps {
 	params: Promise<{ slug: string }>;
@@ -56,7 +57,8 @@ export default async function WorkDetailPage({ params }: WorkDetailPageProps) {
 			data-theme="work-detail"
 			className="min-h-dvh bg-background text-foreground"
 		>
-			<main className="mx-auto flex w-full max-w-2xl flex-col gap-12 px-6 pt-16 pb-24">
+			<WorkBackLink />
+			<main className="mx-auto flex w-full max-w-2xl flex-col gap-12 px-6 pt-10 pb-24 md:pt-12">
 				<WorkArticle work={work} />
 			</main>
 		</div>

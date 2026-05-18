@@ -113,7 +113,7 @@ export const sectionHeaderQuery = groq`
 `;
 
 export const workItemBySlugQuery = defineQuery(`
-  *[_type == "workItem" && slug.current == $slug][0] {
+  *[_type == "workItem" && (slug.current == $slug || slug.current == $slugTrailing)][0] {
     _id,
     title,
     "slug": slug.current,
@@ -143,18 +143,11 @@ export const workItemBySlugQuery = defineQuery(`
         }
       }
     },
-    "prev": *[_type == "workItem" && order < ^.order && defined(slug.current)]
-      | order(order desc)[0] {
-        title,
-        "slug": slug.current,
-        tag
-      },
-    "next": *[_type == "workItem" && order > ^.order && defined(slug.current)]
-      | order(order asc)[0] {
-        title,
-        "slug": slug.current,
-        tag
-      },
+    "orderedItems": *[_type == "workItem" && defined(slug.current)] | order(company->order asc, order asc) {
+      title,
+      "slug": slug.current,
+      tag
+    },
     "company": company->{
       _id,
       name,
