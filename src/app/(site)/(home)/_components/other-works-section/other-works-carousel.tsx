@@ -57,7 +57,7 @@ export function OtherWorksCarousel({ projects }: OtherWorksCarouselProps) {
 					{displayedProjects.map((project, index) => (
 						<CarouselItem
 							key={`${project.name}-${index}`}
-							className="basis-[85%] md:basis-1/4 lg:basis-[40%]"
+							className="basis-auto"
 						>
 							<ProductCard
 								image={project.image}

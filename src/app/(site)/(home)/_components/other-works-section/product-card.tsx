@@ -1,4 +1,3 @@
-import { MediaImage } from "@/components/media";
 import useIsMobile from "@/hooks/use-media-query";
 import { motion } from "motion/react";
 import React from "react";
@@ -22,18 +21,17 @@ export function ProductCard({
 
 	return (
 		<div
-			className="relative h-full cursor-pointer overflow-hidden rounded-[14px]"
+			className="relative h-[380px] cursor-pointer overflow-hidden rounded-[14px]"
 			style={{ backgroundColor }}
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
 			onClick={() => window.open(navigateUrl, "_blank")}
 		>
-			<MediaImage
+			{/* eslint-disable-next-line @next/next/no-img-element */}
+			<img
 				src={image}
 				alt={description}
-				width={296}
-				height={458}
-				className="size-full object-cover"
+				className="block h-full w-auto"
 			/>
 
 			<motion.div

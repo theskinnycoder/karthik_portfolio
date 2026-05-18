@@ -35,13 +35,21 @@ export function Navbar() {
 		document.getElementById(section)?.scrollIntoView({ behavior: "smooth" });
 	};
 
+	const isHidden = activeSection === "about";
+
 	return (
 		<nav
 			data-slot="navbar"
-			className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2"
+			className={cn(
+				"fixed bottom-6 left-1/2 z-50 -translate-x-1/2 transition-all duration-300",
+				isHidden
+					? "translate-y-20 opacity-0 pointer-events-none"
+					: "translate-y-0 opacity-100",
+			)}
 			aria-label="Main navigation"
+			aria-hidden={isHidden}
 		>
-			<div className="flex items-center rounded-full border border-border bg-card p-2">
+			<div className="flex items-center rounded-full border border-border bg-black px-[0.875rem] py-2 shadow-[0_4px_12px_rgba(0,0,0,0.5)]">
 				{NAV_ITEMS.map((item) => {
 					const isActive = activeSection === item.section;
 
@@ -51,7 +59,7 @@ export function Navbar() {
 							href={item.href}
 							onClick={(e) => handleClick(e, item.section)}
 							className={cn(
-								"rounded-full px-3.5 py-1.5 text-base font-semibold tracking-[0.32px] transition-colors",
+								"rounded-full px-3.5 py-1.5 text-lg font-semibold tracking-[0.32px] transition-colors",
 								isActive
 									? "text-foreground"
 									: "text-[oklch(70.94%_0_0)] hover:text-foreground/80",
