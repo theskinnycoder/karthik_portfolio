@@ -32,7 +32,30 @@ export function Navbar() {
 		section: string,
 	) => {
 		e.preventDefault();
-		document.getElementById(section)?.scrollIntoView({ behavior: "smooth" });
+		const el = document.getElementById(section);
+		if (!el) return;
+
+		if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+			el.scrollIntoView();
+			return;
+		}
+
+		const startY = window.scrollY;
+		const targetY = el.getBoundingClientRect().top + startY;
+		const diff = targetY - startY;
+		const duration = 700;
+		let start: number | null = null;
+
+		const ease = (t: number) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t);
+
+		const step = (timestamp: number) => {
+			if (!start) start = timestamp;
+			const progress = Math.min((timestamp - start) / duration, 1);
+			window.scrollTo(0, startY + diff * ease(progress));
+			if (progress < 1) requestAnimationFrame(step);
+		};
+
+		requestAnimationFrame(step);
 	};
 
 	const isHidden = activeSection === "about";
