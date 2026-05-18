@@ -58,7 +58,7 @@ export default async function WorkDetailPage({ params }: WorkDetailPageProps) {
 			className="min-h-dvh bg-background text-foreground"
 		>
 			<WorkBackLink />
-			<main className="mx-auto flex w-full max-w-2xl flex-col gap-12 px-6 pt-10 pb-24 md:pt-12">
+			<main className="mx-auto flex w-full max-w-2xl flex-col gap-12 px-6 pt-10 pb-14 md:pt-12">
 				<WorkArticle work={work} />
 			</main>
 		</div>

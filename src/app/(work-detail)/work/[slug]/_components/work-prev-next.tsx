@@ -13,23 +13,50 @@ export function WorkPrevNext({ prev, next }: WorkPrevNextProps) {
 		prev && next ? "justify-between" : next ? "justify-end" : "justify-start";
 
 	return (
-		<nav
-			aria-label="Case study navigation"
-			className={cn("flex items-center", justify)}
-		>
+		<>
+			{/* Mobile / tablet — inline inside content padding */}
+			<nav
+				aria-label="Case study navigation"
+				className={cn("flex items-center lg:hidden", justify)}
+			>
+				{prev && (
+					<NavCard
+						link={prev}
+						direction="prev"
+					/>
+				)}
+				{next && (
+					<NavCard
+						link={next}
+						direction="next"
+					/>
+				)}
+			</nav>
+
+			{/* Desktop — fixed adjacent to content edges, min 1rem from viewport edge */}
 			{prev && (
-				<NavCard
-					link={prev}
-					direction="prev"
-				/>
+				<div
+					className="fixed bottom-10 z-40 hidden w-[9.5rem] overflow-hidden lg:block"
+					style={{ left: "max(1rem, calc(50% - 31.25rem))" }}
+				>
+					<NavCard
+						link={prev}
+						direction="prev"
+					/>
+				</div>
 			)}
 			{next && (
-				<NavCard
-					link={next}
-					direction="next"
-				/>
+				<div
+					className="fixed bottom-10 z-40 hidden w-[9.5rem] overflow-hidden lg:block"
+					style={{ right: "max(1rem, calc(50% - 31.25rem))" }}
+				>
+					<NavCard
+						link={next}
+						direction="next"
+					/>
+				</div>
 			)}
-		</nav>
+		</>
 	);
 }
 
@@ -43,14 +70,14 @@ function NavCard({ link, direction }: NavCardProps) {
 	return (
 		<Link
 			href={{ pathname: `/work/${link.slug}` }}
-			className="flex h-16 flex-col items-start justify-center gap-1 overflow-hidden rounded-xl border border-[rgba(33,33,33,0.1)] bg-muted px-4 py-3 whitespace-nowrap transition-colors hover:border-[rgba(33,33,33,0.2)]"
+			className="flex min-h-16 flex-col items-start justify-center gap-1 overflow-hidden rounded-xl border border-[rgba(33,33,33,0.1)] bg-muted px-4 py-3 transition-colors hover:border-[rgba(33,33,33,0.2)]"
 		>
 			<span className="flex items-center gap-1 text-xs leading-none font-normal text-[#808080]">
 				{!isNext && <ArrowLeft className="size-3" />}
 				{isNext ? "Next" : "Previous"}
 				{isNext && <ArrowRight className="size-3" />}
 			</span>
-			<span className="text-base leading-none font-semibold text-[#141414]">
+			<span className="text-base leading-tight font-semibold text-[#141414]">
 				{link.title}
 			</span>
 		</Link>
