@@ -14,10 +14,10 @@ export function WorkPrevNext({ prev, next }: WorkPrevNextProps) {
 
 	return (
 		<>
-			{/* Mobile / tablet — inline inside content padding */}
+			{/* Mobile / tablet / small desktop — inline inside content padding */}
 			<nav
 				aria-label="Case study navigation"
-				className={cn("flex items-center lg:hidden", justify)}
+				className={cn("-mx-6 flex items-center border-t border-border px-6 pt-4 xl:hidden", justify)}
 			>
 				{prev && (
 					<NavCard
@@ -33,11 +33,14 @@ export function WorkPrevNext({ prev, next }: WorkPrevNextProps) {
 				)}
 			</nav>
 
-			{/* Desktop — fixed adjacent to content edges, min 1rem from viewport edge */}
+			{/* Desktop — fixed adjacent to content edges, grows with text, safe min-edge */}
 			{prev && (
 				<div
-					className="fixed bottom-10 z-40 hidden w-[9.5rem] overflow-hidden lg:block"
-					style={{ left: "max(1rem, calc(50% - 31.25rem))" }}
+					className="fixed bottom-10 z-40 hidden overflow-hidden xl:block"
+					style={{
+						right: "calc(50% + 22.25rem)",
+						maxWidth: "calc(50% - 23.25rem)",
+					}}
 				>
 					<NavCard
 						link={prev}
@@ -47,8 +50,11 @@ export function WorkPrevNext({ prev, next }: WorkPrevNextProps) {
 			)}
 			{next && (
 				<div
-					className="fixed bottom-10 z-40 hidden w-[9.5rem] overflow-hidden lg:block"
-					style={{ right: "max(1rem, calc(50% - 31.25rem))" }}
+					className="fixed bottom-10 z-40 hidden overflow-hidden xl:block"
+					style={{
+						left: "calc(50% + 22.25rem)",
+						maxWidth: "calc(50% - 23.25rem)",
+					}}
 				>
 					<NavCard
 						link={next}
@@ -70,14 +76,14 @@ function NavCard({ link, direction }: NavCardProps) {
 	return (
 		<Link
 			href={{ pathname: `/work/${link.slug}` }}
-			className="flex min-h-16 flex-col items-start justify-center gap-1 overflow-hidden rounded-xl border border-[rgba(33,33,33,0.1)] bg-muted px-4 py-3 transition-colors hover:border-[rgba(33,33,33,0.2)]"
+			className="flex min-h-16 flex-col items-start justify-center gap-1 overflow-hidden rounded-xl border border-[rgba(33,33,33,0.1)] bg-muted px-4 py-3 whitespace-nowrap transition-colors hover:border-[rgba(33,33,33,0.2)]"
 		>
 			<span className="flex items-center gap-1 text-xs leading-none font-normal text-[#808080]">
 				{!isNext && <ArrowLeft className="size-3" />}
 				{isNext ? "Next" : "Previous"}
 				{isNext && <ArrowRight className="size-3" />}
 			</span>
-			<span className="text-base leading-tight font-semibold text-[#141414]">
+			<span className="w-full truncate text-base leading-snug font-semibold text-[#141414]">
 				{link.title}
 			</span>
 		</Link>
