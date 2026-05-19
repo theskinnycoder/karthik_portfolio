@@ -1,3 +1,5 @@
+"use client";
+
 import { MediaImage } from "@/components/media";
 import useIsMobile from "@/hooks/use-media-query";
 import { motion } from "motion/react";

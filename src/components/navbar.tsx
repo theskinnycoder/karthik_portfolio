@@ -17,11 +17,13 @@ export function Navbar() {
 	const [activeSection, setActiveSection] = useState(
 		PATHNAME_TO_SECTION[pathname] ?? "about",
 	);
+	const [hasLeftAbout, setHasLeftAbout] = useState(false);
 
 	useEffect(() => {
 		const handler = (e: Event) => {
 			const { section } = (e as CustomEvent<{ section: SectionId }>).detail;
 			setActiveSection(section);
+			if (section !== "about") setHasLeftAbout(true);
 		};
 		window.addEventListener("sectionchange", handler);
 		return () => window.removeEventListener("sectionchange", handler);
@@ -58,7 +60,7 @@ export function Navbar() {
 		requestAnimationFrame(step);
 	};
 
-	const isHidden = activeSection === "about";
+	const isHidden = activeSection === "about" && !hasLeftAbout;
 
 	return (
 		<nav

@@ -567,7 +567,7 @@ export async function getWorkItemBySlug(
 	const trimmed = decodeURIComponent(slug).trim();
 	const data = await sanityFetch<WorkItemBySlugQueryResult>({
 		query: workItemBySlugQuery,
-		params: { slug: trimmed, slugTrailing: trimmed + " " },
+		params: { slug: trimmed },
 	});
 	if (!data) return null;
 	return toWorkItemDetailDTO(data);

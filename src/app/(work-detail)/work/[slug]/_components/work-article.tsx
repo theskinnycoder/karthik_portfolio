@@ -5,6 +5,7 @@ import { WorkPrevNext } from "./work-prev-next";
 
 interface WorkArticleProps {
 	work: WorkItemDetailDTO;
+	hideNav?: boolean;
 }
 
 function toBrandStyle(brand: BrandDTO): CSSProperties {
@@ -16,8 +17,8 @@ function toBrandStyle(brand: BrandDTO): CSSProperties {
 	return style as CSSProperties;
 }
 
-export function WorkArticle({ work }: WorkArticleProps) {
-	const hasNavigation = Boolean(work.prev || work.next);
+export function WorkArticle({ work, hideNav = false }: WorkArticleProps) {
+	const hasNavigation = !hideNav && Boolean(work.prev || work.next);
 
 	return (
 		<article

@@ -10,13 +10,22 @@ export function ContentImage({ value }: ContentImageProps) {
 	if (!value.url) return null;
 	const dimensions = sizeToDimensions(value.size);
 	return (
-		<figure className="my-8">
+		<figure
+			className={cn(
+				"my-8",
+				value.size === "wide" && "md:-mx-16 lg:-mx-24",
+				value.size === "full" && "-mx-6",
+			)}
+		>
 			<MediaImage
 				src={value.url}
 				alt={value.alt}
 				width={dimensions.width}
 				height={dimensions.height}
-				className="w-full object-cover"
+				className={cn(
+					"w-full object-cover",
+					value.size === "full" ? "rounded-none" : "rounded-lg",
+				)}
 			/>
 			{value.caption && (
 				<figcaption className="mt-2 text-center text-xs font-light text-muted-foreground">

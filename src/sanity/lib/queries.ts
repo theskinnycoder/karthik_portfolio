@@ -113,7 +113,7 @@ export const sectionHeaderQuery = groq`
 `;
 
 export const workItemBySlugQuery = defineQuery(`
-  *[_type == "workItem" && (slug.current == $slug || slug.current == $slugTrailing)][0] {
+  *[_type == "workItem" && slug.current == $slug][0] {
     _id,
     title,
     "slug": slug.current,

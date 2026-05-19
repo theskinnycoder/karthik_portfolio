@@ -1,5 +1,6 @@
 import { getWorkPageCompanies } from "@/sanity/lib/dal";
 import { CompanyGroup } from "./company-group";
+import { WorkDrawerProvider } from "./work-drawer-context";
 
 export async function WorkSection() {
 	const companies = await getWorkPageCompanies();
@@ -11,13 +12,15 @@ export async function WorkSection() {
 	}
 
 	return (
-		<div className="flex flex-col gap-11">
-			{companies.map((company) => (
-				<CompanyGroup
-					key={company.name}
-					company={company}
-				/>
-			))}
-		</div>
+		<WorkDrawerProvider>
+			<div className="flex flex-col gap-11">
+				{companies.map((company) => (
+					<CompanyGroup
+						key={company.name}
+						company={company}
+					/>
+				))}
+			</div>
+		</WorkDrawerProvider>
 	);
 }
