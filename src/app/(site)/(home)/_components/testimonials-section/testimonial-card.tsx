@@ -1,3 +1,6 @@
+"use client";
+
+import { motion } from "motion/react";
 import { MediaImage } from "@/components/media";
 import { PortableTextRenderer } from "@/components/portable-text";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -11,7 +14,11 @@ export function TestimonialCard({
 	company,
 }: TestimonialDTO) {
 	return (
-		<div className="flex h-full flex-col gap-6 rounded-[18px] border border-border p-4.5">
+		<motion.div
+			className="flex h-full flex-col gap-6 rounded-[18px] border border-border p-4.5"
+			whileHover={{ scale: 0.98 }}
+			transition={{ duration: 0.3, ease: "easeOut" }}
+		>
 			<div className="flex-1 text-base font-light text-muted-foreground">
 				<PortableTextRenderer
 					value={quote}
@@ -55,6 +62,6 @@ export function TestimonialCard({
 					</div>
 				</div>
 			</div>
-		</div>
+		</motion.div>
 	);
 }

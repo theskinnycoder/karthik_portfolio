@@ -1,4 +1,7 @@
+"use client";
+
 import { ArrowUpRight } from "lucide-react";
+import { motion } from "motion/react";
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import { MediaImage } from "@/components/media";
@@ -24,7 +27,11 @@ export function WorkItemCard({ item }: WorkItemCardProps) {
 			href={`/work/${item.slug}`}
 			className="block h-full w-full"
 		>
-			<div className="flex h-full flex-col gap-3 rounded-[20px] border border-border bg-card p-3.5">
+			<motion.div
+				className="flex h-full flex-col gap-3 rounded-[20px] border border-border bg-card p-3.5"
+				whileHover={{ scale: 0.98 }}
+				transition={{ duration: 0.3, ease: "easeOut" }}
+			>
 				<div className="flex items-center gap-1.5">
 					{item.icon && (
 						<MediaImage
@@ -61,7 +68,7 @@ export function WorkItemCard({ item }: WorkItemCardProps) {
 						<ArrowUpRight className="size-4 text-background" />
 					</div>
 				</div>
-			</div>
+			</motion.div>
 		</Link>
 	);
 }
