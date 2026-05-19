@@ -18,19 +18,19 @@ export function WorkDetailDrawer({
 	onClose,
 	onNavigate,
 }: WorkDetailDrawerProps) {
+	const [fetchedSlug, setFetchedSlug] = useState<string | null>(null);
 	const [work, setWork] = useState<WorkItemDetailDTO | null>(null);
-	const [loading, setLoading] = useState(false);
+
+	// Derived — true whenever a new slug hasn't resolved yet
+	const loading = !!slug && slug !== fetchedSlug;
+	// Hide stale content while the next item loads
+	const displayWork = loading ? null : work;
 
 	useEffect(() => {
-		if (!slug) {
-			setWork(null);
-			return;
-		}
-		setLoading(true);
-		setWork(null);
+		if (!slug) return;
 		fetchWorkDetail(slug).then((data) => {
 			setWork(data);
-			setLoading(false);
+			setFetchedSlug(slug);
 		});
 	}, [slug]);
 
@@ -60,7 +60,6 @@ export function WorkDetailDrawer({
 								</span>
 								Go Back
 							</button>
-							<div className="h-1 w-10 rounded-full bg-foreground/20" />
 						</div>
 					</header>
 
@@ -76,16 +75,16 @@ export function WorkDetailDrawer({
 						</div>
 					)}
 
-					{work && !loading && (
-						<main className="mx-auto flex w-full max-w-2xl flex-col gap-12 px-6 pt-10 pb-10 [&_figure]:!mx-0 [&_figure_img]:!rounded-none">
+					{displayWork && (
+						<main className="mx-auto flex w-full max-w-2xl flex-col gap-12 px-6 pt-10 pb-[0.5rem] [&_figure]:!mx-0 [&_figure_img]:!rounded-none">
 							<WorkArticle
-								work={work}
+								work={displayWork}
 								hideNav
 							/>
-							{(work.prev ?? work.next) && (
+							{(displayWork.prev ?? displayWork.next) && (
 								<DrawerPrevNext
-									prev={work.prev}
-									next={work.next}
+									prev={displayWork.prev}
+									next={displayWork.next}
 									onNavigate={onNavigate}
 								/>
 							)}
@@ -121,7 +120,7 @@ function DrawerPrevNext({ prev, next, onNavigate }: DrawerPrevNextProps) {
 						<ArrowLeft className="size-3" />
 						Previous
 					</span>
-					<span className="w-full truncate text-base leading-snug font-semibold text-[#141414]">
+					<span className="w-full truncate text-sm leading-snug font-semibold text-[#141414] sm:text-base">
 						{prev.title}
 					</span>
 				</button>
@@ -135,7 +134,7 @@ function DrawerPrevNext({ prev, next, onNavigate }: DrawerPrevNextProps) {
 						Next
 						<ArrowRight className="size-3" />
 					</span>
-					<span className="w-full truncate text-base leading-snug font-semibold text-[#141414]">
+					<span className="w-full truncate text-sm leading-snug font-semibold text-[#141414] sm:text-base">
 						{next.title}
 					</span>
 				</button>

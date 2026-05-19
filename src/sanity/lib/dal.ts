@@ -18,7 +18,7 @@ import type {
 import {
 	HOME_SECTION_KEYS,
 	type HomeSectionKey,
-} from "../schemaTypes/homePage";
+} from "./home-sections";
 import { sanityFetch } from "./fetch";
 import {
 	allWorkItemSlugsQuery,
@@ -594,8 +594,8 @@ export async function getHomePageSections(): Promise<HomeSectionKey[]> {
 		query: homePageQuery,
 	});
 	const allowed = new Set<string>(HOME_SECTION_KEYS);
-	const ordered = (data?.sections ?? []).filter((key): key is HomeSectionKey =>
-		allowed.has(key),
+	const ordered = ((data?.sections ?? []) as string[]).filter(
+		(key): key is HomeSectionKey => allowed.has(key),
 	);
 	return ordered.length > 0 ? ordered : [...DEFAULT_HOME_SECTIONS];
 }

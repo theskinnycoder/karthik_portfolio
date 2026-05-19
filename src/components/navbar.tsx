@@ -17,13 +17,10 @@ export function Navbar() {
 	const [activeSection, setActiveSection] = useState(
 		PATHNAME_TO_SECTION[pathname] ?? "about",
 	);
-	const [hasLeftAbout, setHasLeftAbout] = useState(false);
-
 	useEffect(() => {
 		const handler = (e: Event) => {
 			const { section } = (e as CustomEvent<{ section: SectionId }>).detail;
 			setActiveSection(section);
-			if (section !== "about") setHasLeftAbout(true);
 		};
 		window.addEventListener("sectionchange", handler);
 		return () => window.removeEventListener("sectionchange", handler);
@@ -60,19 +57,11 @@ export function Navbar() {
 		requestAnimationFrame(step);
 	};
 
-	const isHidden = activeSection === "about" && !hasLeftAbout;
-
 	return (
 		<nav
 			data-slot="navbar"
-			className={cn(
-				"fixed bottom-6 left-1/2 z-50 -translate-x-1/2 transition-all duration-300",
-				isHidden
-					? "translate-y-20 opacity-0 pointer-events-none"
-					: "translate-y-0 opacity-100",
-			)}
+			className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2"
 			aria-label="Main navigation"
-			aria-hidden={isHidden}
 		>
 			<div className="flex items-center rounded-full border border-border bg-background px-[0.875rem] py-2 shadow-[0_4px_12px_rgba(0,0,0,0.5)]">
 				{NAV_ITEMS.map((item) => {
