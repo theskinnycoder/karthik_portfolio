@@ -16,7 +16,7 @@ export async function GET() {
 
 	for (const tags of Object.values(DOCUMENT_TYPE_TO_TAGS)) {
 		for (const tag of tags) {
-			revalidateTag(tag);
+			revalidateTag(tag, { expire: 0 });
 		}
 	}
 
@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
 		}
 
 		for (const tag of tags) {
-			revalidateTag(tag);
+			revalidateTag(tag, { expire: 0 });
 		}
 
 		return NextResponse.json({
