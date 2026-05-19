@@ -1,8 +1,11 @@
+"use client";
+
 import { ArrowUpRight } from "lucide-react";
-import Link from "next/link";
+import { motion } from "motion/react";
 import type { CSSProperties } from "react";
 import { MediaImage } from "@/components/media";
 import type { WorkItemDTO } from "@/sanity/lib/dal";
+import { useWorkDrawer } from "./work-drawer-context";
 
 interface WorkItemCardProps {
 	item: WorkItemDTO;
@@ -18,13 +21,19 @@ export function WorkItemCard({ item }: WorkItemCardProps) {
 		"--brand-from": from,
 		"--brand-to": to,
 	} as CSSProperties;
+	const { openDrawer } = useWorkDrawer();
 
 	return (
-		<Link
-			href={`/work/${item.slug}`}
-			className="block h-full w-full"
+		<button
+			type="button"
+			onClick={() => openDrawer(item.slug)}
+			className="block h-full w-full cursor-pointer text-left"
 		>
-			<div className="flex h-full flex-col gap-3 rounded-[20px] border border-border bg-card p-3.5">
+			<motion.div
+				className="flex h-full flex-col gap-3 rounded-[20px] border border-border bg-card p-3.5"
+				whileHover={{ scale: 0.98 }}
+				transition={{ duration: 0.3, ease: "easeOut" }}
+			>
 				<div className="flex items-center gap-1.5">
 					{item.icon && (
 						<MediaImage
@@ -61,7 +70,7 @@ export function WorkItemCard({ item }: WorkItemCardProps) {
 						<ArrowUpRight className="size-4 text-background" />
 					</div>
 				</div>
-			</div>
-		</Link>
+			</motion.div>
+		</button>
 	);
 }

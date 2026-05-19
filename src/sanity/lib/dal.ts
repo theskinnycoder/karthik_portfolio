@@ -18,7 +18,7 @@ import type {
 import {
 	HOME_SECTION_KEYS,
 	type HomeSectionKey,
-} from "../schemaTypes/homePage";
+} from "./home-sections";
 import { sanityFetch } from "./fetch";
 import {
 	allWorkItemSlugsQuery,
@@ -295,7 +295,7 @@ function toWorkItemCardDTO(data: WorkItemCardRaw): WorkItemDTO {
 		tag: data.tag ?? "",
 		image: getMediaUrl(data.image),
 		description: data.description ?? "",
-		slug: data.slug ?? "",
+		slug: (data.slug ?? "").trim(),
 		brandFrom: data.brandFrom ?? undefined,
 		brandTo: data.brandTo ?? undefined,
 	};
@@ -422,26 +422,30 @@ function toContentBlock(block: ContentBlockRaw): ContentBlock | null {
 	return block as unknown as PortableTextBlock;
 }
 
-function toWorkNavLink(
-	raw: NonNullable<WorkItemDetailRaw["prev"]>,
-): WorkNavLinkDTO | null {
-	if (!raw.slug) return null;
-	return {
-		title: raw.title ?? "",
-		slug: raw.slug,
-		tag: raw.tag ?? "",
-	};
-}
-
 function toWorkItemDetailDTO(data: WorkItemDetailRaw): WorkItemDetailDTO {
 	const heroImage = getMediaUrl(data.heroImage) || getMediaUrl(data.image);
 	const content = (data.content ?? [])
 		.map(toContentBlock)
 		.filter((b): b is ContentBlock => b !== null);
 
+	const currentSlug = (data.slug ?? "").trim();
+	const ordered = (data.orderedItems ?? [])
+		.map((item) => ({
+			title: item.title ?? "",
+			slug: (item.slug ?? "").trim(),
+			tag: item.tag ?? "",
+		}))
+		.filter((item) => item.slug);
+	const currentIndex = ordered.findIndex((item) => item.slug === currentSlug);
+	const prev = currentIndex > 0 ? ordered[currentIndex - 1] : null;
+	const next =
+		currentIndex !== -1 && currentIndex < ordered.length - 1
+			? ordered[currentIndex + 1]
+			: null;
+
 	return {
 		title: data.title ?? "",
-		slug: data.slug ?? "",
+		slug: currentSlug,
 		tag: data.tag ?? "",
 		description: data.description ?? "",
 		excerpt: (data.excerpt ?? undefined) as PortableTextBlock[] | undefined,
@@ -454,8 +458,8 @@ function toWorkItemDetailDTO(data: WorkItemDetailRaw): WorkItemDetailDTO {
 		liveUrl: data.liveUrl ?? undefined,
 		heroImage,
 		content,
-		prev: data.prev ? toWorkNavLink(data.prev) : null,
-		next: data.next ? toWorkNavLink(data.next) : null,
+		prev: prev ?? null,
+		next: next ?? null,
 		company: {
 			name: data.company?.name ?? "",
 			logo: getMediaUrl(data.company?.logo),
@@ -560,9 +564,10 @@ export async function getWorkItemBySlug(
 ): Promise<WorkItemDetailDTO | null> {
 	"use cache";
 	cacheSanityResource("workItem", "company", "testimonial");
+	const trimmed = decodeURIComponent(slug).trim();
 	const data = await sanityFetch<WorkItemBySlugQueryResult>({
 		query: workItemBySlugQuery,
-		params: { slug },
+		params: { slug: trimmed },
 	});
 	if (!data) return null;
 	return toWorkItemDetailDTO(data);
@@ -574,7 +579,10 @@ export async function getAllWorkItemSlugs(): Promise<string[]> {
 	const slugs = await sanityFetch<AllWorkItemSlugsQueryResult>({
 		query: allWorkItemSlugsQuery,
 	});
-	return slugs.filter((s): s is string => s !== null);
+	return slugs
+		.filter((s): s is string => s !== null)
+		.map((s) => s.trim())
+		.filter(Boolean);
 }
 
 const DEFAULT_HOME_SECTIONS: readonly HomeSectionKey[] = HOME_SECTION_KEYS;
@@ -586,8 +594,8 @@ export async function getHomePageSections(): Promise<HomeSectionKey[]> {
 		query: homePageQuery,
 	});
 	const allowed = new Set<string>(HOME_SECTION_KEYS);
-	const ordered = (data?.sections ?? []).filter((key): key is HomeSectionKey =>
-		allowed.has(key),
+	const ordered = ((data?.sections ?? []) as string[]).filter(
+		(key): key is HomeSectionKey => allowed.has(key),
 	);
 	return ordered.length > 0 ? ordered : [...DEFAULT_HOME_SECTIONS];
 }

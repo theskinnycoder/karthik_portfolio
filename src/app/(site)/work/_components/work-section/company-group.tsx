@@ -28,7 +28,7 @@ export function CompanyGroup({ company }: CompanyGroupProps) {
 					width={80}
 					height={80}
 					aria-hidden="true"
-					className="pointer-events-none absolute top-0 left-36 w-20"
+					className="pointer-events-none absolute top-0 left-36 z-10 w-20"
 					unoptimized
 				/>
 				<div className="grid grid-cols-1 justify-items-center gap-4 md:grid-cols-2">

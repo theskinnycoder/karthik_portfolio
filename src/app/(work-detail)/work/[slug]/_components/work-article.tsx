@@ -1,20 +1,13 @@
 import type { CSSProperties } from "react";
 import { PortableTextRenderer } from "@/components/portable-text";
 import type { BrandDTO, WorkItemDetailDTO } from "@/sanity/lib/dal";
-import { WorkBackLink } from "./work-back-link";
 import { WorkPrevNext } from "./work-prev-next";
 
 interface WorkArticleProps {
 	work: WorkItemDetailDTO;
+	hideNav?: boolean;
 }
 
-/**
- * Brand colors are applied to the article root as CSS custom properties so
- * every descendant (including portable-text blocks nested arbitrarily deep)
- * can reference them via `var(--brand-primary, var(--color-foreground))`
- * style fallbacks. Leaving brand unset falls back to the site's grayscale
- * tokens automatically.
- */
 function toBrandStyle(brand: BrandDTO): CSSProperties {
 	const style: Record<string, string> = {};
 	if (brand.primary) style["--brand-primary"] = brand.primary;
@@ -24,15 +17,14 @@ function toBrandStyle(brand: BrandDTO): CSSProperties {
 	return style as CSSProperties;
 }
 
-export function WorkArticle({ work }: WorkArticleProps) {
-	const hasNavigation = Boolean(work.prev || work.next);
+export function WorkArticle({ work, hideNav = false }: WorkArticleProps) {
+	const hasNavigation = !hideNav && Boolean(work.prev || work.next);
 
 	return (
 		<article
 			className="flex flex-col gap-10"
 			style={toBrandStyle(work.brand)}
 		>
-			<WorkBackLink />
 			{work.content.length > 0 && (
 				<PortableTextRenderer
 					value={work.content}

@@ -983,16 +983,11 @@ export type WorkItemBySlugQueryResult = {
 				_key: string;
 		  }
 	> | null;
-	prev: {
+	orderedItems: Array<{
 		title: string | null;
 		slug: string | null;
 		tag: string | null;
-	} | null;
-	next: {
-		title: string | null;
-		slug: string | null;
-		tag: string | null;
-	} | null;
+	}> | null;
 	company: {
 		_id: string;
 		name: string | null;

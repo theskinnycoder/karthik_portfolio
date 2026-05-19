@@ -1,21 +1,12 @@
 import { HomeIcon } from "@sanity/icons";
-import { defineArrayMember, defineField, defineType } from "sanity";
+import { defineField, defineType } from "sanity";
+import { SectionOrderInput } from "../components/section-order-input";
+import {
+	HOME_SECTION_KEYS,
+	type HomeSectionKey,
+} from "../lib/home-sections";
 
-export const HOME_SECTION_KEYS = [
-	"intro",
-	"experience",
-	"otherWorks",
-	"testimonials",
-] as const;
-
-export type HomeSectionKey = (typeof HOME_SECTION_KEYS)[number];
-
-const HOME_SECTION_OPTIONS: { title: string; value: HomeSectionKey }[] = [
-	{ title: "Intro", value: "intro" },
-	{ title: "Experience", value: "experience" },
-	{ title: "Other Works", value: "otherWorks" },
-	{ title: "Testimonials", value: "testimonials" },
-];
+export { HOME_SECTION_KEYS, type HomeSectionKey };
 
 export const homePage = defineType({
 	name: "homePage",
@@ -26,32 +17,11 @@ export const homePage = defineType({
 		defineField({
 			name: "sections",
 			title: "Section order",
-			description:
-				"Drag to reorder. The Video Hero is always pinned at the top and is not listed here.",
+			description: "Drag rows to reorder. All sections are always included.",
 			type: "array",
-			of: [
-				defineArrayMember({
-					type: "string",
-					options: { list: HOME_SECTION_OPTIONS },
-				}),
-			],
-			options: { layout: "tags" },
-			validation: (rule) =>
-				rule
-					.required()
-					.min(1)
-					.unique()
-					.custom((value) => {
-						if (!Array.isArray(value)) return true;
-						const allowed = new Set<string>(HOME_SECTION_KEYS);
-						const invalid = value.filter(
-							(v): v is string => typeof v === "string" && !allowed.has(v),
-						);
-						if (invalid.length > 0) {
-							return `Unknown section(s): ${invalid.join(", ")}`;
-						}
-						return true;
-					}),
+			of: [{ type: "string" }],
+			components: { input: SectionOrderInput },
+			validation: (rule) => rule.required().min(1).unique(),
 		}),
 	],
 	preview: {

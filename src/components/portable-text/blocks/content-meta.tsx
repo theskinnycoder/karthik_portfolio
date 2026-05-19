@@ -75,6 +75,8 @@ function MetaSection({
 	);
 }
 
+const AVATAR_ROTATIONS = [-4, 3, -3, 4, -2, 3];
+
 function TeamRoster({ members }: { members: TeamMemberDTO[] }) {
 	const withAvatars = members.filter(
 		(m): m is TeamMemberDTO & { avatar: string } => Boolean(m.avatar),
@@ -83,16 +85,20 @@ function TeamRoster({ members }: { members: TeamMemberDTO[] }) {
 	return (
 		<div className="flex flex-col gap-4">
 			{withAvatars.length > 0 && (
-				<div className="flex -space-x-6">
-					{withAvatars.map((m) => (
-						<MediaImage
+				<div className="flex -space-x-8">
+					{withAvatars.map((m, i) => (
+						<div
 							key={m.name}
-							src={m.avatar}
-							alt={m.name}
-							width={48}
-							height={48}
-							className="size-12"
-						/>
+							className="relative size-22 shrink-0 overflow-hidden rounded-2xl"
+							style={{ transform: `rotate(${AVATAR_ROTATIONS[i % AVATAR_ROTATIONS.length]}deg)` }}
+						>
+							<MediaImage
+								src={m.avatar}
+								alt={m.name}
+								fill
+								className="object-cover object-top"
+							/>
+						</div>
 					))}
 				</div>
 			)}

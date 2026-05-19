@@ -143,18 +143,11 @@ export const workItemBySlugQuery = defineQuery(`
         }
       }
     },
-    "prev": *[_type == "workItem" && order < ^.order && defined(slug.current)]
-      | order(order desc)[0] {
-        title,
-        "slug": slug.current,
-        tag
-      },
-    "next": *[_type == "workItem" && order > ^.order && defined(slug.current)]
-      | order(order asc)[0] {
-        title,
-        "slug": slug.current,
-        tag
-      },
+    "orderedItems": *[_type == "workItem" && defined(slug.current)] | order(company->order asc, order asc) {
+      title,
+      "slug": slug.current,
+      tag
+    },
     "company": company->{
       _id,
       name,

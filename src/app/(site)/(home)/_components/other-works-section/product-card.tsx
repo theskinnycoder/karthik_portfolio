@@ -1,3 +1,5 @@
+"use client";
+
 import { MediaImage } from "@/components/media";
 import useIsMobile from "@/hooks/use-media-query";
 import { motion } from "motion/react";
@@ -21,12 +23,14 @@ export function ProductCard({
 	const isMobile = useIsMobile();
 
 	return (
-		<div
+		<motion.div
 			className="relative h-[380px] cursor-pointer overflow-hidden rounded-[14px]"
 			style={{ backgroundColor }}
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
 			onClick={() => window.open(navigateUrl, "_blank")}
+			whileHover={{ scale: 0.98 }}
+			transition={{ duration: 0.3, ease: "easeOut" }}
 		>
 			<MediaImage
 				src={image}
@@ -52,6 +56,6 @@ export function ProductCard({
 					<span className="text-sm text-zinc-300">{description}</span>
 				</div>
 			</motion.div>
-		</div>
+		</motion.div>
 	);
 }

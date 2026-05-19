@@ -40,21 +40,17 @@ export function AboutSection({ bio }: AboutSectionProps) {
 	if (!bio) return <FallbackBio />;
 
 	return (
-		<div className={ARTICLE_PROSE}>
-			{bio.map((block, i) => (
-				<motion.div
-					key={(block as PortableTextBlock & { _key?: string })._key ?? i}
-					initial={{ y: 48, opacity: 0 }}
-					whileInView={{ y: 0, opacity: 1 }}
-					viewport={{ once: true, margin: "0px 0px -60px 0px" }}
-					transition={{ ease: "easeOut", duration: 0.6, delay: i * 0.1 }}
-				>
-					<PortableText
-						value={[block]}
-						components={articleComponents}
-					/>
-				</motion.div>
-			))}
-		</div>
+		<motion.div
+			className={ARTICLE_PROSE}
+			initial={{ y: 48, opacity: 0 }}
+			whileInView={{ y: 0, opacity: 1 }}
+			viewport={{ once: true, margin: "0px 0px -60px 0px" }}
+			transition={{ ease: "easeInOut", duration: 0.7 }}
+		>
+			<PortableText
+				value={bio}
+				components={articleComponents}
+			/>
+		</motion.div>
 	);
 }
