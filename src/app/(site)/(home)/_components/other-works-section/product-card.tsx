@@ -22,7 +22,7 @@ export function ProductCard({
 
 	return (
 		<div
-			className="relative h-full cursor-pointer overflow-hidden rounded-[14px]"
+			className="relative h-[380px] cursor-pointer overflow-hidden rounded-[14px]"
 			style={{ backgroundColor }}
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
@@ -31,9 +31,9 @@ export function ProductCard({
 			<MediaImage
 				src={image}
 				alt={description}
-				width={296}
-				height={458}
-				className="size-full object-cover"
+				width={400}
+				height={380}
+				className="block h-full w-auto"
 			/>
 
 			<motion.div

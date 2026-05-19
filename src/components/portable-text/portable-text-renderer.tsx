@@ -86,7 +86,7 @@ export const ARTICLE_PROSE = [
 	"prose-h2:mt-0 prose-h2:mb-4",
 	"prose-h3:mt-0 prose-h3:mb-3",
 	"prose-h4:mt-0 prose-h4:mb-2",
-	"prose-h5:mt-0 prose-h5:mb-5",
+	"prose-h5:mt-0 prose-h5:mb-4",
 	"prose-h6:mt-0 prose-h6:mb-1",
 
 	// Paragraphs — only bottom margin so consecutive paragraphs don't double-stack
