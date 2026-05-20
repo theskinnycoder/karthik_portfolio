@@ -21,7 +21,7 @@ function WhatsAppIcon() {
 
 export function FooterSection() {
 	return (
-		<footer className="w-full pb-20">
+		<footer className="w-full pb-28">
 			{/* Separator — full-width edge to edge */}
 			<hr id={FOOTER_DIVIDER_ID} className="border-border" />
 
