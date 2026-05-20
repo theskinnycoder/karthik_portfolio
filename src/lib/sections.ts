@@ -15,3 +15,5 @@ export const PATHNAME_TO_SECTION: Record<string, SectionId> = {
 	"/work": "work",
 	"/blogs": "blogs",
 };
+
+export const FOOTER_DIVIDER_ID = "footer-divider";
