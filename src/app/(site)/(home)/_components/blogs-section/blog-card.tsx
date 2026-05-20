@@ -57,7 +57,7 @@ export function BlogCard({ post }: BlogCardProps) {
 
 			{/* Body */}
 			<div className="flex flex-1 flex-col gap-2 p-4">
-				<h3 className="line-clamp-2 text-base font-semibold leading-snug text-foreground">
+				<h3 className="line-clamp-2 text-base leading-snug font-semibold text-foreground">
 					{post.title}
 				</h3>
 				<p className="line-clamp-3 flex-1 text-sm font-light text-muted-foreground">

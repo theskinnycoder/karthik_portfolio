@@ -18,18 +18,15 @@ type SectionConfig = {
 
 const SECTION_CONFIGS: Partial<Record<HomeSectionKey, SectionConfig>> = {
 	experience: {
-		className:
-			"mx-auto w-full max-w-5xl px-6 md:px-[1.125rem]",
+		className: "mx-auto w-full max-w-5xl px-6 md:px-[1.125rem]",
 		Component: ExperienceSection,
 	},
 	otherWorks: {
-		className:
-			"mx-auto w-full max-w-5xl px-6 md:px-[1.125rem]",
+		className: "mx-auto w-full max-w-5xl px-6 md:px-[1.125rem]",
 		Component: OtherWorksSection,
 	},
 	testimonials: {
-		className:
-			"mx-auto w-full max-w-5xl px-6 md:px-[1.125rem]",
+		className: "mx-auto w-full max-w-5xl px-6 md:px-[1.125rem]",
 		Component: TestimonialsSection,
 	},
 	work: {
@@ -40,8 +37,7 @@ const SECTION_CONFIGS: Partial<Record<HomeSectionKey, SectionConfig>> = {
 	},
 	blogs: {
 		id: "blogs",
-		className:
-			"mx-auto w-full max-w-5xl px-6 md:px-[1.125rem]",
+		className: "mx-auto w-full max-w-5xl px-6 md:px-[1.125rem]",
 		Component: BlogsSection,
 	},
 };
@@ -65,7 +61,7 @@ export async function SitePage({
 				</div>
 			</section>
 
-			<div className="flex flex-col gap-22 mt-22 pb-6">
+			<div className="mt-22 flex flex-col gap-22 pb-6">
 				{sections
 					.filter((key) => key !== "intro")
 					.map((key) => {
@@ -73,7 +69,11 @@ export async function SitePage({
 						if (!config) return null;
 						const { id, className, Component } = config;
 						return (
-							<section key={key} id={id} className={className}>
+							<section
+								key={key}
+								id={id}
+								className={className}
+							>
 								<Component />
 							</section>
 						);

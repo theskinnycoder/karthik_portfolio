@@ -28,7 +28,10 @@ function extractThumbnail(html: string): string | null {
 
 /** Strip HTML tags and truncate to ~200 chars */
 function extractExcerpt(html: string): string {
-	const plain = html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+	const plain = html
+		.replace(/<[^>]+>/g, " ")
+		.replace(/\s+/g, " ")
+		.trim();
 	if (plain.length <= 200) return plain;
 	// Truncate at a word boundary
 	return plain.slice(0, 200).replace(/\s+\S*$/, "") + "…";
@@ -75,7 +78,9 @@ export async function getMediumPosts(): Promise<MediumPostDTO[]> {
 			return {
 				title: extractValue(i.title).trim(),
 				link: extractValue(i.link || i.guid).trim(),
-				pubDate: Number.isNaN(parsedDate.getTime()) ? rawPubDate : parsedDate.toISOString(),
+				pubDate: Number.isNaN(parsedDate.getTime())
+					? rawPubDate
+					: parsedDate.toISOString(),
 				excerpt: extractExcerpt(excerptSource),
 				thumbnail: extractThumbnail(contentEncoded),
 			};
