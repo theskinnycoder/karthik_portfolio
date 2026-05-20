@@ -18,7 +18,7 @@ function WhatsAppIcon() {
 
 export function FooterSection() {
 	return (
-		<footer className="w-full pb-28">
+		<footer className="w-full pb-20">
 			{/* Separator — full-width edge to edge */}
 			<hr id="footer-divider" className="border-border" />
 
@@ -44,8 +44,8 @@ export function FooterSection() {
 					<Image
 						src="/Flower.png"
 						alt=""
-						width={28}
-						height={42}
+						width={30}
+						height={44}
 						unoptimized
 						aria-hidden="true"
 					/>
@@ -56,13 +56,13 @@ export function FooterSection() {
 					href="https://wa.me/918008892112"
 					target="_blank"
 					rel="noopener noreferrer"
-					className="flex items-center rounded-full px-1.5 py-1.5 transition-opacity hover:opacity-90"
+					className="flex items-center rounded-full transition-opacity hover:opacity-90"
 					style={{ backgroundColor: "#25D467" }}
 					aria-label="Connect with Karthik on WhatsApp"
 				>
-					<span className="flex items-center gap-1.5 rounded-[50px] px-2 py-1.5">
+					<span className="flex items-center gap-1.5 px-4 py-3">
 						<WhatsAppIcon />
-						<span className="font-sans text-base font-semibold tracking-wide text-black">
+						<span className="font-sans text-base font-semibold tracking-wide text-white">
 							Connect on WhatsApp
 						</span>
 					</span>
