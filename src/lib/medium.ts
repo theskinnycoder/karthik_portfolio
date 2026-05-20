@@ -69,10 +69,14 @@ export async function getMediumPosts(): Promise<MediumPostDTO[]> {
 
 			const excerptSource = description || contentEncoded;
 
+			// Safe date parsing: guard against RangeError if date is missing/malformed
+			const rawPubDate = String(i.pubDate ?? "");
+			const parsedDate = new Date(rawPubDate);
+
 			return {
 				title: String(i.title ?? "").trim(),
 				link: String(i.link ?? i.guid ?? "").trim(),
-				pubDate: new Date(String(i.pubDate ?? "")).toISOString(),
+				pubDate: Number.isNaN(parsedDate.getTime()) ? rawPubDate : parsedDate.toISOString(),
 				excerpt: extractExcerpt(excerptSource),
 				thumbnail: extractThumbnail(contentEncoded),
 			};
