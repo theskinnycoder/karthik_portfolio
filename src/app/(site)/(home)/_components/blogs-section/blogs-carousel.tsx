@@ -45,9 +45,9 @@ export function BlogsCarousel({ posts }: BlogsCarouselProps) {
 				className="w-full"
 			>
 				<CarouselContent className="items-stretch">
-					{posts.map((post, index) => (
+					{posts.map((post) => (
 						<CarouselItem
-							key={`${post.link}-${index}`}
+							key={post.link}
 							className="basis-[85%] md:basis-1/2 lg:basis-[45%]"
 						>
 							<BlogCard post={post} />
