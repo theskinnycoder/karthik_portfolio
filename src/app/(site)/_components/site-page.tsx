@@ -1,6 +1,7 @@
 import { ScrollSpy } from "@/components/scroll-spy";
 import { getHomePageSections } from "@/sanity/lib/dal";
 import type { HomeSectionKey } from "@/sanity/lib/home-sections";
+import { ContactSection } from "../(home)/_components/contact-section";
 import { ExperienceSection } from "../(home)/_components/experience-section";
 import { IntroSection } from "../(home)/_components/intro-section";
 import { OtherWorksSection } from "../(home)/_components/other-works-section";
@@ -85,6 +86,10 @@ export async function SitePage({
 							</section>
 						);
 					})}
+				<div className="flex flex-col items-center gap-16 pb-10">
+					<hr className="w-full border-border" />
+					<ContactSection />
+				</div>
 			</div>
 
 			<ScrollSpy initialSection={initialSection} />
