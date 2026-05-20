@@ -1,5 +1,8 @@
 import Image from "next/image";
 
+/** Shared ID for the footer divider — referenced by Navbar to stop above it. */
+export const FOOTER_DIVIDER_ID = "footer-divider";
+
 // WhatsApp SVG icon — inline so no external asset needed
 function WhatsAppIcon() {
 	return (
@@ -20,7 +23,7 @@ export function FooterSection() {
 	return (
 		<footer className="w-full pb-20">
 			{/* Separator — full-width edge to edge */}
-			<hr id="footer-divider" className="border-border" />
+			<hr id={FOOTER_DIVIDER_ID} className="border-border" />
 
 			{/* Content */}
 			<div className="mx-auto mt-10 flex max-w-5xl flex-col items-center gap-6 px-6 md:px-[1.125rem]">

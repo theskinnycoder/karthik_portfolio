@@ -1,5 +1,6 @@
 "use client";
 
+import { FOOTER_DIVIDER_ID } from "@/app/(site)/(home)/_components/footer-section";
 import { PATHNAME_TO_SECTION, type SectionId } from "@/lib/sections";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -20,19 +21,25 @@ export function Navbar() {
 	);
 
 	// Push the navbar up so it never crosses the footer divider.
-	// Maintains a 0.75rem (12px) gap between the divider and the navbar top.
+	// Maintains a 0.75rem (12px) gap between the navbar bottom edge and the divider.
+	// NORMAL_BOTTOM must stay in sync with style={{ bottom: "1.5rem" }} on the <nav>.
 	useEffect(() => {
-		const NORMAL_BOTTOM = 24; // 1.5rem in px (bottom-6)
+		const NORMAL_BOTTOM = 24; // 1.5rem in px — must match the inline style below
 		const GAP = 12; // 0.75rem in px
 
+		let rafId: number;
+
 		const updateBottom = () => {
-			const divider = document.getElementById("footer-divider");
-			if (!divider || !navRef.current) return;
+			cancelAnimationFrame(rafId);
+			rafId = requestAnimationFrame(() => {
+				const divider = document.getElementById(FOOTER_DIVIDER_ID);
+				if (!divider || !navRef.current) return;
 
-			const hrTop = divider.getBoundingClientRect().top;
-			const computed = window.innerHeight - hrTop + GAP;
+				const hrTop = divider.getBoundingClientRect().top;
+				const computed = window.innerHeight - hrTop + GAP;
 
-			navRef.current.style.bottom = `${Math.max(NORMAL_BOTTOM, computed)}px`;
+				navRef.current.style.bottom = `${Math.max(NORMAL_BOTTOM, computed)}px`;
+			});
 		};
 
 		window.addEventListener("scroll", updateBottom, { passive: true });
@@ -40,6 +47,7 @@ export function Navbar() {
 		updateBottom();
 
 		return () => {
+			cancelAnimationFrame(rafId);
 			window.removeEventListener("scroll", updateBottom);
 			window.removeEventListener("resize", updateBottom);
 		};
