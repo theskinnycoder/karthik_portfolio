@@ -37,6 +37,7 @@ const SECTION_CONFIGS: Partial<Record<HomeSectionKey, SectionConfig>> = {
 	},
 	blogs: {
 		id: "blogs",
+		// pb-[9.5rem]: clears the fixed navbar (≈ navbar height 56px + 24px gap + 72px buffer)
 		className: "mx-auto w-full max-w-5xl px-6 pb-[9.5rem] md:px-[1.125rem]",
 		Component: BlogsSection,
 	},

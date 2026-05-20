@@ -77,7 +77,7 @@ export async function getMediumPosts(): Promise<MediumPostDTO[]> {
 
 			return {
 				title: extractValue(i.title).trim(),
-				link: extractValue(i.link || i.guid).trim(),
+				link: (extractValue(i.link) || extractValue(i.guid)).trim(),
 				pubDate: Number.isNaN(parsedDate.getTime())
 					? rawPubDate
 					: parsedDate.toISOString(),
