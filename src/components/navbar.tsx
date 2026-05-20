@@ -30,8 +30,7 @@ export function Navbar() {
 			if (!divider || !navRef.current) return;
 
 			const hrTop = divider.getBoundingClientRect().top;
-			const navHeight = navRef.current.offsetHeight;
-			const computed = window.innerHeight - navHeight - hrTop + GAP;
+			const computed = window.innerHeight - hrTop + GAP;
 
 			navRef.current.style.bottom = `${Math.max(NORMAL_BOTTOM, computed)}px`;
 		};
