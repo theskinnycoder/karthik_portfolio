@@ -18,11 +18,9 @@ function WhatsAppIcon() {
 
 export function FooterSection() {
 	return (
-		<footer className="w-full pb-10">
-			{/* Separator */}
-			<div className="mx-auto max-w-5xl px-6 md:px-[1.125rem]">
-				<hr className="border-border" />
-			</div>
+		<footer className="w-full pb-28">
+			{/* Separator — full-width edge to edge */}
+			<hr className="border-border" />
 
 			{/* Content */}
 			<div className="mx-auto mt-10 flex max-w-5xl flex-col items-center gap-6 px-6 md:px-[1.125rem]">
