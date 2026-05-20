@@ -1,7 +1,6 @@
 "use client";
 
-import { FOOTER_DIVIDER_ID } from "@/app/(site)/(home)/_components/footer-section";
-import { PATHNAME_TO_SECTION, type SectionId } from "@/lib/sections";
+import { FOOTER_DIVIDER_ID, PATHNAME_TO_SECTION, type SectionId } from "@/lib/sections";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";

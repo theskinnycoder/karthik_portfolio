@@ -1,7 +1,7 @@
 import Image from "next/image";
+import { FOOTER_DIVIDER_ID } from "@/lib/sections";
 
-/** Shared ID for the footer divider — referenced by Navbar to stop above it. */
-export const FOOTER_DIVIDER_ID = "footer-divider";
+export { FOOTER_DIVIDER_ID };
 
 // WhatsApp SVG icon — inline so no external asset needed
 function WhatsAppIcon() {
@@ -49,7 +49,6 @@ export function FooterSection() {
 						alt=""
 						width={30}
 						height={44}
-						unoptimized
 						aria-hidden="true"
 					/>
 				</div>
