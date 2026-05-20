@@ -4,7 +4,7 @@ import { PATHNAME_TO_SECTION, type SectionId } from "@/lib/sections";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const NAV_ITEMS = [
 	{ label: "About", href: "/", section: "about" },
@@ -14,9 +14,38 @@ const NAV_ITEMS = [
 
 export function Navbar() {
 	const pathname = usePathname();
+	const navRef = useRef<HTMLElement>(null);
 	const [activeSection, setActiveSection] = useState(
 		PATHNAME_TO_SECTION[pathname] ?? "about",
 	);
+
+	// Push the navbar up so it never crosses the footer divider.
+	// Maintains a 0.75rem (12px) gap between the divider and the navbar top.
+	useEffect(() => {
+		const NORMAL_BOTTOM = 24; // 1.5rem in px (bottom-6)
+		const GAP = 12; // 0.75rem in px
+
+		const updateBottom = () => {
+			const divider = document.getElementById("footer-divider");
+			if (!divider || !navRef.current) return;
+
+			const hrTop = divider.getBoundingClientRect().top;
+			const navHeight = navRef.current.offsetHeight;
+			const computed = window.innerHeight - navHeight - hrTop - GAP;
+
+			navRef.current.style.bottom = `${Math.max(NORMAL_BOTTOM, computed)}px`;
+		};
+
+		window.addEventListener("scroll", updateBottom, { passive: true });
+		window.addEventListener("resize", updateBottom, { passive: true });
+		updateBottom();
+
+		return () => {
+			window.removeEventListener("scroll", updateBottom);
+			window.removeEventListener("resize", updateBottom);
+		};
+	}, []);
+
 	useEffect(() => {
 		const handler = (e: Event) => {
 			const { section } = (e as CustomEvent<{ section: SectionId }>).detail;
@@ -59,8 +88,10 @@ export function Navbar() {
 
 	return (
 		<nav
+			ref={navRef}
 			data-slot="navbar"
-			className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2"
+			className="fixed left-1/2 z-50 -translate-x-1/2"
+			style={{ bottom: "1.5rem" }}
 			aria-label="Main navigation"
 		>
 			<div className="flex items-center rounded-full border border-border bg-background px-[0.875rem] py-2 shadow-[0_4px_12px_rgba(0,0,0,0.5)]">
