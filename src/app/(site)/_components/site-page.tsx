@@ -73,7 +73,7 @@ export async function SitePage({
 				</div>
 			</section>
 
-			<div className="flex flex-col gap-32 pb-20 md:gap-40">
+			<div className="flex flex-col gap-32 pb-[1.125rem] md:gap-40">
 				{sections
 					.filter((key) => key !== "intro")
 					.map((key) => {
