@@ -37,7 +37,7 @@ const SECTION_CONFIGS: Partial<Record<HomeSectionKey, SectionConfig>> = {
 	},
 	blogs: {
 		id: "blogs",
-		className: "mx-auto w-full max-w-5xl px-6 md:px-[1.125rem]",
+		className: "mx-auto w-full max-w-5xl px-6 pb-24 md:px-[1.125rem]",
 		Component: BlogsSection,
 	},
 };
