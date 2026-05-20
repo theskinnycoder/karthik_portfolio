@@ -2,6 +2,7 @@ import { ScrollSpy } from "@/components/scroll-spy";
 import { getHomePageSections } from "@/sanity/lib/dal";
 import type { HomeSectionKey } from "@/sanity/lib/home-sections";
 import { ExperienceSection } from "../(home)/_components/experience-section";
+import { FooterSection } from "../(home)/_components/footer-section";
 import { IntroSection } from "../(home)/_components/intro-section";
 import { OtherWorksSection } from "../(home)/_components/other-works-section";
 import { TestimonialsSection } from "../(home)/_components/testimonials-section";
@@ -86,6 +87,9 @@ export async function SitePage({
 						);
 					})}
 			</div>
+
+			{/* Always-visible footer — intentionally outside the sections container */}
+			<FooterSection />
 
 			<ScrollSpy initialSection={initialSection} />
 		</main>
