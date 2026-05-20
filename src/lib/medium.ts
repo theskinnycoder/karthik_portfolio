@@ -10,6 +10,16 @@ export interface MediumPostDTO {
 
 const MEDIUM_RSS_URL = "https://medium.com/feed/@panchalakarthik123";
 
+/** Unwrap a value that may be a plain string or a CDATA-wrapped object { __cdata: "..." } */
+function extractValue(raw: unknown): string {
+	if (typeof raw === "string") return raw;
+	if (typeof raw === "object" && raw !== null) {
+		const obj = raw as Record<string, unknown>;
+		return String(obj["__cdata"] ?? obj["#text"] ?? "");
+	}
+	return String(raw ?? "");
+}
+
 /** Extract the first image src from Medium's content:encoded HTML */
 function extractThumbnail(html: string): string | null {
 	const match = html.match(/<img[^>]+src="([^"]+)"/);
@@ -53,29 +63,18 @@ export async function getMediumPosts(): Promise<MediumPostDTO[]> {
 		const posts: MediumPostDTO[] = items.map((item) => {
 			const i = item as Record<string, unknown>;
 
-			// content:encoded may be wrapped in __cdata by the parser
-			const rawContent = i["content:encoded"];
-			const contentEncoded =
-				typeof rawContent === "object" && rawContent !== null
-					? String((rawContent as Record<string, unknown>)["__cdata"] ?? "")
-					: String(rawContent ?? "");
-
+			const contentEncoded = extractValue(i["content:encoded"]);
 			// description is a shorter HTML excerpt Medium provides
-			const rawDesc = i.description;
-			const description =
-				typeof rawDesc === "object" && rawDesc !== null
-					? String((rawDesc as Record<string, unknown>)["__cdata"] ?? "")
-					: String(rawDesc ?? "");
-
+			const description = extractValue(i.description);
 			const excerptSource = description || contentEncoded;
 
 			// Safe date parsing: guard against RangeError if date is missing/malformed
-			const rawPubDate = String(i.pubDate ?? "");
+			const rawPubDate = extractValue(i.pubDate);
 			const parsedDate = new Date(rawPubDate);
 
 			return {
-				title: String(i.title ?? "").trim(),
-				link: String(i.link ?? i.guid ?? "").trim(),
+				title: extractValue(i.title).trim(),
+				link: extractValue(i.link || i.guid).trim(),
 				pubDate: Number.isNaN(parsedDate.getTime()) ? rawPubDate : parsedDate.toISOString(),
 				excerpt: extractExcerpt(excerptSource),
 				thumbnail: extractThumbnail(contentEncoded),
