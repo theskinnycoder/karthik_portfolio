@@ -1,14 +1,11 @@
 "use client";
 
-import AutoScroll from "embla-carousel-auto-scroll";
-import * as React from "react";
-
 import {
 	Carousel,
 	CarouselContent,
 	CarouselItem,
 } from "@/components/ui/carousel";
-import { ProgressiveBlur } from "@/components/ui/progressive-blur";
+import { cn } from "@/lib/utils";
 import type { MediumPostDTO } from "@/lib/medium";
 import { BlogCard } from "./blog-card";
 
@@ -17,60 +14,31 @@ interface BlogsCarouselProps {
 }
 
 export function BlogsCarousel({ posts }: BlogsCarouselProps) {
-	const plugin = React.useRef(
-		AutoScroll({
-			speed: 1,
-			startDelay: 0,
-			stopOnInteraction: false,
-			stopOnMouseEnter: true,
-			active: false,
-			breakpoints: {
-				"(min-width: 768px)": { active: true },
-			},
-		}),
-	);
-
 	return (
 		<div className="relative -mx-6 w-[calc(100%+3rem)] self-center md:-mx-[1.125rem] md:w-[calc(100%+2.25rem)]">
 			<Carousel
 				opts={{
 					align: "start",
-					loop: true,
+					loop: false,
 					dragFree: true,
-					breakpoints: {
-						"(max-width: 767px)": { loop: false },
-					},
 				}}
-				plugins={[plugin.current]}
 				className="w-full"
 			>
-				<CarouselContent className="items-stretch">
-					{posts.map((post) => (
+				<CarouselContent className="ml-0 items-stretch">
+					{posts.map((post, index) => (
 						<CarouselItem
 							key={post.link}
-							className="basis-[85%] md:basis-1/2 lg:basis-[45%]"
+							className={cn(
+								"pl-0 md:basis-1/2 lg:basis-[45%]",
+								posts.length === 1 ? "basis-full" : "basis-[85%]",
+								index > 0 && "border-l border-border",
+							)}
 						>
 							<BlogCard post={post} />
 						</CarouselItem>
 					))}
 				</CarouselContent>
 			</Carousel>
-
-			{/* Edge fades — desktop only */}
-			<ProgressiveBlur
-				direction="left"
-				blurLayers={8}
-				blurIntensity={0.5}
-				className="absolute inset-y-0 left-0 z-10 hidden w-24 md:block"
-			/>
-			<div className="pointer-events-none absolute inset-y-0 left-0 z-10 hidden w-8 bg-gradient-to-r from-background to-transparent md:block" />
-			<ProgressiveBlur
-				direction="right"
-				blurLayers={8}
-				blurIntensity={0.5}
-				className="absolute inset-y-0 right-0 z-10 hidden w-24 md:block"
-			/>
-			<div className="pointer-events-none absolute inset-y-0 right-0 z-10 hidden w-8 bg-gradient-to-l from-background to-transparent md:block" />
 		</div>
 	);
 }

@@ -7,7 +7,9 @@ export function BlogsSection() {
 	return (
 		<section className="flex flex-col items-center gap-7">
 			<div className="flex w-full items-center gap-3">
-				<h2 className="font-serif text-4xl text-foreground">Blogs</h2>
+				<h2 className="font-sans text-4xl font-semibold text-foreground">
+					Blogs
+				</h2>
 				<Image
 					src="/smile.png"
 					alt=""
