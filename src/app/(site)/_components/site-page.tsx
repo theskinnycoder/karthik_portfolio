@@ -3,6 +3,7 @@ import { getHomePageSections } from "@/sanity/lib/dal";
 import type { HomeSectionKey } from "@/sanity/lib/home-sections";
 import { ContactSection } from "../(home)/_components/contact-section";
 import { ExperienceSection } from "../(home)/_components/experience-section";
+import { FooterSection } from "../(home)/_components/footer-section";
 import { IntroSection } from "../(home)/_components/intro-section";
 import { OtherWorksSection } from "../(home)/_components/other-works-section";
 import { TestimonialsSection } from "../(home)/_components/testimonials-section";
@@ -43,7 +44,7 @@ const SECTION_CONFIGS: Partial<Record<HomeSectionKey, SectionConfig>> = {
 	work: {
 		id: "work",
 		className:
-			"mx-auto flex w-full max-w-5xl flex-col gap-16 px-6 pt-8 pb-24 md:px-11",
+			"mx-auto flex w-full max-w-5xl flex-col gap-16 px-6 pt-8 md:px-11",
 		Component: WorkSection,
 	},
 	blogs: {
@@ -65,7 +66,7 @@ export async function SitePage({
 		<main className="flex flex-col">
 			<section
 				id="about"
-				className="mx-auto flex w-full max-w-5xl flex-col pt-10 pb-20 md:pt-20 xl:pt-[7.5rem]"
+				className="mx-auto flex w-full max-w-5xl flex-col pt-10 md:pt-20 xl:pt-[7.5rem]"
 			>
 				<div className="flex flex-col-reverse gap-16 px-6 md:px-[1.125rem] xl:grid xl:grid-cols-2 xl:items-start xl:gap-16">
 					<IntroSection />
@@ -73,7 +74,7 @@ export async function SitePage({
 				</div>
 			</section>
 
-			<div className="flex flex-col gap-32 pb-20 md:gap-40">
+			<div className="flex flex-col gap-22 mt-22 pb-6">
 				{sections
 					.filter((key) => key !== "intro")
 					.map((key) => {
@@ -91,6 +92,9 @@ export async function SitePage({
 					<ContactSection />
 				</div>
 			</div>
+
+			{/* Always-visible footer — intentionally outside the sections container */}
+			<FooterSection />
 
 			<ScrollSpy initialSection={initialSection} />
 		</main>

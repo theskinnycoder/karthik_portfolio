@@ -1,10 +1,10 @@
 "use client";
 
-import { PATHNAME_TO_SECTION, type SectionId } from "@/lib/sections";
+import { FOOTER_DIVIDER_ID, PATHNAME_TO_SECTION, type SectionId } from "@/lib/sections";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const NAV_ITEMS = [
 	{ label: "About", href: "/", section: "about" },
@@ -14,9 +14,44 @@ const NAV_ITEMS = [
 
 export function Navbar() {
 	const pathname = usePathname();
+	const navRef = useRef<HTMLElement>(null);
 	const [activeSection, setActiveSection] = useState(
 		PATHNAME_TO_SECTION[pathname] ?? "about",
 	);
+
+	// Push the navbar up so it never crosses the footer divider.
+	// Maintains a 0.75rem (12px) gap between the navbar bottom edge and the divider.
+	// NORMAL_BOTTOM must stay in sync with style={{ bottom: "1.5rem" }} on the <nav>.
+	useEffect(() => {
+		const NORMAL_BOTTOM = 24; // 1.5rem in px — must match the inline style below
+		const GAP = 12; // 0.75rem in px
+
+		let rafId: number;
+
+		const updateBottom = () => {
+			cancelAnimationFrame(rafId);
+			rafId = requestAnimationFrame(() => {
+				const divider = document.getElementById(FOOTER_DIVIDER_ID);
+				if (!divider || !navRef.current) return;
+
+				const hrTop = divider.getBoundingClientRect().top;
+				const computed = window.innerHeight - hrTop + GAP;
+
+				navRef.current.style.bottom = `${Math.max(NORMAL_BOTTOM, computed)}px`;
+			});
+		};
+
+		window.addEventListener("scroll", updateBottom, { passive: true });
+		window.addEventListener("resize", updateBottom, { passive: true });
+		updateBottom();
+
+		return () => {
+			cancelAnimationFrame(rafId);
+			window.removeEventListener("scroll", updateBottom);
+			window.removeEventListener("resize", updateBottom);
+		};
+	}, []);
+
 	useEffect(() => {
 		const handler = (e: Event) => {
 			const { section } = (e as CustomEvent<{ section: SectionId }>).detail;
@@ -59,8 +94,10 @@ export function Navbar() {
 
 	return (
 		<nav
+			ref={navRef}
 			data-slot="navbar"
-			className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2"
+			className="fixed left-1/2 z-50 -translate-x-1/2"
+			style={{ bottom: "1.5rem" }}
 			aria-label="Main navigation"
 		>
 			<div className="flex items-center rounded-full border border-border bg-background px-[0.875rem] py-2 shadow-[0_4px_12px_rgba(0,0,0,0.5)]">

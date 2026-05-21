@@ -44,7 +44,7 @@ export function AboutSection({ bio }: AboutSectionProps) {
 			className={ARTICLE_PROSE}
 			initial={{ y: 48, opacity: 0 }}
 			whileInView={{ y: 0, opacity: 1 }}
-			viewport={{ once: true, margin: "0px 0px -60px 0px" }}
+			viewport={{ once: true }}
 			transition={{ ease: "easeInOut", duration: 0.7 }}
 		>
 			<PortableText
