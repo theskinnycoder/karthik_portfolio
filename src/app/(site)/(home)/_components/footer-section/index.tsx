@@ -23,10 +23,7 @@ export function FooterSection() {
 	return (
 		<footer className="w-full pb-20">
 			{/* Separator — full-width edge to edge */}
-			<hr
-				id={FOOTER_DIVIDER_ID}
-				className="border-border"
-			/>
+			<hr id={FOOTER_DIVIDER_ID} className="border-border" />
 
 			{/* Content */}
 			<div className="mx-auto mt-10 flex max-w-5xl flex-col items-center gap-6 px-6 md:px-[1.125rem]">

@@ -1,6 +1,7 @@
 import { ScrollSpy } from "@/components/scroll-spy";
 import { getHomePageSections } from "@/sanity/lib/dal";
 import type { HomeSectionKey } from "@/sanity/lib/home-sections";
+import { ContactSection } from "../(home)/_components/contact-section";
 import { ExperienceSection } from "../(home)/_components/experience-section";
 import { FooterSection } from "../(home)/_components/footer-section";
 import { IntroSection } from "../(home)/_components/intro-section";
@@ -62,7 +63,7 @@ export async function SitePage({
 				</div>
 			</section>
 
-			<div className="mt-22 flex flex-col gap-22 pb-6">
+			<div className="flex flex-col gap-22 mt-22 pb-6">
 				{sections
 					.filter((key) => key !== "intro")
 					.map((key) => {
@@ -79,6 +80,10 @@ export async function SitePage({
 							</section>
 						);
 					})}
+				<div className="flex flex-col items-center gap-16 pb-10">
+					<hr className="w-full border-border" />
+					<ContactSection />
+				</div>
 			</div>
 
 			{/* Always-visible footer — intentionally outside the sections container */}
