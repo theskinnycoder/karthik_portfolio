@@ -27,6 +27,7 @@ export function Navbar() {
 		const GAP = 12; // 0.75rem in px
 
 		let rafId: number;
+		let viewportHeight = window.innerHeight;
 
 		const updateBottom = () => {
 			cancelAnimationFrame(rafId);
@@ -35,20 +36,28 @@ export function Navbar() {
 				if (!divider || !navRef.current) return;
 
 				const hrTop = divider.getBoundingClientRect().top;
-				const computed = window.innerHeight - hrTop + GAP;
+				const newBottom = Math.max(NORMAL_BOTTOM, viewportHeight - hrTop + GAP);
+				const currentBottom =
+					parseFloat(navRef.current.style.bottom) || NORMAL_BOTTOM;
 
-				navRef.current.style.bottom = `${Math.max(NORMAL_BOTTOM, computed)}px`;
+				if (Math.abs(newBottom - currentBottom) < 1) return;
+				navRef.current.style.bottom = `${newBottom}px`;
 			});
 		};
 
+		const onResize = () => {
+			viewportHeight = window.innerHeight;
+			updateBottom();
+		};
+
 		window.addEventListener("scroll", updateBottom, { passive: true });
-		window.addEventListener("resize", updateBottom, { passive: true });
+		window.addEventListener("resize", onResize, { passive: true });
 		updateBottom();
 
 		return () => {
 			cancelAnimationFrame(rafId);
 			window.removeEventListener("scroll", updateBottom);
-			window.removeEventListener("resize", updateBottom);
+			window.removeEventListener("resize", onResize);
 		};
 	}, []);
 

@@ -21,7 +21,7 @@ export function ScrollSpy({
 			new CustomEvent("sectionchange", { detail: { section: initialSection } }),
 		);
 
-		const threshold = window.innerHeight * 0.4;
+		const threshold = window.innerHeight * 0.7;
 
 		const handleScroll = () => {
 			let active: SectionId = "about";
