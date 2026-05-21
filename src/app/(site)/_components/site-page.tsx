@@ -8,16 +8,8 @@ import { IntroSection } from "../(home)/_components/intro-section";
 import { OtherWorksSection } from "../(home)/_components/other-works-section";
 import { TestimonialsSection } from "../(home)/_components/testimonials-section";
 import { VideoHeroSection } from "../(home)/_components/video-hero-section";
+import { BlogsSection } from "../(home)/_components/blogs-section";
 import { WorkSection } from "../work/_components/work-section";
-
-function BlogsSection() {
-	return (
-		<>
-			<h1 className="font-serif text-4xl">Blogs</h1>
-			<p className="text-xl text-muted-foreground">Work in progress!</p>
-		</>
-	);
-}
 
 type SectionConfig = {
 	id?: string;
@@ -27,18 +19,15 @@ type SectionConfig = {
 
 const SECTION_CONFIGS: Partial<Record<HomeSectionKey, SectionConfig>> = {
 	experience: {
-		className:
-			"mx-auto w-full max-w-5xl px-6 md:px-[1.125rem]",
+		className: "mx-auto w-full max-w-5xl px-6 md:px-[1.125rem]",
 		Component: ExperienceSection,
 	},
 	otherWorks: {
-		className:
-			"mx-auto w-full max-w-5xl px-6 md:px-[1.125rem]",
+		className: "mx-auto w-full max-w-5xl px-6 md:px-[1.125rem]",
 		Component: OtherWorksSection,
 	},
 	testimonials: {
-		className:
-			"mx-auto w-full max-w-5xl px-6 md:px-[1.125rem]",
+		className: "mx-auto w-full max-w-5xl px-6 md:px-[1.125rem]",
 		Component: TestimonialsSection,
 	},
 	work: {
@@ -49,8 +38,8 @@ const SECTION_CONFIGS: Partial<Record<HomeSectionKey, SectionConfig>> = {
 	},
 	blogs: {
 		id: "blogs",
-		className:
-			"mx-auto flex h-dvh w-full max-w-5xl flex-col items-center justify-center gap-2 px-6 md:px-11",
+		// pb-[9.5rem]: clears the fixed navbar (≈ navbar height 56px + 24px gap + 72px buffer)
+		className: "mx-auto w-full max-w-5xl px-6 pb-[9.5rem] md:px-[1.125rem]",
 		Component: BlogsSection,
 	},
 };
@@ -82,7 +71,11 @@ export async function SitePage({
 						if (!config) return null;
 						const { id, className, Component } = config;
 						return (
-							<section key={key} id={id} className={className}>
+							<section
+								key={key}
+								id={id}
+								className={className}
+							>
 								<Component />
 							</section>
 						);
