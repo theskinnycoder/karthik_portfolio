@@ -36,6 +36,11 @@ export function Navbar() {
 				if (!divider || !navRef.current) return;
 
 				const hrTop = divider.getBoundingClientRect().top;
+
+				// Skip during iOS rubber-band overscroll (hrTop < 0 means footer
+				// has been pulled above the viewport top — not a real scroll position)
+				if (hrTop < 0) return;
+
 				const newBottom = Math.max(NORMAL_BOTTOM, viewportHeight - hrTop + GAP);
 				const currentBottom =
 					parseFloat(navRef.current.style.bottom) || NORMAL_BOTTOM;
@@ -106,7 +111,7 @@ export function Navbar() {
 			ref={navRef}
 			data-slot="navbar"
 			className="fixed left-1/2 z-50 -translate-x-1/2"
-			style={{ bottom: "1.5rem" }}
+			style={{ bottom: "1.5rem", transition: "bottom 0.2s ease-out" }}
 			aria-label="Main navigation"
 		>
 			<div className="flex items-center rounded-full border border-border bg-background px-[0.875rem] py-2 shadow-[0_4px_12px_rgba(0,0,0,0.5)]">
