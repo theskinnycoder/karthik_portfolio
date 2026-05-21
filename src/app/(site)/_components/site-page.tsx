@@ -38,7 +38,7 @@ const SECTION_CONFIGS: Partial<Record<HomeSectionKey, SectionConfig>> = {
 	blogs: {
 		id: "blogs",
 		// pb-[9.5rem]: clears the fixed navbar (≈ navbar height 56px + 24px gap + 72px buffer)
-		className: "mx-auto w-full max-w-5xl px-6 pb-[9.5rem] md:px-[1.125rem]",
+		className: "mx-auto w-full max-w-5xl px-6 md:px-[1.125rem]",
 		Component: BlogsSection,
 	},
 };
@@ -62,7 +62,7 @@ export async function SitePage({
 				</div>
 			</section>
 
-			<div className="mt-22 flex flex-col gap-22 pb-6">
+			<div className="mt-22 flex flex-col gap-22 pb-[128px]">
 				{sections
 					.filter((key) => key !== "intro")
 					.map((key) => {
