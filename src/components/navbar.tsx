@@ -20,11 +20,14 @@ export function Navbar() {
 	);
 
 	// Push navbar up when footer divider approaches, capped so navbar center
-	// aligns with the divider line (never goes above it).
+	// aligns with the divider line. Holds the pushed position while scrolling
+	// up — releases only once the footer is 80% past the viewport bottom.
 	useEffect(() => {
-		const NORMAL_BOTTOM = 24; // matches bottom-6 = 1.5rem
+		const NORMAL_BOTTOM = 24; // matches style={{ bottom: "1.5rem" }}
 		let rafId: number;
 		let viewportHeight = window.innerHeight;
+		let isPushed = false;
+		let heldBottom = NORMAL_BOTTOM; // highest bottom reached while pushed
 
 		const updateBottom = () => {
 			cancelAnimationFrame(rafId);
@@ -33,15 +36,38 @@ export function Navbar() {
 				if (!divider || !navRef.current) return;
 
 				const hrTop = divider.getBoundingClientRect().top;
-				if (hrTop < 0) return; // ignore iOS overscroll
+				if (hrTop < 0) return; // ignore iOS rubber-band overscroll
 
 				const navHeight = navRef.current.offsetHeight;
-				// Cap: navbar center aligns with divider line, no higher
-				const maxBottom = viewportHeight - hrTop - navHeight / 2;
-				const newBottom = Math.max(NORMAL_BOTTOM, maxBottom);
+				const footer = divider.closest("footer") as HTMLElement | null;
+				const footerHeight = footer?.offsetHeight ?? 200;
+
+				// Enter push zone when footer divider would cross the navbar center
+				const pushZone = viewportHeight - navHeight / 2 - NORMAL_BOTTOM;
+				// Release only after footer is 80% past the viewport bottom
+				const releaseAt = viewportHeight + 0.8 * footerHeight;
+
+				if (hrTop <= pushZone) {
+					// Scrolling down — track the footer center (high-water mark only)
+					const centerBottom = Math.max(
+						NORMAL_BOTTOM,
+						viewportHeight - hrTop - navHeight / 2,
+					);
+					if (centerBottom > heldBottom) {
+						isPushed = true;
+						heldBottom = centerBottom;
+						navRef.current.style.transition = "none"; // instant while tracking
+					}
+				} else if (isPushed && hrTop >= releaseAt) {
+					// Footer 80% gone — release back to normal
+					isPushed = false;
+					heldBottom = NORMAL_BOTTOM;
+					navRef.current.style.transition = "bottom 0.3s ease-out";
+				}
+
+				const newBottom = isPushed ? heldBottom : NORMAL_BOTTOM;
 				const currentBottom =
 					parseFloat(navRef.current.style.bottom) || NORMAL_BOTTOM;
-
 				if (Math.abs(newBottom - currentBottom) < 1) return;
 				navRef.current.style.bottom = `${newBottom}px`;
 			});
