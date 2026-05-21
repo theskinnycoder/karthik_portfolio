@@ -21,7 +21,7 @@ export function Navbar() {
 
 	// Push navbar up when footer divider approaches, capped so navbar center
 	// aligns with the divider line. Holds the pushed position while scrolling
-	// up — releases only once the footer is 80% past the viewport bottom.
+	// up — releases as soon as the divider clears the push zone again.
 	useEffect(() => {
 		const NORMAL_BOTTOM = 24; // matches style={{ bottom: "1.5rem" }}
 		let rafId: number;
@@ -39,16 +39,12 @@ export function Navbar() {
 				if (hrTop < 0) return; // ignore iOS rubber-band overscroll
 
 				const navHeight = navRef.current.offsetHeight;
-				const footer = divider.closest("footer") as HTMLElement | null;
-				const footerHeight = footer?.offsetHeight ?? 200;
 
 				// Enter push zone when footer divider would cross the navbar center
 				const pushZone = viewportHeight - navHeight / 2 - NORMAL_BOTTOM;
-				// Release only after footer is 80% past the viewport bottom
-				const releaseAt = viewportHeight + 0.8 * footerHeight;
 
 				if (hrTop <= pushZone) {
-					// Scrolling down — track the footer center (high-water mark only)
+					// In push zone — track the divider center (high-water mark only)
 					const centerBottom = Math.max(
 						NORMAL_BOTTOM,
 						viewportHeight - hrTop - navHeight / 2,
@@ -58,8 +54,8 @@ export function Navbar() {
 						heldBottom = centerBottom;
 						navRef.current.style.transition = "none"; // instant while tracking
 					}
-				} else if (isPushed && hrTop >= releaseAt) {
-					// Footer 80% gone — release back to normal
+				} else if (isPushed) {
+					// Divider cleared the push zone — release smoothly back to normal
 					isPushed = false;
 					heldBottom = NORMAL_BOTTOM;
 					navRef.current.style.transition = "bottom 0.3s ease-out";
