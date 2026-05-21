@@ -19,13 +19,10 @@ export function Navbar() {
 		PATHNAME_TO_SECTION[pathname] ?? "about",
 	);
 
-	// Push the navbar up so it never crosses the footer divider.
-	// Maintains a 0.75rem (12px) gap between the navbar bottom edge and the divider.
-	// NORMAL_BOTTOM must stay in sync with style={{ bottom: "1.5rem" }} on the <nav>.
+	// Push navbar up when footer divider approaches, capped so navbar center
+	// aligns with the divider line (never goes above it).
 	useEffect(() => {
-		const NORMAL_BOTTOM = 24; // 1.5rem in px — must match the inline style below
-		const GAP = 12; // 0.75rem in px
-
+		const NORMAL_BOTTOM = 24; // matches bottom-6 = 1.5rem
 		let rafId: number;
 		let viewportHeight = window.innerHeight;
 
@@ -36,12 +33,12 @@ export function Navbar() {
 				if (!divider || !navRef.current) return;
 
 				const hrTop = divider.getBoundingClientRect().top;
+				if (hrTop < 0) return; // ignore iOS overscroll
 
-				// Skip during iOS rubber-band overscroll (hrTop < 0 means footer
-				// has been pulled above the viewport top — not a real scroll position)
-				if (hrTop < 0) return;
-
-				const newBottom = Math.max(NORMAL_BOTTOM, viewportHeight - hrTop + GAP);
+				const navHeight = navRef.current.offsetHeight;
+				// Cap: navbar center aligns with divider line, no higher
+				const maxBottom = viewportHeight - hrTop - navHeight / 2;
+				const newBottom = Math.max(NORMAL_BOTTOM, maxBottom);
 				const currentBottom =
 					parseFloat(navRef.current.style.bottom) || NORMAL_BOTTOM;
 
@@ -111,7 +108,7 @@ export function Navbar() {
 			ref={navRef}
 			data-slot="navbar"
 			className="fixed left-1/2 z-50 -translate-x-1/2"
-			style={{ bottom: "1.5rem", transition: "bottom 0.2s ease-out" }}
+			style={{ bottom: "1.5rem" }}
 			aria-label="Main navigation"
 		>
 			<div className="flex items-center rounded-full border border-border bg-background px-[0.875rem] py-2 shadow-[0_4px_12px_rgba(0,0,0,0.5)]">
