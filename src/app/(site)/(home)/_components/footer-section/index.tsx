@@ -29,7 +29,7 @@ export function FooterSection() {
 			/>
 
 			{/* Content */}
-			<div className="mx-auto mt-10 flex max-w-5xl flex-col items-center gap-6 px-6 md:px-[1.125rem]">
+			<div className="mx-auto mt-12 flex max-w-5xl flex-col items-center gap-5 px-6 md:px-[1.125rem]">
 				{/* Heading + Flower */}
 				<div className="flex items-start gap-3">
 					<p className="font-serif text-[28px] leading-normal">

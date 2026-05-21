@@ -19,13 +19,13 @@ export function Navbar() {
 		PATHNAME_TO_SECTION[pathname] ?? "about",
 	);
 
-	// Navbar center tracks the footer divider line as it scrolls into view.
-	// Moves up with the divider (scroll down) and back down with it (scroll up).
-	// Stops at NORMAL_BOTTOM once the divider leaves the push zone.
+	// Navbar center tracks the footer divider line in both directions.
+	// Uses a 32px exit buffer to prevent boundary flicker on release.
 	useEffect(() => {
 		const NORMAL_BOTTOM = 24; // matches style={{ bottom: "1.5rem" }}
 		let rafId: number;
 		let viewportHeight = window.innerHeight;
+		let inPushZone = false;
 
 		const updateBottom = () => {
 			cancelAnimationFrame(rafId);
@@ -37,20 +37,32 @@ export function Navbar() {
 				if (hrTop < 0) return; // ignore iOS rubber-band overscroll
 
 				const navHeight = navRef.current.offsetHeight;
+				// Enter when divider reaches navbar center
+				const entryZone = viewportHeight - navHeight / 2 - NORMAL_BOTTOM;
+				// Exit 32px past entry — prevents rapid entry/exit oscillation
+				const exitZone = entryZone + 32;
 
-				// Push zone: when divider would cross the navbar center
-				const pushZone = viewportHeight - navHeight / 2 - NORMAL_BOTTOM;
-
-				// Track divider center in both directions; floor at NORMAL_BOTTOM
-				const newBottom =
-					hrTop <= pushZone
-						? Math.max(NORMAL_BOTTOM, viewportHeight - hrTop - navHeight / 2)
-						: NORMAL_BOTTOM;
-
-				const currentBottom =
-					parseFloat(navRef.current.style.bottom) || NORMAL_BOTTOM;
-				if (Math.abs(newBottom - currentBottom) < 1) return;
-				navRef.current.style.bottom = `${newBottom}px`;
+				if (hrTop <= entryZone) {
+					// Track divider center instantly in both directions
+					inPushZone = true;
+					const newBottom = Math.max(
+						NORMAL_BOTTOM,
+						viewportHeight - hrTop - navHeight / 2,
+					);
+					// style.bottom may be "1.5rem" on first run — convert to px
+				const rawBottom = navRef.current.style.bottom;
+				const currentBottom = rawBottom.endsWith("px")
+					? parseFloat(rawBottom)
+					: NORMAL_BOTTOM;
+					if (Math.abs(newBottom - currentBottom) < 1) return;
+					navRef.current.style.transition = "none";
+					navRef.current.style.bottom = `${newBottom}px`;
+				} else if (inPushZone && hrTop >= exitZone) {
+					// Divider safely clear — release smoothly back to normal
+					inPushZone = false;
+					navRef.current.style.transition = "bottom 0.3s ease-out";
+					navRef.current.style.bottom = `${NORMAL_BOTTOM}px`;
+				}
 			});
 		};
 
