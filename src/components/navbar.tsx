@@ -19,15 +19,13 @@ export function Navbar() {
 		PATHNAME_TO_SECTION[pathname] ?? "about",
 	);
 
-	// Push navbar up when footer divider approaches, capped so navbar center
-	// aligns with the divider line. Holds the pushed position while scrolling
-	// up — releases as soon as the divider clears the push zone again.
+	// Navbar center tracks the footer divider line as it scrolls into view.
+	// Moves up with the divider (scroll down) and back down with it (scroll up).
+	// Stops at NORMAL_BOTTOM once the divider leaves the push zone.
 	useEffect(() => {
 		const NORMAL_BOTTOM = 24; // matches style={{ bottom: "1.5rem" }}
 		let rafId: number;
 		let viewportHeight = window.innerHeight;
-		let isPushed = false;
-		let heldBottom = NORMAL_BOTTOM; // highest bottom reached while pushed
 
 		const updateBottom = () => {
 			cancelAnimationFrame(rafId);
@@ -40,28 +38,15 @@ export function Navbar() {
 
 				const navHeight = navRef.current.offsetHeight;
 
-				// Enter push zone when footer divider would cross the navbar center
+				// Push zone: when divider would cross the navbar center
 				const pushZone = viewportHeight - navHeight / 2 - NORMAL_BOTTOM;
 
-				if (hrTop <= pushZone) {
-					// In push zone — track the divider center (high-water mark only)
-					const centerBottom = Math.max(
-						NORMAL_BOTTOM,
-						viewportHeight - hrTop - navHeight / 2,
-					);
-					if (centerBottom > heldBottom) {
-						isPushed = true;
-						heldBottom = centerBottom;
-						navRef.current.style.transition = "none"; // instant while tracking
-					}
-				} else if (isPushed) {
-					// Divider cleared the push zone — release smoothly back to normal
-					isPushed = false;
-					heldBottom = NORMAL_BOTTOM;
-					navRef.current.style.transition = "bottom 0.3s ease-out";
-				}
+				// Track divider center in both directions; floor at NORMAL_BOTTOM
+				const newBottom =
+					hrTop <= pushZone
+						? Math.max(NORMAL_BOTTOM, viewportHeight - hrTop - navHeight / 2)
+						: NORMAL_BOTTOM;
 
-				const newBottom = isPushed ? heldBottom : NORMAL_BOTTOM;
 				const currentBottom =
 					parseFloat(navRef.current.style.bottom) || NORMAL_BOTTOM;
 				if (Math.abs(newBottom - currentBottom) < 1) return;
