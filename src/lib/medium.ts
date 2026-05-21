@@ -20,8 +20,6 @@ function extractValue(raw: unknown): string {
 	return String(raw ?? "");
 }
 
-
-
 /** Extract the first image src from Medium's content:encoded HTML */
 function extractThumbnail(html: string): string | null {
 	const match = html.match(/<img[^>]+src="([^"]+)"/);

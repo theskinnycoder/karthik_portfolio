@@ -5,6 +5,7 @@ import {
 	type ElementType,
 	type FC,
 	useEffect,
+	useMemo,
 	useRef,
 	useState,
 } from "react";
@@ -67,8 +68,8 @@ const SplitText: FC<SplitTextProps> = ({
 	}, []);
 
 	// JSON.stringify stabilises object identity for from/to without needing deep-equal
-	const fromKey = JSON.stringify(from);
-	const toKey = JSON.stringify(to);
+	const fromKey = useMemo(() => JSON.stringify(from), [from]);
+	const toKey = useMemo(() => JSON.stringify(to), [to]);
 
 	useEffect(() => {
 		if (!ref.current || !text || !fontsLoaded) return;
