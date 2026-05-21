@@ -12,6 +12,10 @@ const NAV_ITEMS = [
 	{ label: "Blogs", href: "/blogs", section: "blogs" },
 ] as const;
 
+/** px — matches the initial `style={{ bottom: "1.5rem" }}` */
+const NORMAL_BOTTOM = 24;
+const STYLE_EL_ID = "_navbar_push_style";
+
 export function Navbar() {
 	const pathname = usePathname();
 	const navRef = useRef<HTMLElement>(null);
@@ -19,66 +23,140 @@ export function Navbar() {
 		PATHNAME_TO_SECTION[pathname] ?? "about",
 	);
 
-	// Navbar center tracks the footer divider line in both directions.
-	// Uses a 32px exit buffer to prevent boundary flicker on release.
+	// Footer magnet: navbar center tracks the divider line as it scrolls up.
+	// Primary  → CSS Scroll-Driven Animation (compositor thread — zero jitter).
+	// Fallback → rAF + transform for browsers without SDA support.
+	//
+	// Note: Tailwind v4's -translate-x-1/2 uses the CSS `translate` property
+	// (not `transform`), so our animation's `transform: translateY(...)` composes
+	// with it cleanly — no double-translation.
 	useEffect(() => {
-		const NORMAL_BOTTOM = 24; // matches style={{ bottom: "1.5rem" }}
-		let rafId: number;
-		let viewportHeight = window.innerHeight;
-		let inPushZone = false;
+		const nav = navRef.current;
+		if (!nav) return;
 
-		const updateBottom = () => {
+		const supportsSDA =
+			typeof CSS !== "undefined" &&
+			CSS.supports("animation-timeline", "scroll()");
+
+		// Shared <style> element for injected @keyframes
+		let styleEl = document.getElementById(STYLE_EL_ID) as HTMLStyleElement | null;
+		if (!styleEl) {
+			styleEl = document.createElement("style");
+			styleEl.id = STYLE_EL_ID;
+			document.head.appendChild(styleEl);
+		}
+		const styleNode = styleEl;
+
+		// Computes scroll positions and wires up the animation.
+		// Called once on mount and debounced after resize.
+		const setup = () => {
+			const divider = document.getElementById(FOOTER_DIVIDER_ID);
+			if (!divider) return;
+
+			const vh = window.innerHeight;
+			const navH = nav.offsetHeight;
+			if (navH === 0) return; // layout not yet measured
+
+			// Absolute Y of the divider from document top
+			const dividerAbsY =
+				divider.getBoundingClientRect().top + window.scrollY;
+
+			// Scroll offset at which divider center aligns with navbar center
+			const scrollStart = Math.max(
+				0,
+				dividerAbsY - (vh - NORMAL_BOTTOM - navH / 2),
+			);
+			// Range = vh px → 1 scroll-px maps to exactly 1 transform-px (perfect tracking)
+			const scrollEnd = scrollStart + vh;
+
+			styleNode.textContent = `@keyframes _navbar_push {
+  from { transform: translateY(0px); }
+  to   { transform: translateY(-${vh}px); }
+}`;
+
+			if (supportsSDA) {
+				nav.style.setProperty("animation-name", "_navbar_push");
+				nav.style.setProperty("animation-duration", "auto");
+				nav.style.setProperty("animation-timing-function", "linear");
+				nav.style.setProperty("animation-fill-mode", "both");
+				nav.style.setProperty("animation-timeline", "scroll()");
+				nav.style.setProperty(
+					"animation-range",
+					`${scrollStart}px ${scrollEnd}px`,
+				);
+			}
+		};
+
+		setup();
+
+		let resizeTimer: ReturnType<typeof setTimeout>;
+		const onResize = () => {
+			clearTimeout(resizeTimer);
+			resizeTimer = setTimeout(setup, 150);
+		};
+
+		if (supportsSDA) {
+			window.addEventListener("resize", onResize, { passive: true });
+			return () => {
+				clearTimeout(resizeTimer);
+				window.removeEventListener("resize", onResize);
+				[
+					"animation-name",
+					"animation-duration",
+					"animation-timing-function",
+					"animation-fill-mode",
+					"animation-timeline",
+					"animation-range",
+				].forEach((p) => nav.style.removeProperty(p));
+				styleNode.remove();
+			};
+		}
+
+		// ── JS fallback (no SDA support) ─────────────────────────────────────
+		nav.style.setProperty("will-change", "transform");
+		let rafId: number;
+		let cachedVh = window.innerHeight;
+
+		const handleScroll = () => {
 			cancelAnimationFrame(rafId);
 			rafId = requestAnimationFrame(() => {
 				const divider = document.getElementById(FOOTER_DIVIDER_ID);
-				if (!divider || !navRef.current) return;
+				if (!divider) return;
 
 				const hrTop = divider.getBoundingClientRect().top;
-				if (hrTop < 0) return; // ignore iOS rubber-band overscroll
+				if (hrTop < 0) return; // iOS rubber-band overscroll
 
-				const navHeight = navRef.current.offsetHeight;
-				// Enter when divider reaches navbar center
-				const entryZone = viewportHeight - navHeight / 2 - NORMAL_BOTTOM;
-				// Exit 32px past entry — prevents rapid entry/exit oscillation
-				const exitZone = entryZone + 32;
+				const navH = nav.offsetHeight;
+				const entry = cachedVh - NORMAL_BOTTOM - navH / 2;
 
-				if (hrTop <= entryZone) {
-					// Track divider center instantly in both directions
-					inPushZone = true;
-					const newBottom = Math.max(
-						NORMAL_BOTTOM,
-						viewportHeight - hrTop - navHeight / 2,
+				if (hrTop <= entry) {
+					nav.style.setProperty(
+						"transform",
+						`translateY(-${entry - hrTop}px)`,
 					);
-					// style.bottom may be "1.5rem" on first run — convert to px
-				const rawBottom = navRef.current.style.bottom;
-				const currentBottom = rawBottom.endsWith("px")
-					? parseFloat(rawBottom)
-					: NORMAL_BOTTOM;
-					if (Math.abs(newBottom - currentBottom) < 1) return;
-					navRef.current.style.transition = "none";
-					navRef.current.style.bottom = `${newBottom}px`;
-				} else if (inPushZone && hrTop >= exitZone) {
-					// Divider safely clear — release smoothly back to normal
-					inPushZone = false;
-					navRef.current.style.transition = "bottom 0.3s ease-out";
-					navRef.current.style.bottom = `${NORMAL_BOTTOM}px`;
+				} else {
+					nav.style.removeProperty("transform");
 				}
 			});
 		};
 
-		const onResize = () => {
-			viewportHeight = window.innerHeight;
-			updateBottom();
+		const onResizeFallback = () => {
+			cachedVh = window.innerHeight;
+			clearTimeout(resizeTimer);
+			resizeTimer = setTimeout(handleScroll, 150);
 		};
 
-		window.addEventListener("scroll", updateBottom, { passive: true });
-		window.addEventListener("resize", onResize, { passive: true });
-		updateBottom();
+		window.addEventListener("scroll", handleScroll, { passive: true });
+		window.addEventListener("resize", onResizeFallback, { passive: true });
 
 		return () => {
 			cancelAnimationFrame(rafId);
-			window.removeEventListener("scroll", updateBottom);
-			window.removeEventListener("resize", onResize);
+			clearTimeout(resizeTimer);
+			window.removeEventListener("scroll", handleScroll);
+			window.removeEventListener("resize", onResizeFallback);
+			nav.style.removeProperty("will-change");
+			nav.style.removeProperty("transform");
+			styleNode.remove();
 		};
 	}, []);
 
