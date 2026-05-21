@@ -66,6 +66,10 @@ const SplitText: FC<SplitTextProps> = ({
 		}
 	}, []);
 
+	// JSON.stringify stabilises object identity for from/to without needing deep-equal
+	const fromKey = JSON.stringify(from);
+	const toKey = JSON.stringify(to);
+
 	useEffect(() => {
 		if (!ref.current || !text || !fontsLoaded) return;
 		if (animationCompletedRef.current) return;
@@ -179,7 +183,6 @@ const SplitText: FC<SplitTextProps> = ({
 					undefined;
 			}
 		};
-		// JSON.stringify stabilises object identity for from/to without needing deep-equal
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
 		text,
@@ -187,8 +190,8 @@ const SplitText: FC<SplitTextProps> = ({
 		duration,
 		ease,
 		splitType,
-		JSON.stringify(from),
-		JSON.stringify(to),
+		fromKey,
+		toKey,
 		threshold,
 		rootMargin,
 		fontsLoaded,
