@@ -1,12 +1,17 @@
 "use client";
 
+import GradientText from "@/components/GradientText";
 import { inlineMarks } from "@/components/portable-text/inline-marks";
+import { COLOR_DECORATORS } from "@/sanity/rich-text/constants";
 import { motion } from "motion/react";
 import {
 	PortableText,
 	type PortableTextBlock,
 	type PortableTextComponents,
 } from "next-sanity";
+import type { ReactNode } from "react";
+
+const passThrough = ({ children }: { children?: ReactNode }) => <>{children}</>;
 
 const inlineComponents: PortableTextComponents = {
 	block: {
@@ -19,6 +24,18 @@ const inlineComponents: PortableTextComponents = {
 		h6: ({ children }) => <>{children}</>,
 	},
 	marks: inlineMarks,
+};
+
+// Title variant: color marks are stripped so the GradientText shines through.
+// The Sanity editor applies colorMuted to the title text; keeping it would
+// inject `style={{ color: "var(--muted-foreground)" }}` which overrides
+// GradientText's `text-transparent` / `bg-clip-text`.
+const titleComponents: PortableTextComponents = {
+	...inlineComponents,
+	marks: {
+		...inlineMarks,
+		...Object.fromEntries(COLOR_DECORATORS.map((c) => [c, passThrough])),
+	},
 };
 
 const fadeUp = {
@@ -49,20 +66,26 @@ export function HeroSection({ name, title }: HeroSectionProps) {
 					"Karthik Panchala"
 				)}
 			</motion.h1>
-			<motion.p
+			<motion.div
 				{...fadeUp}
 				transition={{ ease: "easeOut", duration: 0.6, delay: 0.15 }}
-				className="text-3xl font-semibold text-muted-foreground"
 			>
-				{title?.length ? (
-					<PortableText
-						value={title}
-						components={inlineComponents}
-					/>
-				) : (
-					"Product Designer"
-				)}
-			</motion.p>
+				<GradientText
+					colors={["#FBBA27", "#FB7481"]}
+					direction="horizontal"
+					animationSpeed={8}
+					className="mx-0 inline-flex! overflow-visible rounded-none text-3xl font-semibold"
+				>
+					{title?.length ? (
+						<PortableText
+							value={title}
+							components={titleComponents}
+						/>
+					) : (
+						"Product Designer"
+					)}
+				</GradientText>
+			</motion.div>
 		</div>
 	);
 }
