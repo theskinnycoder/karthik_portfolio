@@ -17,7 +17,7 @@ export function ContentBadges({ value }: ContentBadgesProps) {
 			{value.badges.map((badge, i) => (
 				<span
 					key={`${badge}-${i}`}
-					className="rounded-full border border-border bg-card px-3 py-1.5 text-sm font-light tracking-prose whitespace-nowrap text-foreground"
+					className="rounded-full border-2 border-[#D4D4D4] px-5 py-1.5 text-[1.125rem] font-normal tracking-prose whitespace-nowrap text-foreground shadow-[0px_1px_3px_0px_#D4D4D4] md:text-[1.25rem] lg:text-[1.375rem]"
 				>
 					{badge}
 				</span>
