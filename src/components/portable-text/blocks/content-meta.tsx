@@ -62,12 +62,12 @@ function MetaSection({
 					aria-hidden
 					className="block h-[18px] w-[1.5px] rounded-tr-[9px] rounded-br-[12px] bg-[var(--accent-coral)]"
 				/>
-				<span className="text-[0.875rem] font-semibold text-foreground md:text-[0.9375rem] lg:text-[1rem]">
+				<span className="text-[1.125rem] font-semibold text-foreground md:text-[1.25rem] lg:text-[1.375rem]">
 					{label}
 				</span>
 			</div>
 			<div
-				className={`${bodyPad} text-[0.875rem] font-normal text-muted-foreground md:text-[0.9375rem] lg:text-[1rem]`}
+				className={`${bodyPad} text-[1.125rem] font-normal text-muted-foreground md:text-[1.25rem] lg:text-[1.375rem]`}
 			>
 				{children}
 			</div>
@@ -106,7 +106,7 @@ function TeamRoster({ members }: { members: TeamMemberDTO[] }) {
 				{members.map((m) => (
 					<li
 						key={m.name}
-						className="text-[0.875rem] font-normal text-muted-foreground md:text-[0.9375rem] lg:text-[1rem]"
+						className="text-[1.125rem] font-normal text-muted-foreground md:text-[1.25rem] lg:text-[1.375rem]"
 					>
 						{m.name}, {m.role}
 					</li>
