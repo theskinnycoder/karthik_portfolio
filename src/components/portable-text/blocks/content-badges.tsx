@@ -14,10 +14,10 @@ export function ContentBadges({ value }: ContentBadgesProps) {
 
 	return (
 		<div className="not-prose my-6 flex flex-wrap gap-2">
-			{value.badges.map((badge) => (
+			{value.badges.map((badge, i) => (
 				<span
-					key={badge}
-					className="rounded-full border border-border bg-card px-3 py-1.5 text-sm font-light tracking-wide whitespace-nowrap text-foreground"
+					key={`${badge}-${i}`}
+					className="rounded-full border border-border bg-card px-3 py-1.5 text-sm font-light tracking-prose whitespace-nowrap text-foreground"
 				>
 					{badge}
 				</span>
