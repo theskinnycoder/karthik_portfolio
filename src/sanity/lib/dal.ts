@@ -564,7 +564,12 @@ export async function getWorkItemBySlug(
 ): Promise<WorkItemDetailDTO | null> {
 	"use cache";
 	cacheSanityResource("workItem", "company", "testimonial");
-	const trimmed = decodeURIComponent(slug).trim();
+	let trimmed: string;
+	try {
+		trimmed = decodeURIComponent(slug).trim();
+	} catch {
+		return null;
+	}
 	const data = await sanityFetch<WorkItemBySlugQueryResult>({
 		query: workItemBySlugQuery,
 		params: { slug: trimmed },

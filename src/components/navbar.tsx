@@ -173,9 +173,9 @@ export function Navbar() {
 		e: React.MouseEvent<HTMLAnchorElement>,
 		section: string,
 	) => {
-		e.preventDefault();
 		const el = document.getElementById(section);
-		if (!el) return;
+		if (!el) return; // no section in DOM — let the <Link> navigate normally
+		e.preventDefault();
 
 		if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
 			el.scrollIntoView();
