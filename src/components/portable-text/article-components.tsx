@@ -1,5 +1,6 @@
 import type { PortableTextComponents } from "next-sanity";
 import type {
+	ContentBadgesDTO,
 	ContentDividerDTO,
 	ContentImageDTO,
 	ContentMetaDTO,
@@ -7,6 +8,7 @@ import type {
 	ContentVideoDTO,
 } from "@/sanity/lib/dal";
 import {
+	ContentBadges,
 	ContentDivider,
 	ContentImage,
 	ContentMeta,
@@ -96,6 +98,9 @@ export const articleComponents: PortableTextComponents = {
 		),
 		contentMeta: ({ value }: { value: ContentMetaDTO }) => (
 			<ContentMeta value={value} />
+		),
+		contentBadges: ({ value }: { value: ContentBadgesDTO }) => (
+			<ContentBadges value={value} />
 		),
 	},
 };
