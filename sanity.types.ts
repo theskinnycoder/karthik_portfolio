@@ -119,6 +119,11 @@ export type WorkItem = {
 				_key: string;
 		  }
 		| {
+				badges?: Array<string>;
+				_type: "contentBadges";
+				_key: string;
+		  }
+		| {
 				style?: "line" | "space";
 				_type: "contentDivider";
 				_key: string;
@@ -317,7 +322,7 @@ export type HomePage = {
 	_createdAt: string;
 	_updatedAt: string;
 	_rev: string;
-	sections?: Array<"intro" | "experience" | "otherWorks" | "testimonials">;
+	sections?: Array<string>;
 };
 
 export type Experience = {
@@ -780,9 +785,7 @@ export type SiteProfileQueryResult = {
 // Variable: homePageQuery
 // Query: *[_type == "homePage"][0] {    sections  }
 export type HomePageQueryResult = {
-	sections: Array<
-		"experience" | "intro" | "otherWorks" | "testimonials"
-	> | null;
+	sections: Array<string> | null;
 } | null;
 
 // Source: src/sanity/lib/queries.ts
@@ -845,7 +848,7 @@ export type SectionHeaderQueryResult = {
 
 // Source: src/sanity/lib/queries.ts
 // Variable: workItemBySlugQuery
-// Query: *[_type == "workItem" && slug.current == $slug][0] {    _id,    title,    "slug": slug.current,    tag,    description,    excerpt,    liveUrl,    image,    heroImage,    brand,    content[] {      ...,      _type == "contentTestimonial" => {        _type,        _key,        "testimonial": testimonial->{          _id,          quote,          authorName,          authorRole,          authorAvatar,          company->{            _id,            name,            logo          }        }      }    },    "prev": *[_type == "workItem" && order < ^.order && defined(slug.current)]      | order(order desc)[0] {        title,        "slug": slug.current,        tag      },    "next": *[_type == "workItem" && order > ^.order && defined(slug.current)]      | order(order asc)[0] {        title,        "slug": slug.current,        tag      },    "company": company->{      _id,      name,      logo,      website    }  }
+// Query: *[_type == "workItem" && slug.current == $slug][0] {    _id,    title,    "slug": slug.current,    tag,    description,    excerpt,    liveUrl,    image,    heroImage,    brand,    content[] {      ...,      _type == "contentTestimonial" => {        _type,        _key,        "testimonial": testimonial->{          _id,          quote,          authorName,          authorRole,          authorAvatar,          company->{            _id,            name,            logo          }        }      }    },    "orderedItems": *[_type == "workItem" && defined(slug.current)] | order(company->order asc, order asc) {      title,      "slug": slug.current,      tag    },    "company": company->{      _id,      name,      logo,      website    }  }
 export type WorkItemBySlugQueryResult = {
 	_id: string;
 	title: string | null;
@@ -901,6 +904,11 @@ export type WorkItemBySlugQueryResult = {
 				}>;
 				level?: number;
 				_type: "block";
+				_key: string;
+		  }
+		| {
+				badges?: Array<string>;
+				_type: "contentBadges";
 				_key: string;
 		  }
 		| {
@@ -987,7 +995,7 @@ export type WorkItemBySlugQueryResult = {
 		title: string | null;
 		slug: string | null;
 		tag: string | null;
-	}> | null;
+	}>;
 	company: {
 		_id: string;
 		name: string | null;
@@ -1014,7 +1022,7 @@ declare module "@sanity/client" {
 		'\n  *[_type == "homePage"][0] {\n    sections\n  }\n': HomePageQueryResult;
 		'\n  *[_type == "company" && count(*[_type == "workItem" && references(^._id)]) > 0] | order(order asc) {\n    _id,\n    name,\n    logo,\n    website,\n    isCurrent,\n    badge,\n    workTagline,\n    workDescription,\n    "workItems": *[_type == "workItem" && references(^._id)] | order(order asc) {\n      _id,\n      title,\n      icon,\n      tag,\n      image,\n      description,\n      "slug": slug.current,\n      "brandFrom": brand.primary,\n      "brandTo": brand.secondary\n    }\n  }\n': WorkPageQueryResult;
 		'\n  *[_type == "sectionHeader" && slug.current == $slug][0] {\n    _id,\n    headingPrefix,\n    headingHighlight,\n    headingEmoji,\n    icon,\n    gradientFrom,\n    gradientTo,\n    video,\n    subheading\n  }\n': SectionHeaderQueryResult;
-		'\n  *[_type == "workItem" && slug.current == $slug][0] {\n    _id,\n    title,\n    "slug": slug.current,\n    tag,\n    description,\n    excerpt,\n    liveUrl,\n    image,\n    heroImage,\n    brand,\n    content[] {\n      ...,\n      _type == "contentTestimonial" => {\n        _type,\n        _key,\n        "testimonial": testimonial->{\n          _id,\n          quote,\n          authorName,\n          authorRole,\n          authorAvatar,\n          company->{\n            _id,\n            name,\n            logo\n          }\n        }\n      }\n    },\n    "prev": *[_type == "workItem" && order < ^.order && defined(slug.current)]\n      | order(order desc)[0] {\n        title,\n        "slug": slug.current,\n        tag\n      },\n    "next": *[_type == "workItem" && order > ^.order && defined(slug.current)]\n      | order(order asc)[0] {\n        title,\n        "slug": slug.current,\n        tag\n      },\n    "company": company->{\n      _id,\n      name,\n      logo,\n      website\n    }\n  }\n': WorkItemBySlugQueryResult;
+		'\n  *[_type == "workItem" && slug.current == $slug][0] {\n    _id,\n    title,\n    "slug": slug.current,\n    tag,\n    description,\n    excerpt,\n    liveUrl,\n    image,\n    heroImage,\n    brand,\n    content[] {\n      ...,\n      _type == "contentTestimonial" => {\n        _type,\n        _key,\n        "testimonial": testimonial->{\n          _id,\n          quote,\n          authorName,\n          authorRole,\n          authorAvatar,\n          company->{\n            _id,\n            name,\n            logo\n          }\n        }\n      }\n    },\n    "orderedItems": *[_type == "workItem" && defined(slug.current)] | order(company->order asc, order asc) {\n      title,\n      "slug": slug.current,\n      tag\n    },\n    "company": company->{\n      _id,\n      name,\n      logo,\n      website\n    }\n  }\n': WorkItemBySlugQueryResult;
 		'\n  *[_type == "workItem" && defined(slug.current)].slug.current\n': AllWorkItemSlugsQueryResult;
 	}
 }
