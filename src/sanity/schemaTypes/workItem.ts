@@ -268,6 +268,32 @@ export const workItem = defineType({
 				}),
 				defineArrayMember({
 					type: "object",
+					name: "contentBadges",
+					title: "Tags / Badges",
+					fields: [
+						defineField({
+							name: "badges",
+							title: "Badges",
+							type: "array",
+							of: [{ type: "string" }],
+							options: { layout: "tags" },
+							validation: (rule) => rule.required().min(1),
+							description:
+								'Add one or more badge labels, e.g. "Figma", "UX Research"',
+						}),
+					],
+					preview: {
+						select: { badges: "badges" },
+						prepare: ({ badges }) => ({
+							title: "Tags / Badges",
+							subtitle: Array.isArray(badges)
+								? (badges as string[]).join(", ")
+								: "",
+						}),
+					},
+				}),
+				defineArrayMember({
+					type: "object",
 					name: "contentDivider",
 					title: "Divider",
 					fields: [
