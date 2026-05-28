@@ -279,7 +279,7 @@ export const workItem = defineType({
 							options: { layout: "tags" },
 							validation: (rule) => rule.required().min(1),
 							description:
-								'Add one or more badge labels, e.g. "Figma", "UX Research"',
+								'Type a label and press Enter to add it. Repeat for multiple badges, e.g. "Figma", "UX Research".',
 						}),
 					],
 					preview: {
