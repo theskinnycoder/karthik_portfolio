@@ -86,10 +86,15 @@ export async function getMediumPosts(): Promise<MediumPostDTO[]> {
 			};
 		});
 
-		// Newest first
-		return posts.sort(
-			(a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime(),
-		);
+		// Newest first — guard NaN for malformed pubDate values
+		return posts.sort((a, b) => {
+			const aTime = new Date(a.pubDate).getTime();
+			const bTime = new Date(b.pubDate).getTime();
+			if (Number.isNaN(aTime) && Number.isNaN(bTime)) return 0;
+			if (Number.isNaN(aTime)) return 1; // push bad dates to end
+			if (Number.isNaN(bTime)) return -1;
+			return bTime - aTime;
+		});
 	} catch (error) {
 		console.error("[medium] Failed to fetch RSS feed:", error);
 		return [];

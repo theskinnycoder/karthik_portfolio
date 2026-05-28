@@ -27,7 +27,7 @@ export async function GET() {
 }
 
 interface SanityWebhookPayload {
-	_type: keyof typeof DOCUMENT_TYPE_TO_TAGS;
+	_type: string;
 	_id: string;
 }
 
@@ -60,15 +60,15 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
-		const tags = getTags(body._type);
-
-		if (!tags) {
+		if (!(body._type in DOCUMENT_TYPE_TO_TAGS)) {
 			return NextResponse.json({
 				revalidated: false,
 				message: `No cache tags configured for type: ${body._type}`,
 				now: Date.now(),
 			});
 		}
+
+		const tags = getTags(body._type as keyof typeof DOCUMENT_TYPE_TO_TAGS);
 
 		for (const tag of tags) {
 			revalidateTag(tag, "max");
