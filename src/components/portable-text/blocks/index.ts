@@ -1,5 +1,6 @@
 export { ContentBadges } from "./content-badges";
 export { ContentDivider } from "./content-divider";
+export { ContentTable } from "./content-table";
 export { ContentImage } from "./content-image";
 export { ContentMeta } from "./content-meta";
 export { ContentTestimonial } from "./content-testimonial";

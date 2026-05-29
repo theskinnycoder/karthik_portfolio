@@ -134,6 +134,12 @@ export const workItemBySlugQuery = defineQuery(`
         authorRole,
         companyLogo,
         authorAvatar
+      },
+      _type == "contentTable" => {
+        _type,
+        _key,
+        table,
+        caption
       }
     },
     "orderedItems": *[_type == "workItem" && defined(slug.current)] | order(company->order asc, order asc) {

@@ -4,6 +4,7 @@ import type {
 	ContentDividerDTO,
 	ContentImageDTO,
 	ContentMetaDTO,
+	ContentTableDTO,
 	ContentTestimonialDTO,
 	ContentVideoDTO,
 } from "@/sanity/lib/dal";
@@ -12,6 +13,7 @@ import {
 	ContentDivider,
 	ContentImage,
 	ContentMeta,
+	ContentTable,
 	ContentTestimonial,
 	ContentVideo,
 } from "./blocks";
@@ -101,6 +103,9 @@ export const articleComponents: PortableTextComponents = {
 		),
 		contentBadges: ({ value }: { value: ContentBadgesDTO }) => (
 			<ContentBadges value={value} />
+		),
+		contentTable: ({ value }: { value: ContentTableDTO }) => (
+			<ContentTable value={value} />
 		),
 	},
 };

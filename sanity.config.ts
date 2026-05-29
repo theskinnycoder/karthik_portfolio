@@ -3,6 +3,7 @@
 import { visionTool } from "@sanity/vision";
 import { defineConfig } from "sanity";
 import { cloudinarySchemaPlugin } from "sanity-plugin-cloudinary";
+
 import { structureTool } from "sanity/structure";
 import { apiVersion, dataset, projectId } from "./src/sanity/env";
 import { schema } from "./src/sanity/schemaTypes";

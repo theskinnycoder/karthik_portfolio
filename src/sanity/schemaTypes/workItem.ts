@@ -316,6 +316,65 @@ export const workItem = defineType({
 				}),
 				defineArrayMember({
 					type: "object",
+					name: "contentTable",
+					title: "Table",
+					fields: [
+						defineField({
+							name: "caption",
+							title: "Caption",
+							type: "string",
+							description: "Optional caption displayed below the table",
+						}),
+						defineField({
+							name: "headers",
+							title: "Headers",
+							type: "array",
+							of: [{ type: "string" }],
+							description: "Column header labels — one per column",
+							options: { layout: "tags" },
+						}),
+						defineField({
+							name: "rows",
+							title: "Rows",
+							type: "array",
+							description: "Each row is a set of cells matching the header count",
+							of: [
+								defineArrayMember({
+									type: "object",
+									name: "tableRow",
+									title: "Row",
+									fields: [
+										defineField({
+											name: "cells",
+											title: "Cells",
+											type: "array",
+											of: [{ type: "string" }],
+											options: { layout: "tags" },
+											description: "One value per column, in order",
+										}),
+									],
+									preview: {
+										select: { cells: "cells" },
+										prepare: ({ cells }) => ({
+											title: Array.isArray(cells)
+												? (cells as string[]).join(" | ")
+												: "Row",
+										}),
+									},
+								}),
+							],
+						}),
+					],
+					preview: {
+						select: { caption: "caption" },
+						prepare: ({ caption }) => ({
+							title: "Table",
+							subtitle: (caption as string) || undefined,
+						}),
+					},
+				}),
+				defineArrayMember({
+					type: "object",
 					name: "contentDivider",
 					title: "Divider",
 					fields: [

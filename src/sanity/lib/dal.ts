@@ -190,6 +190,14 @@ export interface ContentBadgesDTO {
 	badges: string[];
 }
 
+export interface ContentTableDTO {
+	_type: "contentTable";
+	_key: string;
+	caption?: string;
+	headers: string[];
+	rows: string[][];
+}
+
 export type ContentBlock =
 	| PortableTextBlock
 	| ContentImageDTO
@@ -197,7 +205,8 @@ export type ContentBlock =
 	| ContentDividerDTO
 	| ContentVideoDTO
 	| ContentMetaDTO
-	| ContentBadgesDTO;
+	| ContentBadgesDTO
+	| ContentTableDTO;
 
 export interface WorkNavLinkDTO {
 	title: string;
@@ -430,6 +439,23 @@ function toContentBadgesDTO(
 	};
 }
 
+function toContentTableDTO(
+	data: ContentBlockOfType<"contentTable">,
+): ContentTableDTO {
+	const rows = (data.rows ?? []).map((row) =>
+		(row.cells ?? []).filter((c): c is string => typeof c === "string"),
+	);
+	return {
+		_type: "contentTable",
+		_key: data._key,
+		caption: data.caption ?? undefined,
+		headers: (data.headers ?? []).filter(
+			(h): h is string => typeof h === "string",
+		),
+		rows,
+	};
+}
+
 function hasType<T extends string>(
 	block: ContentBlockRaw,
 	type: T,
@@ -445,6 +471,7 @@ function toContentBlock(block: ContentBlockRaw): ContentBlock | null {
 	if (hasType(block, "contentVideo")) return toContentVideoDTO(block);
 	if (hasType(block, "contentMeta")) return toContentMetaDTO(block);
 	if (hasType(block, "contentBadges")) return toContentBadgesDTO(block);
+	if (hasType(block, "contentTable")) return toContentTableDTO(block);
 	// Pass-through for PortableText `block` — the generated shape is a superset
 	// of `PortableTextBlock` so the cast is safe at runtime.
 	return block as unknown as PortableTextBlock;
