@@ -17,10 +17,16 @@ export function ContentImage({ value }: ContentImageProps) {
 	useEffect(() => {
 		if (!open) return;
 		const onKey = (e: KeyboardEvent) => {
-			if (e.key === "Escape") setOpen(false);
+			if (e.key === "Escape") {
+				// stopImmediatePropagation in the capture phase prevents Vaul's
+				// drawer ESC handler from also firing and closing the drawer.
+				e.stopImmediatePropagation();
+				setOpen(false);
+			}
 		};
-		window.addEventListener("keydown", onKey);
-		return () => window.removeEventListener("keydown", onKey);
+		// capture:true fires before Vaul's bubble-phase listener
+		window.addEventListener("keydown", onKey, { capture: true });
+		return () => window.removeEventListener("keydown", onKey, { capture: true });
 	}, [open]);
 
 	// Prevent body scroll while lightbox is open
