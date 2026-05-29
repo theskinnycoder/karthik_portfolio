@@ -71,7 +71,7 @@ export function ContentImage({ value }: ContentImageProps) {
 						role="dialog"
 						aria-modal="true"
 						aria-label={value.alt || "Full-size image"}
-						className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
+						className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm pointer-events-auto"
 						onClick={(e) => {
 							// Only close when clicking the backdrop itself, not its children
 							if (e.target === e.currentTarget) setOpen(false);
