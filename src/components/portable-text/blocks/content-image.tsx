@@ -72,27 +72,25 @@ export function ContentImage({ value }: ContentImageProps) {
 						aria-modal="true"
 						aria-label={value.alt || "Full-size image"}
 						className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
-						onClick={() => setOpen(false)}
+						onClick={(e) => {
+							// Only close when clicking the backdrop itself, not its children
+							if (e.target === e.currentTarget) setOpen(false);
+						}}
 					>
-						{/* Close button */}
+						{/* Close button — z-10 keeps it above the image regardless of image size */}
 						<button
 							type="button"
-							onClick={(e) => {
-								e.stopPropagation();
-								setOpen(false);
-							}}
+							onClick={() => setOpen(false)}
 							aria-label="Close image"
-							className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/25"
+							className="absolute right-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/25"
 						>
 							<X className="h-5 w-5" />
 						</button>
 
-						{/* Image — stop propagation so clicking the image itself doesn't close */}
 						<img
 							src={value.url}
 							alt={value.alt}
 							className="max-h-[90vh] max-w-[90vw] rounded-lg object-contain shadow-2xl"
-							onClick={(e) => e.stopPropagation()}
 						/>
 					</div>,
 					document.body,
