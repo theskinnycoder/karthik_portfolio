@@ -19,14 +19,14 @@ export function ContentTable({ value }: ContentTableProps) {
 	return (
 		<div className="not-prose -mx-6 my-8 flex flex-col gap-3">
 			<div className="overflow-x-auto border-y border-border [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-				<table className="w-full border-collapse">
+				<table className="min-w-full border-collapse">
 					{hasHeaders && (
 						<thead>
 							<tr className="border-b border-border bg-muted">
 								{value.headers.map((header, i) => (
 									<th
 										key={`h-${i}`}
-										className="px-4 py-2.5 text-left text-[1.125rem] font-semibold tracking-wide text-foreground first:pl-6 last:pr-6 md:text-[1.25rem] lg:text-[1.375rem]"
+										className="px-4 py-2.5 text-left text-[1.125rem] font-semibold tracking-wide text-foreground whitespace-nowrap first:pl-6 last:pr-6 md:text-[1.25rem] lg:text-[1.375rem]"
 									>
 										{header}
 									</th>
@@ -44,7 +44,7 @@ export function ContentTable({ value }: ContentTableProps) {
 									{cells.map((cell, ci) => (
 										<td
 											key={`c-${ci}`}
-											className="px-4 py-2.5 text-[1.0625rem] font-normal text-paragraph first:pl-6 last:pr-6 md:text-[1.125rem] lg:text-[1.25rem]"
+											className="px-4 py-2.5 text-[1.0625rem] font-normal text-paragraph whitespace-nowrap first:pl-6 last:pr-6 md:text-[1.125rem] lg:text-[1.25rem]"
 										>
 											{cell}
 										</td>
