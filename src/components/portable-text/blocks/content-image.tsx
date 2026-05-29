@@ -77,10 +77,16 @@ export function ContentImage({ value }: ContentImageProps) {
 							if (e.target === e.currentTarget) setOpen(false);
 						}}
 					>
-						{/* Close button — z-10 keeps it above the image regardless of image size */}
+						{/* Close button — z-10 keeps it above the image regardless of image size.
+						    stopPropagation is required: portal events bubble through the React
+						    tree, so without it the click reaches <figure onClick=setOpen(true)>
+						    and immediately re-opens the lightbox. */}
 						<button
 							type="button"
-							onClick={() => setOpen(false)}
+							onClick={(e) => {
+								e.stopPropagation();
+								setOpen(false);
+							}}
 							aria-label="Close image"
 							className="absolute right-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/25"
 						>
