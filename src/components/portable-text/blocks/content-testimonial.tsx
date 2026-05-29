@@ -28,7 +28,7 @@ export function ContentTestimonial({ value }: ContentTestimonialProps) {
 						sizes="100vw"
 					/>
 				)}
-				<blockquote className="text-[14px] leading-[22px] font-normal text-muted-foreground">
+				<blockquote className="text-[16px] leading-[24px] font-normal text-muted-foreground">
 					<PortableTextRenderer
 						value={value.quote}
 						variant="base"
