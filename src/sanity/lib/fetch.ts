@@ -9,7 +9,8 @@ export async function sanityFetch<T>({
 	query: string;
 	params?: QueryParams;
 }): Promise<T> {
-	return client.fetch<T>(query, params, {
-		cache: process.env.NODE_ENV === "development" ? "no-store" : "force-cache",
-	});
+	// Always no-store: the DAL "use cache" boundaries (tagResource / cacheSanityResource)
+	// are the single caching layer. Using "force-cache" here created a second cache that
+	// was never invalidated by revalidateTag, causing stale data after content updates.
+	return client.fetch<T>(query, params, { cache: "no-store" });
 }
