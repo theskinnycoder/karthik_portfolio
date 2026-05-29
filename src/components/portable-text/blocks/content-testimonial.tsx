@@ -10,18 +10,18 @@ interface ContentTestimonialProps {
 /**
  * Inline testimonial block. Wraps a quote + author row in a card that adopts
  * the workItem's brand-primary as its border color when set.
+ * Company is represented by an inline logo upload — no Company document required.
  */
 export function ContentTestimonial({ value }: ContentTestimonialProps) {
-	const { testimonial } = value;
-	const initials = getInitials(testimonial.authorName);
+	const initials = getInitials(value.authorName);
 
 	return (
 		<figure className="not-prose my-8 flex flex-col gap-[18px] rounded-[18px] border border-border bg-card px-3.5 py-4.5">
 			<div className="flex flex-col gap-4">
-				{testimonial.company.logo && (
+				{value.companyLogo && (
 					<MediaImage
-						src={testimonial.company.logo}
-						alt={testimonial.company.name}
+						src={value.companyLogo}
+						alt="Company logo"
 						width={0}
 						height={0}
 						className="h-[18px] w-auto shrink-0 self-start"
@@ -30,7 +30,7 @@ export function ContentTestimonial({ value }: ContentTestimonialProps) {
 				)}
 				<blockquote className="text-[14px] leading-[22px] font-normal text-muted-foreground">
 					<PortableTextRenderer
-						value={testimonial.quote}
+						value={value.quote}
 						variant="base"
 					/>
 				</blockquote>
@@ -38,18 +38,18 @@ export function ContentTestimonial({ value }: ContentTestimonialProps) {
 			<figcaption className="flex items-center gap-3">
 				<Avatar className="size-[35px]">
 					<AvatarImage
-						src={testimonial.authorAvatar}
-						alt={testimonial.authorName}
+						src={value.authorAvatar}
+						alt={value.authorName}
 						className="object-top"
 					/>
 					<AvatarFallback>{initials}</AvatarFallback>
 				</Avatar>
 				<div className="flex flex-col gap-1">
 					<span className="text-xs font-semibold text-foreground">
-						{testimonial.authorName}
+						{value.authorName}
 					</span>
 					<span className="text-xs font-normal text-foreground">
-						{testimonial.authorRole}
+						{value.authorRole}
 					</span>
 				</div>
 			</figcaption>

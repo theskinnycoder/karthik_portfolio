@@ -129,18 +129,11 @@ export const workItemBySlugQuery = defineQuery(`
       _type == "contentTestimonial" => {
         _type,
         _key,
-        "testimonial": testimonial->{
-          _id,
-          quote,
-          authorName,
-          authorRole,
-          authorAvatar,
-          company->{
-            _id,
-            name,
-            logo
-          }
-        }
+        quote,
+        authorName,
+        authorRole,
+        companyLogo,
+        authorAvatar
       }
     },
     "orderedItems": *[_type == "workItem" && defined(slug.current)] | order(company->order asc, order asc) {

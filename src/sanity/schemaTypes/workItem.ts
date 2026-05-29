@@ -172,22 +172,44 @@ export const workItem = defineType({
 					title: "Testimonial",
 					fields: [
 						defineField({
-							name: "testimonial",
-							title: "Testimonial",
-							type: "reference",
-							to: [{ type: "testimonial" }],
+							name: "quote",
+							title: "Quote",
+							type: "array",
+							of: [inlineBlock()],
 							validation: (rule) => rule.required(),
+						}),
+						defineField({
+							name: "authorName",
+							title: "Author Name",
+							type: "string",
+							validation: (rule) => rule.required(),
+						}),
+						defineField({
+							name: "authorRole",
+							title: "Author Role",
+							type: "string",
+							description: 'e.g. "Senior Product Manager"',
+							validation: (rule) => rule.required(),
+						}),
+						defineField({
+							name: "companyLogo",
+							title: "Company Logo",
+							type: "cloudinary.asset",
+							description: "Upload the company logo directly",
+						}),
+						defineField({
+							name: "authorAvatar",
+							title: "Author Avatar",
+							type: "cloudinary.asset",
+							description: "Author's profile photo",
 						}),
 					],
 					preview: {
 						select: {
-							author: "testimonial.authorName",
-							quote: "testimonial.quote",
+							title: "authorName",
+							subtitle: "authorRole",
+							media: "authorAvatar",
 						},
-						prepare: ({ author, quote }) => ({
-							title: (author as string) || "Testimonial",
-							subtitle: quote as string,
-						}),
 					},
 				}),
 				defineArrayMember({

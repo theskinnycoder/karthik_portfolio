@@ -151,7 +151,11 @@ export interface ContentImageDTO {
 export interface ContentTestimonialDTO {
 	_type: "contentTestimonial";
 	_key: string;
-	testimonial: TestimonialDTO;
+	quote: PortableTextBlock[];
+	authorName: string;
+	authorRole: string;
+	companyLogo?: string;
+	authorAvatar?: string;
 }
 
 export interface ContentDividerDTO {
@@ -354,11 +358,15 @@ function toContentImageDTO(
 function toContentTestimonialDTO(
 	data: ContentBlockOfType<"contentTestimonial">,
 ): ContentTestimonialDTO | null {
-	if (!data.testimonial) return null;
+	if (!data.authorName) return null;
 	return {
 		_type: "contentTestimonial",
 		_key: data._key,
-		testimonial: toTestimonialDTO(data.testimonial),
+		quote: (data.quote ?? []) as PortableTextBlock[],
+		authorName: data.authorName ?? "",
+		authorRole: data.authorRole ?? "",
+		companyLogo: data.companyLogo ? getMediaUrl(data.companyLogo) || undefined : undefined,
+		authorAvatar: data.authorAvatar ? getMediaUrl(data.authorAvatar) || undefined : undefined,
 	};
 }
 
