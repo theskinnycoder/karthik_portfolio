@@ -17,7 +17,7 @@ export function ContentTable({ value }: ContentTableProps) {
 	return (
 		<figure className="not-prose my-8 flex flex-col gap-3">
 			<div className="overflow-x-auto rounded-[0.375rem] border border-border [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-				<table className="w-full border-collapse text-sm">
+				<table className="w-full border-collapse">
 					{hasHeaders && (
 						<thead>
 							<tr className="border-b border-border bg-muted">

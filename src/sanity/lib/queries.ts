@@ -138,8 +138,12 @@ export const workItemBySlugQuery = defineQuery(`
       _type == "contentTable" => {
         _type,
         _key,
-        table,
-        caption
+        caption,
+        headers,
+        "rows": rows[]{
+          _key,
+          cells
+        }
       }
     },
     "orderedItems": *[_type == "workItem" && defined(slug.current)] | order(company->order asc, order asc) {
