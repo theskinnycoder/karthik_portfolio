@@ -5,13 +5,20 @@ import { revalidateTag } from "next/cache";
 import { type NextRequest, NextResponse } from "next/server";
 
 /**
- * Development-only: flush all cache tags without a webhook signature.
- * Hit GET /api/revalidate in the browser after publishing in Sanity Studio.
- * Returns 404 in production.
+ * Flush all cache tags on demand.
+ * - In development: no auth required — just hit GET /api/revalidate
+ * - In production: requires ?secret=<SANITY_WEBHOOK_SECRET> query param
+ *
+ * Usage (production):
+ *   GET https://imkarthik.in/api/revalidate?secret=YOUR_WEBHOOK_SECRET
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
 	if (process.env.NODE_ENV !== "development") {
-		return NextResponse.json({ error: "Not found" }, { status: 404 });
+		const { searchParams } = new URL(request.url);
+		const secret = searchParams.get("secret");
+		if (!secret || secret !== serverEnv.SANITY_WEBHOOK_SECRET) {
+			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+		}
 	}
 
 	for (const tags of Object.values(DOCUMENT_TYPE_TO_TAGS)) {
