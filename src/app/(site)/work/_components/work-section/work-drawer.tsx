@@ -4,7 +4,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { fetchWorkDetail } from "@/app/actions/work";
 import { WorkArticle } from "@/app/(work-detail)/work/[slug]/_components/work-article";
-import { Drawer, DrawerContent } from "@/components/ui/drawer";
+import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
 import type { WorkItemDetailDTO, WorkNavLinkDTO } from "@/sanity/lib/dal";
 
 interface WorkDetailDrawerProps {
@@ -45,6 +45,7 @@ export function WorkDetailDrawer({
 				data-theme="work-detail"
 				className="mt-0 h-dvh max-h-none p-0 bg-background before:hidden data-[vaul-drawer-direction=bottom]:mt-0 data-[vaul-drawer-direction=bottom]:max-h-none [&>div:first-child]:hidden"
 			>
+				<DrawerTitle className="sr-only">Case Study</DrawerTitle>
 				<div
 					className="h-full overflow-x-hidden overflow-y-auto bg-background text-foreground"
 				>

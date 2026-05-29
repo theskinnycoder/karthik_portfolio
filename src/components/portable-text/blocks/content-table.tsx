@@ -42,7 +42,7 @@ export function ContentTable({ value }: ContentTableProps) {
 									{cells.map((cell, ci) => (
 										<td
 											key={`c-${ci}`}
-											className="px-4 py-2.5 text-[1.125rem] font-normal text-paragraph md:text-[1.25rem] lg:text-[1.375rem]"
+											className="px-4 py-2.5 text-[1.0625rem] font-normal text-paragraph md:text-[1.125rem] lg:text-[1.25rem]"
 										>
 											{cell}
 										</td>
@@ -54,7 +54,7 @@ export function ContentTable({ value }: ContentTableProps) {
 				</table>
 			</div>
 			{value.caption && (
-				<p className="text-center text-[1.125rem] font-normal text-muted-foreground md:text-[1.25rem] lg:text-[1.375rem]">
+				<p className="text-center text-[1.0625rem] font-normal text-muted-foreground md:text-[1.125rem] lg:text-[1.25rem]">
 					{value.caption}
 				</p>
 			)}
