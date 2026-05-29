@@ -16,7 +16,7 @@ export function ContentTable({ value }: ContentTableProps) {
 
 	return (
 		<figure className="not-prose my-8 flex flex-col gap-3">
-			<div className="overflow-x-auto rounded-xl border border-border [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+			<div className="overflow-x-auto rounded-[0.375rem] border border-border [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
 				<table className="w-full border-collapse text-sm">
 					{hasHeaders && (
 						<thead>
@@ -24,7 +24,7 @@ export function ContentTable({ value }: ContentTableProps) {
 								{value.headers.map((header, i) => (
 									<th
 										key={`h-${i}`}
-										className="px-4 py-2.5 text-left text-xs font-semibold tracking-wide text-foreground whitespace-nowrap"
+										className="px-4 py-2.5 text-left text-[1.125rem] font-semibold tracking-wide text-foreground whitespace-nowrap md:text-[1.25rem] lg:text-[1.375rem]"
 									>
 										{header}
 									</th>
@@ -42,7 +42,7 @@ export function ContentTable({ value }: ContentTableProps) {
 									{cells.map((cell, ci) => (
 										<td
 											key={`c-${ci}`}
-											className="px-4 py-2.5 text-sm font-normal text-paragraph"
+											className="px-4 py-2.5 text-[1.125rem] font-normal text-paragraph md:text-[1.25rem] lg:text-[1.375rem]"
 										>
 											{cell}
 										</td>
@@ -54,7 +54,7 @@ export function ContentTable({ value }: ContentTableProps) {
 				</table>
 			</div>
 			{value.caption && (
-				<p className="text-center text-xs font-normal text-muted-foreground">
+				<p className="text-center text-[1.125rem] font-normal text-muted-foreground md:text-[1.25rem] lg:text-[1.375rem]">
 					{value.caption}
 				</p>
 			)}
