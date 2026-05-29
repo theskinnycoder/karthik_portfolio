@@ -14,11 +14,16 @@ import { type NextRequest, NextResponse } from "next/server";
  */
 export async function GET(request: NextRequest) {
 	if (process.env.NODE_ENV !== "development") {
-		const { searchParams } = new URL(request.url);
-		const secret = searchParams.get("secret");
-		if (!secret || secret !== serverEnv.SANITY_WEBHOOK_SECRET) {
-			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+		const webhookSecret = serverEnv.SANITY_WEBHOOK_SECRET;
+		if (webhookSecret) {
+			// Secret is configured — require it as a query param
+			const { searchParams } = new URL(request.url);
+			const secret = searchParams.get("secret");
+			if (secret !== webhookSecret) {
+				return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+			}
 		}
+		// No secret configured → allow through (cache bust is not a sensitive operation)
 	}
 
 	for (const tags of Object.values(DOCUMENT_TYPE_TO_TAGS)) {
