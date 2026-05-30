@@ -39,7 +39,7 @@ export function CompanyHeader({
 			{(workTagline || workDescription) && (
 				<div className="flex flex-col gap-3">
 					{workTagline && (
-						<p className="text-lg font-semibold text-foreground">
+						<p className="text-[1.125rem] md:text-[1.25rem] lg:text-[1.375rem] font-semibold text-foreground">
 							{workTagline}
 						</p>
 					)}
