@@ -1,6 +1,7 @@
 import { ComposeIcon } from "@sanity/icons";
 import { defineArrayMember, defineField, defineType } from "sanity";
 import { CaseStudyContentPlugins } from "../components/case-study-content";
+import { ContentBlogInput } from "../components/content-blog-input";
 import { articleBlock, inlineBlock } from "../rich-text";
 
 export const workItem = defineType({
@@ -450,6 +451,25 @@ export const workItem = defineType({
 						prepare: ({ title, media }) => ({
 							title: (title as string) || "Video",
 							media: media as unknown as undefined,
+						}),
+					},
+				}),
+				defineArrayMember({
+					type: "object",
+					name: "contentBlog",
+					title: "Blog",
+					components: { input: ContentBlogInput },
+					fields: [
+						defineField({ name: "title", type: "string" }),
+						defineField({ name: "link", type: "string" }),
+						defineField({ name: "pubDate", type: "string" }),
+						defineField({ name: "excerpt", type: "string" }),
+						defineField({ name: "thumbnail", type: "string" }),
+					],
+					preview: {
+						select: { title: "title" },
+						prepare: ({ title }) => ({
+							title: (title as string) || "Blog (not selected)",
 						}),
 					},
 				}),

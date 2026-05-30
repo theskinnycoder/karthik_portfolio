@@ -198,6 +198,16 @@ export interface ContentTableDTO {
 	rows: string[][];
 }
 
+export interface ContentBlogDTO {
+	_type: "contentBlog";
+	_key: string;
+	title: string;
+	link: string;
+	pubDate: string;
+	excerpt: string;
+	thumbnail: string | null;
+}
+
 export type ContentBlock =
 	| PortableTextBlock
 	| ContentImageDTO
@@ -206,7 +216,8 @@ export type ContentBlock =
 	| ContentVideoDTO
 	| ContentMetaDTO
 	| ContentBadgesDTO
-	| ContentTableDTO;
+	| ContentTableDTO
+	| ContentBlogDTO;
 
 export interface WorkNavLinkDTO {
 	title: string;
@@ -456,6 +467,22 @@ function toContentTableDTO(
 	};
 }
 
+function toContentBlogDTO(
+	data: Record<string, unknown> & { _key: string },
+): ContentBlogDTO | null {
+	const link = data.link as string | undefined;
+	if (!link) return null;
+	return {
+		_type: "contentBlog",
+		_key: data._key,
+		title: (data.title as string) ?? "",
+		link,
+		pubDate: (data.pubDate as string) ?? "",
+		excerpt: (data.excerpt as string) ?? "",
+		thumbnail: (data.thumbnail as string) ?? null,
+	};
+}
+
 function hasType<T extends string>(
 	block: ContentBlockRaw,
 	type: T,
@@ -472,6 +499,11 @@ function toContentBlock(block: ContentBlockRaw): ContentBlock | null {
 	if (hasType(block, "contentMeta")) return toContentMetaDTO(block);
 	if (hasType(block, "contentBadges")) return toContentBadgesDTO(block);
 	if (hasType(block, "contentTable")) return toContentTableDTO(block);
+	// contentBlog fields are plain strings not in generated types yet — cast directly
+	if ((block._type as string) === "contentBlog")
+		return toContentBlogDTO(
+			block as unknown as Record<string, unknown> & { _key: string },
+		);
 	// Pass-through for PortableText `block` — the generated shape is a superset
 	// of `PortableTextBlock` so the cast is safe at runtime.
 	return block as unknown as PortableTextBlock;

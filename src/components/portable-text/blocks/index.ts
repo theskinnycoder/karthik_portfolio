@@ -1,4 +1,5 @@
 export { ContentBadges } from "./content-badges";
+export { ContentBlog } from "./content-blog";
 export { ContentDivider } from "./content-divider";
 export { ContentTable } from "./content-table";
 export { ContentImage } from "./content-image";
