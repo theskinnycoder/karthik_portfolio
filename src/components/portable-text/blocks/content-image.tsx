@@ -228,7 +228,7 @@ export function ContentImage({ value }: ContentImageProps) {
 					height={dimensions.height}
 					className={cn(
 						"w-full object-cover",
-						value.size === "full" ? "rounded-none" : "rounded-lg",
+						"rounded-none",
 					)}
 				/>
 				{value.caption && (
