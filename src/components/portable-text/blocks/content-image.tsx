@@ -217,7 +217,7 @@ export function ContentImage({ value }: ContentImageProps) {
 				className={cn(
 					"my-8 cursor-zoom-in",
 					value.size === "wide" && "md:-mx-16 lg:-mx-24",
-					value.size === "full" && "w-screen ml-[calc(50%_-_50vw)]",
+					value.size === "full" && "w-screen ml-[calc(50%_-_50vw)] px-[2.5rem]",
 				)}
 				onClick={() => setOpen(true)}
 			>
