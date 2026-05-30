@@ -77,7 +77,7 @@ export function WorkDetailDrawer({
 					)}
 
 					{displayWork && (
-						<main className="mx-auto flex w-full max-w-2xl flex-col gap-12 px-6 pt-10 pb-[0.5rem] [&_figure]:!mx-0 [&_figure_img]:!rounded-none">
+						<main className="mx-auto flex w-full max-w-2xl flex-col gap-12 px-6 pt-10 pb-[0.5rem]">
 							<WorkArticle
 								work={displayWork}
 								hideNav
