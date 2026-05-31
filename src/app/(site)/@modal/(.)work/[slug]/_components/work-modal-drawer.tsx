@@ -36,7 +36,9 @@ export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 			if (!next) return;
 			setWork(next);
 			scrollRef.current?.scrollTo({ top: 0 });
-			router.replace(`/work/${slug}`);
+			// Patch URL without triggering a Next.js navigation — keeps the
+			// drawer mounted so no re-animation plays.
+			window.history.replaceState(null, "", `/work/${slug}`);
 		});
 	}
 
