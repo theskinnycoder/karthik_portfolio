@@ -2,10 +2,10 @@
 
 import { ArrowUpRight } from "lucide-react";
 import { motion } from "motion/react";
+import Link from "next/link";
 import type { CSSProperties } from "react";
 import { MediaImage } from "@/components/media";
 import type { WorkItemDTO } from "@/sanity/lib/dal";
-import { useWorkDrawer } from "./work-drawer-context";
 
 interface WorkItemCardProps {
 	item: WorkItemDTO;
@@ -21,13 +21,11 @@ export function WorkItemCard({ item }: WorkItemCardProps) {
 		"--brand-from": from,
 		"--brand-to": to,
 	} as CSSProperties;
-	const { openDrawer } = useWorkDrawer();
 
 	return (
-		<button
-			type="button"
-			onClick={() => openDrawer(item.slug)}
-			className="block h-full w-full cursor-pointer text-left"
+		<Link
+			href={`/work/${item.slug}`}
+			className="block h-full w-full text-left"
 		>
 			<motion.div
 				className="flex h-full flex-col gap-3 rounded-[20px] border border-border bg-card p-3.5"
@@ -71,6 +69,6 @@ export function WorkItemCard({ item }: WorkItemCardProps) {
 					</div>
 				</div>
 			</motion.div>
-		</button>
+		</Link>
 	);
 }
