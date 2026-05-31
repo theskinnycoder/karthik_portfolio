@@ -92,7 +92,8 @@ export const workPageQuery = groq`
       description,
       "slug": slug.current,
       "brandFrom": brand.primary,
-      "brandTo": brand.secondary
+      "brandTo": brand.secondary,
+      "brandIcon": brand.icon
     }
   }
 `;

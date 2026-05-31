@@ -124,6 +124,7 @@ export interface WorkItemDTO {
 	slug: string;
 	brandFrom?: string;
 	brandTo?: string;
+	brandIcon?: string;
 }
 
 export interface TeamMemberDTO {
@@ -329,6 +330,7 @@ function toWorkItemCardDTO(data: WorkItemCardRaw): WorkItemDTO {
 		slug: (data.slug ?? "").trim(),
 		brandFrom: data.brandFrom ?? undefined,
 		brandTo: data.brandTo ?? undefined,
+		brandIcon: data.brandIcon ?? undefined,
 	};
 }
 

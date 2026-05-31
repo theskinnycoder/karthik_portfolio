@@ -99,6 +99,13 @@ export const workItem = defineType({
 					type: "string",
 					description: "Hex, subtle fill",
 				}),
+				defineField({
+					name: "icon",
+					title: "CTA icon color",
+					type: "string",
+					description:
+						"Hex. Color of the arrow icon on the card CTA button. Defaults to black (#000000).",
+				}),
 			],
 		}),
 		defineField({

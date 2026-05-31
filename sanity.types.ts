@@ -54,6 +54,7 @@ export type WorkItem = {
 		secondary?: string;
 		accent?: string;
 		muted?: string;
+		icon?: string;
 	};
 	liveUrl?: string;
 	content?: Array<
@@ -157,6 +158,15 @@ export type WorkItem = {
 				muted?: boolean;
 				controls?: boolean;
 				_type: "contentVideo";
+				_key: string;
+		  }
+		| {
+				title?: string;
+				link?: string;
+				pubDate?: string;
+				excerpt?: string;
+				thumbnail?: string;
+				_type: "contentBlog";
 				_key: string;
 		  }
 	>;
@@ -810,7 +820,7 @@ export type HomePageQueryResult = {
 
 // Source: src/sanity/lib/queries.ts
 // Variable: workPageQuery
-// Query: *[_type == "company" && count(*[_type == "workItem" && references(^._id)]) > 0] | order(order asc) {    _id,    name,    logo,    website,    isCurrent,    badge,    workTagline,    workDescription,    "workItems": *[_type == "workItem" && references(^._id)] | order(order asc) {      _id,      title,      icon,      tag,      image,      description,      "slug": slug.current,      "brandFrom": brand.primary,      "brandTo": brand.secondary    }  }
+// Query: *[_type == "company" && count(*[_type == "workItem" && references(^._id)]) > 0] | order(order asc) {    _id,    name,    logo,    website,    isCurrent,    badge,    workTagline,    workDescription,    "workItems": *[_type == "workItem" && references(^._id)] | order(order asc) {      _id,      title,      icon,      tag,      image,      description,      "slug": slug.current,      "brandFrom": brand.primary,      "brandTo": brand.secondary,      "brandIcon": brand.icon    }  }
 export type WorkPageQueryResult = Array<{
 	_id: string;
 	name: string | null;
@@ -848,6 +858,7 @@ export type WorkPageQueryResult = Array<{
 		slug: string | null;
 		brandFrom: string | null;
 		brandTo: string | null;
+		brandIcon: string | null;
 	}>;
 }>;
 
@@ -897,6 +908,7 @@ export type WorkItemBySlugQueryResult = {
 		secondary?: string;
 		accent?: string;
 		muted?: string;
+		icon?: string;
 	} | null;
 	content: Array<
 		| {
@@ -929,6 +941,15 @@ export type WorkItemBySlugQueryResult = {
 		| {
 				badges?: Array<string>;
 				_type: "contentBadges";
+				_key: string;
+		  }
+		| {
+				title?: string;
+				link?: string;
+				pubDate?: string;
+				excerpt?: string;
+				thumbnail?: string;
+				_type: "contentBlog";
 				_key: string;
 		  }
 		| {
@@ -1030,7 +1051,7 @@ declare module "@sanity/client" {
 		'\n  *[_type == "experience"] | order(order asc) {\n    _id,\n    company,\n    url,\n    role,\n    description\n  }\n': ExperiencesQueryResult;
 		'\n  *[_type == "siteProfile"][0] {\n    _id,\n    name,\n    title,\n    bio,\n    availabilityMessage,\n    heroVideo\n  }\n': SiteProfileQueryResult;
 		'\n  *[_type == "homePage"][0] {\n    sections\n  }\n': HomePageQueryResult;
-		'\n  *[_type == "company" && count(*[_type == "workItem" && references(^._id)]) > 0] | order(order asc) {\n    _id,\n    name,\n    logo,\n    website,\n    isCurrent,\n    badge,\n    workTagline,\n    workDescription,\n    "workItems": *[_type == "workItem" && references(^._id)] | order(order asc) {\n      _id,\n      title,\n      icon,\n      tag,\n      image,\n      description,\n      "slug": slug.current,\n      "brandFrom": brand.primary,\n      "brandTo": brand.secondary\n    }\n  }\n': WorkPageQueryResult;
+		'\n  *[_type == "company" && count(*[_type == "workItem" && references(^._id)]) > 0] | order(order asc) {\n    _id,\n    name,\n    logo,\n    website,\n    isCurrent,\n    badge,\n    workTagline,\n    workDescription,\n    "workItems": *[_type == "workItem" && references(^._id)] | order(order asc) {\n      _id,\n      title,\n      icon,\n      tag,\n      image,\n      description,\n      "slug": slug.current,\n      "brandFrom": brand.primary,\n      "brandTo": brand.secondary,\n      "brandIcon": brand.icon\n    }\n  }\n': WorkPageQueryResult;
 		'\n  *[_type == "sectionHeader" && slug.current == $slug][0] {\n    _id,\n    headingPrefix,\n    headingHighlight,\n    headingEmoji,\n    icon,\n    gradientFrom,\n    gradientTo,\n    video,\n    subheading\n  }\n': SectionHeaderQueryResult;
 		'\n  *[_type == "workItem" && slug.current == $slug][0] {\n    _id,\n    title,\n    "slug": slug.current,\n    tag,\n    description,\n    excerpt,\n    liveUrl,\n    image,\n    heroImage,\n    brand,\n    content[] {\n      ...,\n      _type == "contentTestimonial" => {\n        _type,\n        _key,\n        quote,\n        authorName,\n        authorRole,\n        companyLogo,\n        authorAvatar\n      },\n      _type == "contentTable" => {\n        _type,\n        _key,\n        caption,\n        headers,\n        "rows": rows[]{\n          _key,\n          cells\n        }\n      }\n    },\n    "orderedItems": *[_type == "workItem" && defined(slug.current)] | order(company->order asc, order asc) {\n      title,\n      "slug": slug.current,\n      tag\n    },\n    "company": company->{\n      _id,\n      name,\n      logo,\n      website\n    }\n  }\n': WorkItemBySlugQueryResult;
 		'\n  *[_type == "workItem" && defined(slug.current)].slug.current\n': AllWorkItemSlugsQueryResult;

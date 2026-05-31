@@ -20,6 +20,7 @@ export function WorkItemCard({ item }: WorkItemCardProps) {
 	const ctaStyle = {
 		"--brand-from": from,
 		"--brand-to": to,
+		...(item.brandIcon ? { "--brand-icon": item.brandIcon } : {}),
 	} as CSSProperties;
 
 	return (
@@ -65,7 +66,10 @@ export function WorkItemCard({ item }: WorkItemCardProps) {
 						style={ctaStyle}
 						className="flex size-[30px] shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-[var(--brand-from)] to-[var(--brand-to)]"
 					>
-						<ArrowUpRight className="size-4 text-background" />
+						<ArrowUpRight
+								className="size-4"
+								style={{ color: "var(--brand-icon, var(--background))" }}
+							/>
 					</div>
 				</div>
 			</motion.div>
