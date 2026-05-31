@@ -7,6 +7,7 @@ import { fetchWorkDetail } from "@/app/actions/work";
 import { WorkArticle } from "@/app/(work-detail)/work/[slug]/_components/work-article";
 import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
 import type { WorkItemDetailDTO, WorkNavLinkDTO } from "@/sanity/lib/dal";
+import { LOADING_SHOWN_KEY } from "./work-drawer-loading";
 
 interface WorkModalDrawerProps {
 	work: WorkItemDetailDTO;
@@ -14,14 +15,20 @@ interface WorkModalDrawerProps {
 
 export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 	const router = useRouter();
-	const [open, setOpen] = useState(false);
+	// If the loading skeleton already animated the drawer open, start open to
+	// avoid re-playing the slide-up animation.
+	const [open, setOpen] = useState(() => {
+		const skip = sessionStorage.getItem(LOADING_SHOWN_KEY);
+		if (skip) sessionStorage.removeItem(LOADING_SHOWN_KEY);
+		return !!skip;
+	});
 	const [work, setWork] = useState(initialWork);
-	const [, startTransition] = useTransition();
+	const [isPending, startTransition] = useTransition();
 	const scrollRef = useRef<HTMLDivElement>(null);
 
-	// Animate open on first mount
+	// Animate open only when the loading skeleton wasn't shown first
 	useEffect(() => {
-		setOpen(true);
+		if (!open) setOpen(true);
 	}, []);
 
 	function handleClose() {
@@ -72,19 +79,31 @@ export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 						</div>
 					</header>
 
-					<main className="mx-auto flex w-full max-w-2xl flex-col gap-12 px-6 pt-10 pb-[0.5rem]">
-						<WorkArticle
-							work={work}
-							hideNav
-						/>
-						{(work.prev ?? work.next) && (
-							<ModalPrevNext
-								prev={work.prev}
-								next={work.next}
-								onNavigate={navigateTo}
+					{isPending ? (
+						<div className="mx-auto flex w-full max-w-2xl flex-col gap-5 px-6 pt-10 pb-24">
+							{[100, 70, 90, 50, 80, 60, 100, 75].map((w, i) => (
+								<div
+									key={i}
+									className="h-5 animate-pulse rounded-md bg-foreground/10"
+									style={{ width: `${w}%` }}
+								/>
+							))}
+						</div>
+					) : (
+						<main className="mx-auto flex w-full max-w-2xl flex-col gap-12 px-6 pt-10 pb-[0.5rem]">
+							<WorkArticle
+								work={work}
+								hideNav
 							/>
-						)}
-					</main>
+							{(work.prev ?? work.next) && (
+								<ModalPrevNext
+									prev={work.prev}
+									next={work.next}
+									onNavigate={navigateTo}
+								/>
+							)}
+						</main>
+					)}
 				</div>
 			</DrawerContent>
 		</Drawer>
