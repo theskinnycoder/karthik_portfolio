@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
 import { DrawerBackHeader } from "@/components/drawer-back-header";
 import { DrawerSkeleton } from "./drawer-skeleton";
@@ -11,20 +11,11 @@ const CLOSE_ANIMATION_FALLBACK_MS = 600;
 
 export function WorkDrawerLoading() {
 	const router = useRouter();
-	// Start open immediately — vaul's CSS animation fires on data-state=open mount.
 	const [open, setOpen] = useState(true);
 	const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-	// useLayoutEffect fires during the commit phase, before any passive effects
-	// run — guaranteed to execute before WorkModalDrawer's useState initializer
-	// reads the flag in the next render cycle triggered by data arriving.
-	useLayoutEffect(() => {
-		sessionStorage.setItem(LOADING_SHOWN_KEY, "1");
-	}, []);
-
-	// Cancel any pending router.push when Next.js replaces this loading component
-	// with the real WorkModalDrawer (data arrived). Without this, the stale timer
-	// would fire after the modal is already open and navigate the user away.
+	// Cancel any pending router.back() when Next.js replaces this loading
+	// component with WorkModalDrawer (data arrived).
 	useEffect(() => {
 		return () => {
 			if (closeTimerRef.current !== null) {
@@ -45,6 +36,14 @@ export function WorkDrawerLoading() {
 			open={open}
 			onOpenChange={(isOpen) => {
 				if (!isOpen) handleClose();
+			}}
+			onAnimationEnd={(isOpen) => {
+				// Only set the flag once the skeleton's open animation fully completes.
+				// If data arrives before this fires (fast load), the flag is never set
+				// and WorkModalDrawer plays its own entrance animation normally.
+				// If the skeleton fully opens first (slow load), the flag suppresses
+				// WorkModalDrawer's duplicate animation.
+				if (isOpen) sessionStorage.setItem(LOADING_SHOWN_KEY, "1");
 			}}
 		>
 			<DrawerContent

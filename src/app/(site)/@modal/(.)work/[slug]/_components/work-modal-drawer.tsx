@@ -43,6 +43,10 @@ export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 	// Guards the pathname-based reopen so it never fires on a fresh mount
 	// (where open starts true), only after a real close has happened.
 	const hasClosedRef = useRef(false);
+	// Incremented each time navigateTo() is called or a reopen resets work state.
+	// The navigateTo closure captures the value at call time and bails out if it
+	// has since changed, preventing stale fetches from overwriting state.
+	const navGenerationRef = useRef(0);
 
 	// Cancel any pending close-navigation timer on unmount.
 	useEffect(() => {
@@ -51,14 +55,10 @@ export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 		};
 	}, []);
 
-	// On initial mount: WorkDrawerLoading's useLayoutEffect has already committed
-	// and written the sessionStorage flag (it mounted in the Suspense fallback
-	// phase, before us). Reading it here — before the browser paints — lets us
-	// set data-no-open-anim on the first painted frame, suppressing the duplicate
-	// slide-up when the skeleton already animated the drawer open.
-	// useState lazy initializer runs during speculative render (before Suspense
-	// shows the fallback), so the flag is not set yet at that point — this
-	// useLayoutEffect is the correct place to read it.
+	// On initial mount: if WorkDrawerLoading's open animation fully completed
+	// before data arrived, it has written the flag via onAnimationEnd. Reading
+	// the flag here (before first paint) suppresses the duplicate slide-up.
+	// For fast loads the flag is never set, so animation plays normally.
 	useLayoutEffect(() => {
 		if (consumeSkeletonFlag()) setSuppressOpenAnim(true);
 	}, []);
@@ -77,30 +77,56 @@ export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 	// while the drawer is closed, re-read the skeleton flag (WorkDrawerLoading
 	// sets it in its own useLayoutEffect before this fires), and reopen.
 	// hasClosedRef prevents this from triggering on the initial mount.
+	//
+	// We check initialWork.slug (the server-provided slug) rather than work.slug
+	// (the client state). After navigateTo(), work.slug drifts to the navigated
+	// card — if the user then closes and immediately re-clicks the original card
+	// before router.back() completes, React reconciles this instance with the new
+	// initialWork prop. Using initialWork.slug ensures the reopen fires correctly
+	// and we reset the stale work state before re-opening.
 	useLayoutEffect(() => {
-		if (pathname === `/work/${work.slug}` && !open && hasClosedRef.current) {
+		if (pathname === `/work/${initialWork.slug}` && !open && hasClosedRef.current) {
+			if (work.slug !== initialWork.slug) {
+				// navigateTo() left stale work state and a stale browser URL.
+				// Increment the generation to discard any in-flight navigateTo fetch,
+				// reset work to the server-provided data, and restore the URL so that
+				// handleClose's window.location.pathname guard stays consistent.
+				navGenerationRef.current++;
+				setWork(initialWork);
+				window.history.replaceState(null, "", `/work/${initialWork.slug}`);
+			}
 			setSuppressOpenAnim(consumeSkeletonFlag());
 			setOpen(true);
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps -- pathname is the only trigger; open/work.slug/hasClosedRef are guards, not reactive dependencies
+	// eslint-disable-next-line react-hooks/exhaustive-deps -- pathname is the only trigger; open/initialWork/work/hasClosedRef are guards read at trigger time
 	}, [pathname]);
 
 	function handleClose() {
 		// Guard against vaul firing onOpenChange(false) more than once.
 		if (!open) return;
 		// Ghost drawers from a previous card must not trigger navigation.
-		if (pathname !== `/work/${work.slug}`) return;
+		// Use window.location.pathname — navigateTo() patches the URL via
+		// replaceState which does NOT update usePathname(), so `pathname` would
+		// be stale after any prev/next navigation.
+		if (window.location.pathname !== `/work/${work.slug}`) return;
 
 		setOpen(false);
 		if (closeTimerRef.current !== null) clearTimeout(closeTimerRef.current);
 		// Fallback for reduced-motion environments where onAnimationEnd never fires.
-		closeTimerRef.current = setTimeout(() => router.back(), CLOSE_ANIMATION_FALLBACK_MS);
+		// Null the ref before calling router.back() so that if onAnimationEnd also
+		// fires afterward it sees a null ref and skips the duplicate navigation.
+		closeTimerRef.current = setTimeout(() => {
+			closeTimerRef.current = null;
+			router.back();
+		}, CLOSE_ANIMATION_FALLBACK_MS);
 	}
 
 	function navigateTo(slug: string) {
+		const generation = ++navGenerationRef.current;
 		startTransition(async () => {
 			const next = await fetchWorkDetail(slug);
-			if (!next) return;
+			// Bail out if a reopen or newer navigateTo superseded this call.
+			if (!next || generation !== navGenerationRef.current) return;
 			setWork(next);
 			scrollRef.current?.scrollTo({ top: 0 });
 			// Patch the URL without a Next.js navigation to keep the drawer mounted.
@@ -117,7 +143,8 @@ export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 			onAnimationEnd={(isOpen) => {
 				// Navigate as soon as vaul's close animation finishes, then cancel
 				// the fallback timer so it does not double-fire.
-				if (!isOpen && pathname === `/work/${work.slug}`) {
+				// Same window.location.pathname rationale as handleClose above.
+				if (!isOpen && window.location.pathname === `/work/${work.slug}`) {
 					if (closeTimerRef.current !== null) {
 						clearTimeout(closeTimerRef.current);
 						closeTimerRef.current = null;
@@ -167,8 +194,7 @@ interface ModalPrevNextProps {
 }
 
 function ModalPrevNext({ prev, next, onNavigate }: ModalPrevNextProps) {
-	const justify =
-		prev && next ? "justify-between" : next ? "justify-end" : "justify-start";
+	const justify = prev && next ? "justify-between" : "justify-start";
 
 	return (
 		<nav
