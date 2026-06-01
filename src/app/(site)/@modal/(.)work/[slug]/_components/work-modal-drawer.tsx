@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState, useTransition } from "react";
 import { fetchWorkDetail } from "@/app/actions/work";
 import { WorkArticle } from "@/app/(work-detail)/work/[slug]/_components/work-article";
@@ -16,6 +16,7 @@ interface WorkModalDrawerProps {
 
 export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 	const router = useRouter();
+	const pathname = usePathname();
 	// Read the flag once, synchronously, to know if the loading skeleton was shown.
 	const [skeletonWasShown] = useState(() => {
 		const skip = sessionStorage.getItem(LOADING_SHOWN_KEY);
@@ -23,31 +24,26 @@ export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 		return !!skip;
 	});
 	const [open, setOpen] = useState(true);
+
+	// When Next.js concurrent rendering reuses this component instance (stale
+	// open=false), detect the pathname arriving back at our own slug URL and
+	// reset open=true. useLayoutEffect fires after commit, before paint —
+	// reliable even during concurrent rendering transitions.
+	useLayoutEffect(() => {
+		if (pathname === `/work/${work.slug}` && !open) {
+			setOpen(true);
+		}
+	}, [pathname]); // eslint-disable-line react-hooks/exhaustive-deps
 	const [work, setWork] = useState(initialWork);
 	const [isPending, startTransition] = useTransition();
 	const scrollRef = useRef<HTMLDivElement>(null);
-	const drawerContentRef = useRef<HTMLDivElement>(null);
 	// Tracks a pending close-navigation timer so it can be cancelled on unmount.
 	const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-	// When the loading skeleton already animated the drawer open, mark the
-	// DrawerContent element so the CSS rule in globals.css can suppress vaul's
-	// slideFromBottom animation (scoped to data-state=open, so the slideToBottom
-	// close animation is unaffected). This runs before first paint, so the
-	// attribute is present when the browser applies the initial CSS.
-	useLayoutEffect(() => {
-		if (skeletonWasShown) {
-			drawerContentRef.current?.setAttribute("data-no-open-anim", "");
-		}
-	}, [skeletonWasShown]);
-
-	// Cancel any pending router.push on unmount to prevent a stale timer from
-	// navigating away after Next.js has already replaced this component.
+	// Cancel pending timers on unmount.
 	useEffect(() => {
 		return () => {
-			if (closeTimerRef.current !== null) {
-				clearTimeout(closeTimerRef.current);
-			}
+			if (closeTimerRef.current !== null) clearTimeout(closeTimerRef.current);
 		};
 	}, []);
 
@@ -55,6 +51,9 @@ export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 		// Guard: vaul can call onOpenChange(false) more than once (swipe + outside
 		// click). Ignore if we are already in the closing sequence.
 		if (!open) return;
+		// Guard: only the drawer whose slug matches the current URL should navigate.
+		// Ghost (leaked) drawers from previous cards must not trigger router.back().
+		if (pathname !== `/work/${work.slug}`) return;
 		setOpen(false);
 		// Clear any prior pending timer, then set a new one.
 		// Navigation is triggered via onAnimationEnd on the Drawer (see below);
@@ -84,7 +83,8 @@ export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 			onAnimationEnd={(isOpen) => {
 				// Navigate as soon as vaul's close animation actually finishes,
 				// then cancel the fallback timer so it doesn't double-fire.
-				if (!isOpen) {
+				// Guard: only navigate if this drawer's slug matches the current URL.
+				if (!isOpen && pathname === `/work/${work.slug}`) {
 					if (closeTimerRef.current !== null) {
 						clearTimeout(closeTimerRef.current);
 						closeTimerRef.current = null;
@@ -94,8 +94,8 @@ export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 			}}
 		>
 			<DrawerContent
-				ref={drawerContentRef}
 				data-theme="work-detail"
+				{...(skeletonWasShown ? { "data-no-open-anim": "" } : {})}
 				className="mt-0 h-dvh max-h-none p-0 bg-background before:hidden data-[vaul-drawer-direction=bottom]:mt-0 data-[vaul-drawer-direction=bottom]:max-h-none [&>div:first-child]:hidden"
 			>
 				<DrawerTitle className="sr-only">Case Study</DrawerTitle>
