@@ -50,7 +50,10 @@ export function WorkItemCard({ item }: WorkItemCardProps) {
 						{item.tag}
 					</span>
 				</div>
-				<div className="relative aspect-[11/10] overflow-hidden rounded-xl">
+				<div
+					className="relative overflow-hidden rounded-xl"
+					style={{ aspectRatio: "var(--card-image-ratio, 11/10)" }}
+				>
 					<MediaImage
 						src={item.image}
 						alt={item.title}

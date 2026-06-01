@@ -31,12 +31,14 @@ export function CompanyGroup({ company }: CompanyGroupProps) {
 					className="pointer-events-none absolute top-0 left-36 z-10 w-20"
 					unoptimized
 				/>
-				<div className="grid grid-cols-1 justify-items-center gap-4 md:grid-cols-2">
+				<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 					{company.workItems.map((item) => (
-						<WorkItemCard
+						<div
 							key={item.slug}
-							item={item}
-						/>
+							className="h-full w-full md:[&:last-child:nth-child(odd)]:col-span-full md:[&:last-child:nth-child(odd)]:[--card-image-ratio:2.2]"
+						>
+							<WorkItemCard item={item} />
+						</div>
 					))}
 				</div>
 			</div>
