@@ -11,10 +11,13 @@ export function WorkDrawerLoading() {
 	const router = useRouter();
 	const [open, setOpen] = useState(false);
 
+	// Set synchronously during render — useEffect may not fire before React
+	// replaces this loading fallback with WorkModalDrawer, so we need the
+	// flag in place before the replacement component's useState initializer runs.
+	sessionStorage.setItem(LOADING_SHOWN_KEY, "1");
+
 	useEffect(() => {
 		setOpen(true);
-		// Tell the real drawer it doesn't need to animate open
-		sessionStorage.setItem(LOADING_SHOWN_KEY, "1");
 	}, []);
 
 	function handleClose() {
