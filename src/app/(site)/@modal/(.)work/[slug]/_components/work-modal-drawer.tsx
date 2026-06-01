@@ -2,11 +2,12 @@
 
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import { fetchWorkDetail } from "@/app/actions/work";
 import { WorkArticle } from "@/app/(work-detail)/work/[slug]/_components/work-article";
 import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
 import type { WorkItemDetailDTO, WorkNavLinkDTO } from "@/sanity/lib/dal";
+import { DrawerSkeleton } from "./drawer-skeleton";
 import { LOADING_SHOWN_KEY } from "./work-drawer-loading";
 
 interface WorkModalDrawerProps {
@@ -15,21 +16,17 @@ interface WorkModalDrawerProps {
 
 export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 	const router = useRouter();
-	// If the loading skeleton already animated the drawer open, start open to
-	// avoid re-playing the slide-up animation.
-	const [open, setOpen] = useState(() => {
+	// Read the flag synchronously so defaultOpen can suppress vaul's entrance
+	// animation when the loading skeleton already animated the drawer open.
+	const [skeletonWasShown] = useState(() => {
 		const skip = sessionStorage.getItem(LOADING_SHOWN_KEY);
 		if (skip) sessionStorage.removeItem(LOADING_SHOWN_KEY);
 		return !!skip;
 	});
+	const [open, setOpen] = useState(true);
 	const [work, setWork] = useState(initialWork);
 	const [isPending, startTransition] = useTransition();
 	const scrollRef = useRef<HTMLDivElement>(null);
-
-	// Animate open only when the loading skeleton wasn't shown first
-	useEffect(() => {
-		if (!open) setOpen(true);
-	}, []);
 
 	function handleClose() {
 		setOpen(false);
@@ -52,6 +49,7 @@ export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 	return (
 		<Drawer
 			open={open}
+			defaultOpen={skeletonWasShown}
 			onOpenChange={(isOpen) => {
 				if (!isOpen) handleClose();
 			}}
@@ -80,15 +78,7 @@ export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 					</header>
 
 					{isPending ? (
-						<div className="mx-auto flex w-full max-w-2xl flex-col gap-5 px-6 pt-10 pb-24">
-							{[100, 70, 90, 50, 80, 60, 100, 75].map((w, i) => (
-								<div
-									key={i}
-									className="h-5 animate-pulse rounded-md bg-foreground/10"
-									style={{ width: `${w}%` }}
-								/>
-							))}
-						</div>
+						<DrawerSkeleton />
 					) : (
 						<main className="mx-auto flex w-full max-w-2xl flex-col gap-12 px-6 pt-10 pb-[0.5rem]">
 							<WorkArticle

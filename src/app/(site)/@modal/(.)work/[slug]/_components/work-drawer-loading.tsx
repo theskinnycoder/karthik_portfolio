@@ -2,22 +2,22 @@
 
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
+import { DrawerSkeleton } from "./drawer-skeleton";
 
 const LOADING_SHOWN_KEY = "vaul-loading-shown";
 
 export function WorkDrawerLoading() {
 	const router = useRouter();
-	const [open, setOpen] = useState(false);
+	// Start open immediately — vaul's CSS animation fires on data-state=open mount.
+	const [open, setOpen] = useState(true);
 
-	// Set synchronously during render — useEffect may not fire before React
-	// replaces this loading fallback with WorkModalDrawer, so we need the
-	// flag in place before the replacement component's useState initializer runs.
-	sessionStorage.setItem(LOADING_SHOWN_KEY, "1");
-
-	useEffect(() => {
-		setOpen(true);
+	// useLayoutEffect fires during the commit phase, before any passive effects
+	// run — guaranteed to execute before WorkModalDrawer's useState initializer
+	// reads the flag in the next render cycle triggered by data arriving.
+	useLayoutEffect(() => {
+		sessionStorage.setItem(LOADING_SHOWN_KEY, "1");
 	}, []);
 
 	function handleClose() {
@@ -52,15 +52,7 @@ export function WorkDrawerLoading() {
 						</div>
 					</header>
 
-					<div className="mx-auto flex w-full max-w-2xl flex-col gap-5 px-6 pt-10 pb-24">
-						{[100, 70, 90, 50, 80, 60, 100, 75].map((w, i) => (
-							<div
-								key={i}
-								className="h-5 animate-pulse rounded-md bg-foreground/10"
-								style={{ width: `${w}%` }}
-							/>
-						))}
-					</div>
+					<DrawerSkeleton />
 				</div>
 			</DrawerContent>
 		</Drawer>

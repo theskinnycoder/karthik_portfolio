@@ -67,9 +67,9 @@ export function WorkItemCard({ item }: WorkItemCardProps) {
 						className="flex size-[30px] shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-[var(--brand-from)] to-[var(--brand-to)]"
 					>
 						<ArrowUpRight
-								className="size-4"
-								style={{ color: "var(--brand-icon, var(--background))" }}
-							/>
+							className="size-4"
+							style={{ color: "var(--brand-icon, var(--background))" }}
+						/>
 					</div>
 				</div>
 			</motion.div>
