@@ -2,7 +2,7 @@
 
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useRef, useState, useTransition } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, useTransition } from "react";
 import { fetchWorkDetail } from "@/app/actions/work";
 import { WorkArticle } from "@/app/(work-detail)/work/[slug]/_components/work-article";
 import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
@@ -16,8 +16,7 @@ interface WorkModalDrawerProps {
 
 export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 	const router = useRouter();
-	// Read the flag synchronously so defaultOpen can suppress vaul's entrance
-	// animation when the loading skeleton already animated the drawer open.
+	// Read the flag once, synchronously, to know if the loading skeleton was shown.
 	const [skeletonWasShown] = useState(() => {
 		const skip = sessionStorage.getItem(LOADING_SHOWN_KEY);
 		if (skip) sessionStorage.removeItem(LOADING_SHOWN_KEY);
@@ -27,11 +26,41 @@ export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 	const [work, setWork] = useState(initialWork);
 	const [isPending, startTransition] = useTransition();
 	const scrollRef = useRef<HTMLDivElement>(null);
+	const drawerContentRef = useRef<HTMLDivElement>(null);
+	// Tracks a pending close-navigation timer so it can be cancelled on unmount.
+	const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+	// When the loading skeleton already animated the drawer open, mark the
+	// DrawerContent element so the CSS rule in globals.css can suppress vaul's
+	// slideFromBottom animation (scoped to data-state=open, so the slideToBottom
+	// close animation is unaffected). This runs before first paint, so the
+	// attribute is present when the browser applies the initial CSS.
+	useLayoutEffect(() => {
+		if (skeletonWasShown) {
+			drawerContentRef.current?.setAttribute("data-no-open-anim", "");
+		}
+	}, [skeletonWasShown]);
+
+	// Cancel any pending router.push on unmount to prevent a stale timer from
+	// navigating away after Next.js has already replaced this component.
+	useEffect(() => {
+		return () => {
+			if (closeTimerRef.current !== null) {
+				clearTimeout(closeTimerRef.current);
+			}
+		};
+	}, []);
 
 	function handleClose() {
+		// Guard: vaul can call onOpenChange(false) more than once (swipe + outside
+		// click). Ignore if we are already in the closing sequence.
+		if (!open) return;
 		setOpen(false);
-		// vaul's exit animation is 500ms
-		setTimeout(() => router.push("/work"), 500);
+		// Clear any prior pending timer, then set a new one.
+		// Navigation is triggered via onAnimationEnd on the Drawer (see below);
+		// the 600 ms timer is only a fallback for reduced-motion environments.
+		if (closeTimerRef.current !== null) clearTimeout(closeTimerRef.current);
+		closeTimerRef.current = setTimeout(() => router.back(), 600);
 	}
 
 	function navigateTo(slug: string) {
@@ -49,12 +78,23 @@ export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 	return (
 		<Drawer
 			open={open}
-			defaultOpen={skeletonWasShown}
 			onOpenChange={(isOpen) => {
 				if (!isOpen) handleClose();
 			}}
+			onAnimationEnd={(isOpen) => {
+				// Navigate as soon as vaul's close animation actually finishes,
+				// then cancel the fallback timer so it doesn't double-fire.
+				if (!isOpen) {
+					if (closeTimerRef.current !== null) {
+						clearTimeout(closeTimerRef.current);
+						closeTimerRef.current = null;
+					}
+					router.back();
+				}
+			}}
 		>
 			<DrawerContent
+				ref={drawerContentRef}
 				data-theme="work-detail"
 				className="mt-0 h-dvh max-h-none p-0 bg-background before:hidden data-[vaul-drawer-direction=bottom]:mt-0 data-[vaul-drawer-direction=bottom]:max-h-none [&>div:first-child]:hidden"
 			>

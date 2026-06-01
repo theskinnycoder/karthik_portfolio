@@ -2,7 +2,7 @@
 
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
 import { DrawerSkeleton } from "./drawer-skeleton";
 
@@ -12,6 +12,7 @@ export function WorkDrawerLoading() {
 	const router = useRouter();
 	// Start open immediately — vaul's CSS animation fires on data-state=open mount.
 	const [open, setOpen] = useState(true);
+	const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
 	// useLayoutEffect fires during the commit phase, before any passive effects
 	// run — guaranteed to execute before WorkModalDrawer's useState initializer
@@ -20,9 +21,22 @@ export function WorkDrawerLoading() {
 		sessionStorage.setItem(LOADING_SHOWN_KEY, "1");
 	}, []);
 
+	// Cancel any pending router.push when Next.js replaces this loading component
+	// with the real WorkModalDrawer (data arrived). Without this, the stale timer
+	// would fire after the modal is already open and navigate the user away.
+	useEffect(() => {
+		return () => {
+			if (closeTimerRef.current !== null) {
+				clearTimeout(closeTimerRef.current);
+			}
+		};
+	}, []);
+
 	function handleClose() {
+		if (!open) return;
 		setOpen(false);
-		setTimeout(() => router.push("/work"), 500);
+		if (closeTimerRef.current !== null) clearTimeout(closeTimerRef.current);
+		closeTimerRef.current = setTimeout(() => router.back(), 600);
 	}
 
 	return (

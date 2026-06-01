@@ -3,6 +3,16 @@
 @import "shadcn/tailwind.css";
 @plugin "@tailwindcss/typography";
 
+/*
+ * Suppress vaul's slideFromBottom entrance animation when the loading skeleton
+ * already animated the drawer open (data-no-open-anim attribute is set via
+ * useLayoutEffect in WorkModalDrawer). Intentionally scoped to data-state=open
+ * so the slideToBottom close animation is never affected.
+ */
+[data-vaul-drawer][data-state='open'][data-no-open-anim] {
+	animation-name: none !important;
+}
+
 @theme inline {
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
