@@ -33,13 +33,16 @@ export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 	const [work, setWork] = useState(initialWork);
 	const [isPending, startTransition] = useTransition();
 
-	// Suppress the entrance animation when the loading skeleton already animated
-	// the drawer open. Reset to false on close so any subsequent reopen always
-	// gets its entrance animation back.
-	const [suppressOpenAnim, setSuppressOpenAnim] = useState(consumeSkeletonFlag);
+	// False by default. Set true (synchronously before first paint) when the
+	// loading skeleton already slid the drawer open, preventing a double slide-up.
+	// Reset to false on close so any subsequent reopen gets its animation back.
+	const [suppressOpenAnim, setSuppressOpenAnim] = useState(false);
 
 	const scrollRef = useRef<HTMLDivElement>(null);
 	const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+	// Guards the pathname-based reopen so it never fires on a fresh mount
+	// (where open starts true), only after a real close has happened.
+	const hasClosedRef = useRef(false);
 
 	// Cancel any pending close-navigation timer on unmount.
 	useEffect(() => {
@@ -48,22 +51,38 @@ export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 		};
 	}, []);
 
-	// When the drawer closes, reset the animation-suppress flag so the next
-	// open (same-card reopen) plays the entrance animation correctly.
+	// On initial mount: WorkDrawerLoading's useLayoutEffect has already committed
+	// and written the sessionStorage flag (it mounted in the Suspense fallback
+	// phase, before us). Reading it here — before the browser paints — lets us
+	// set data-no-open-anim on the first painted frame, suppressing the duplicate
+	// slide-up when the skeleton already animated the drawer open.
+	// useState lazy initializer runs during speculative render (before Suspense
+	// shows the fallback), so the flag is not set yet at that point — this
+	// useLayoutEffect is the correct place to read it.
+	useLayoutEffect(() => {
+		if (consumeSkeletonFlag()) setSuppressOpenAnim(true);
+	}, []);
+
+	// When the drawer closes: mark that a close has occurred (enables the
+	// pathname-based reopen below) and reset the animation suppress flag.
 	useEffect(() => {
-		if (!open) setSuppressOpenAnim(false);
+		if (!open) {
+			hasClosedRef.current = true;
+			setSuppressOpenAnim(false);
+		}
 	}, [open]);
 
 	// Same-card reopen: Next.js may reuse this component instance when the user
 	// navigates back to the same slug. Detect the pathname returning to our slug
 	// while the drawer is closed, re-read the skeleton flag (WorkDrawerLoading
 	// sets it in its own useLayoutEffect before this fires), and reopen.
+	// hasClosedRef prevents this from triggering on the initial mount.
 	useLayoutEffect(() => {
-		if (pathname === `/work/${work.slug}` && !open) {
+		if (pathname === `/work/${work.slug}` && !open && hasClosedRef.current) {
 			setSuppressOpenAnim(consumeSkeletonFlag());
 			setOpen(true);
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps -- pathname is the only trigger; open and work.slug are guards, not reactive dependencies
+	// eslint-disable-next-line react-hooks/exhaustive-deps -- pathname is the only trigger; open/work.slug/hasClosedRef are guards, not reactive dependencies
 	}, [pathname]);
 
 	function handleClose() {
