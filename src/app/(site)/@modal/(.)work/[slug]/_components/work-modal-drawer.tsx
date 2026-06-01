@@ -194,7 +194,7 @@ interface ModalPrevNextProps {
 }
 
 function ModalPrevNext({ prev, next, onNavigate }: ModalPrevNextProps) {
-	const justify = prev && next ? "justify-between" : "justify-start";
+	const justify = prev && next ? "justify-between" : next ? "justify-end" : "justify-start";
 
 	return (
 		<nav
@@ -235,7 +235,7 @@ function NavButton({ label, title, icon, iconPosition, onClick }: NavButtonProps
 	return (
 		<button
 			onClick={onClick}
-			className="flex min-h-16 flex-col items-start justify-center gap-1 overflow-hidden rounded-xl border border-[rgba(33,33,33,0.1)] bg-muted px-4 py-3 whitespace-nowrap transition-colors hover:border-[rgba(33,33,33,0.2)]"
+			className="flex min-h-16 cursor-pointer flex-col items-start justify-center gap-1 overflow-hidden rounded-xl border border-[rgba(33,33,33,0.1)] bg-muted px-4 py-3 whitespace-nowrap transition-colors hover:border-[rgba(33,33,33,0.2)]"
 		>
 			<span className="flex items-center gap-1 text-xs leading-none font-normal text-[#808080]">
 				{iconPosition === "left" && icon}
