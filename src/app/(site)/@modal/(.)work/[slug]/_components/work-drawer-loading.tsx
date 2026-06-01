@@ -1,12 +1,13 @@
 "use client";
 
-import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
+import { DrawerBackHeader } from "@/components/drawer-back-header";
 import { DrawerSkeleton } from "./drawer-skeleton";
 
 const LOADING_SHOWN_KEY = "vaul-loading-shown";
+const CLOSE_ANIMATION_FALLBACK_MS = 600;
 
 export function WorkDrawerLoading() {
 	const router = useRouter();
@@ -36,7 +37,7 @@ export function WorkDrawerLoading() {
 		if (!open) return;
 		setOpen(false);
 		if (closeTimerRef.current !== null) clearTimeout(closeTimerRef.current);
-		closeTimerRef.current = setTimeout(() => router.back(), 600);
+		closeTimerRef.current = setTimeout(() => router.back(), CLOSE_ANIMATION_FALLBACK_MS);
 	}
 
 	return (
@@ -52,20 +53,7 @@ export function WorkDrawerLoading() {
 			>
 				<DrawerTitle className="sr-only">Loading…</DrawerTitle>
 				<div className="h-full overflow-x-hidden overflow-y-auto bg-background text-foreground">
-					<header className="sticky top-0 z-50 w-full border-b border-foreground/[0.06] bg-background/75 backdrop-blur-md">
-						<div className="mx-auto flex w-full max-w-2xl items-center px-6 py-3.5">
-							<button
-								onClick={handleClose}
-								className="group inline-flex w-fit items-center gap-2.5 text-sm font-medium text-foreground transition-opacity hover:opacity-80"
-							>
-								<span className="flex size-7 items-center justify-center rounded-full bg-foreground text-background transition-transform group-hover:scale-95">
-									<ArrowLeft className="size-4" />
-								</span>
-								Back to Work
-							</button>
-						</div>
-					</header>
-
+					<DrawerBackHeader onBack={handleClose} />
 					<DrawerSkeleton />
 				</div>
 			</DrawerContent>
@@ -73,4 +61,4 @@ export function WorkDrawerLoading() {
 	);
 }
 
-export { LOADING_SHOWN_KEY };
+export { CLOSE_ANIMATION_FALLBACK_MS, LOADING_SHOWN_KEY };

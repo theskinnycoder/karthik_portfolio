@@ -5,8 +5,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cachePageLife } from "@/lib/caching";
 import { getAllWorkItemSlugs, getWorkItemBySlug } from "@/sanity/lib/dal";
-import { WorkArticle } from "./_components/work-article";
-import { WorkBackLink } from "./_components/work-back-link";
+import { WorkDetailDrawerShell } from "./_components/work-detail-drawer-shell";
 
 interface WorkDetailPageProps {
 	params: Promise<{ slug: string }>;
@@ -57,10 +56,7 @@ export default async function WorkDetailPage({ params }: WorkDetailPageProps) {
 			data-theme="work-detail"
 			className="min-h-dvh bg-background text-foreground"
 		>
-			<WorkBackLink />
-			<main className="mx-auto flex w-full max-w-2xl flex-col gap-12 px-6 pt-10 pb-[18px] md:pt-12">
-				<WorkArticle work={work} />
-			</main>
+			<WorkDetailDrawerShell work={work} />
 		</div>
 	);
 }

@@ -7,59 +7,75 @@ import { fetchWorkDetail } from "@/app/actions/work";
 import { WorkArticle } from "@/app/(work-detail)/work/[slug]/_components/work-article";
 import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
 import type { WorkItemDetailDTO, WorkNavLinkDTO } from "@/sanity/lib/dal";
+import { DrawerBackHeader } from "@/components/drawer-back-header";
 import { DrawerSkeleton } from "./drawer-skeleton";
-import { LOADING_SHOWN_KEY } from "./work-drawer-loading";
+import { CLOSE_ANIMATION_FALLBACK_MS, LOADING_SHOWN_KEY } from "./work-drawer-loading";
 
 interface WorkModalDrawerProps {
 	work: WorkItemDetailDTO;
 }
 
+// Read and consume the skeleton-shown flag. Returns true if the loading
+// skeleton played for this open, clearing the flag as a side effect so it
+// is never double-consumed across renders.
+function consumeSkeletonFlag(): boolean {
+	if (typeof window === "undefined") return false;
+	const wasShown = !!sessionStorage.getItem(LOADING_SHOWN_KEY);
+	if (wasShown) sessionStorage.removeItem(LOADING_SHOWN_KEY);
+	return wasShown;
+}
+
 export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 	const router = useRouter();
 	const pathname = usePathname();
-	// Read the flag once, synchronously, to know if the loading skeleton was shown.
-	const [skeletonWasShown] = useState(() => {
-		const skip = sessionStorage.getItem(LOADING_SHOWN_KEY);
-		if (skip) sessionStorage.removeItem(LOADING_SHOWN_KEY);
-		return !!skip;
-	});
-	const [open, setOpen] = useState(true);
 
-	// When Next.js concurrent rendering reuses this component instance (stale
-	// open=false), detect the pathname arriving back at our own slug URL and
-	// reset open=true. useLayoutEffect fires after commit, before paint —
-	// reliable even during concurrent rendering transitions.
-	useLayoutEffect(() => {
-		if (pathname === `/work/${work.slug}` && !open) {
-			setOpen(true);
-		}
-	}, [pathname]); // eslint-disable-line react-hooks/exhaustive-deps
+	const [open, setOpen] = useState(true);
 	const [work, setWork] = useState(initialWork);
 	const [isPending, startTransition] = useTransition();
+
+	// Suppress the entrance animation when the loading skeleton already animated
+	// the drawer open. Reset to false on close so any subsequent reopen always
+	// gets its entrance animation back.
+	const [suppressOpenAnim, setSuppressOpenAnim] = useState(consumeSkeletonFlag);
+
 	const scrollRef = useRef<HTMLDivElement>(null);
-	// Tracks a pending close-navigation timer so it can be cancelled on unmount.
 	const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-	// Cancel pending timers on unmount.
+	// Cancel any pending close-navigation timer on unmount.
 	useEffect(() => {
 		return () => {
 			if (closeTimerRef.current !== null) clearTimeout(closeTimerRef.current);
 		};
 	}, []);
 
+	// When the drawer closes, reset the animation-suppress flag so the next
+	// open (same-card reopen) plays the entrance animation correctly.
+	useEffect(() => {
+		if (!open) setSuppressOpenAnim(false);
+	}, [open]);
+
+	// Same-card reopen: Next.js may reuse this component instance when the user
+	// navigates back to the same slug. Detect the pathname returning to our slug
+	// while the drawer is closed, re-read the skeleton flag (WorkDrawerLoading
+	// sets it in its own useLayoutEffect before this fires), and reopen.
+	useLayoutEffect(() => {
+		if (pathname === `/work/${work.slug}` && !open) {
+			setSuppressOpenAnim(consumeSkeletonFlag());
+			setOpen(true);
+		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps -- pathname is the only trigger; open and work.slug are guards, not reactive dependencies
+	}, [pathname]);
+
 	function handleClose() {
-		// Guard: vaul can call onOpenChange(false) more than once (swipe + outside
-		// click). Ignore if we are already in the closing sequence.
+		// Guard against vaul firing onOpenChange(false) more than once.
 		if (!open) return;
-		// Guard: only the drawer whose slug matches the current URL should navigate.
-		// Ghost (leaked) drawers from previous cards must not trigger router.back().
+		// Ghost drawers from a previous card must not trigger navigation.
 		if (pathname !== `/work/${work.slug}`) return;
+
 		setOpen(false);
-		// Clear any prior pending timer, then set a new one.
-		// Navigation is triggered via onAnimationEnd on the Drawer (see below);
-		// the 600 ms timer is only a fallback for reduced-motion environments.
 		if (closeTimerRef.current !== null) clearTimeout(closeTimerRef.current);
-		closeTimerRef.current = setTimeout(() => router.back(), 600);
+		// Fallback for reduced-motion environments where onAnimationEnd never fires.
+		closeTimerRef.current = setTimeout(() => router.back(), CLOSE_ANIMATION_FALLBACK_MS);
 	}
 
 	function navigateTo(slug: string) {
@@ -68,8 +84,7 @@ export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 			if (!next) return;
 			setWork(next);
 			scrollRef.current?.scrollTo({ top: 0 });
-			// Patch URL without triggering a Next.js navigation — keeps the
-			// drawer mounted so no re-animation plays.
+			// Patch the URL without a Next.js navigation to keep the drawer mounted.
 			window.history.replaceState(null, "", `/work/${slug}`);
 		});
 	}
@@ -81,9 +96,8 @@ export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 				if (!isOpen) handleClose();
 			}}
 			onAnimationEnd={(isOpen) => {
-				// Navigate as soon as vaul's close animation actually finishes,
-				// then cancel the fallback timer so it doesn't double-fire.
-				// Guard: only navigate if this drawer's slug matches the current URL.
+				// Navigate as soon as vaul's close animation finishes, then cancel
+				// the fallback timer so it does not double-fire.
 				if (!isOpen && pathname === `/work/${work.slug}`) {
 					if (closeTimerRef.current !== null) {
 						clearTimeout(closeTimerRef.current);
@@ -95,7 +109,7 @@ export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 		>
 			<DrawerContent
 				data-theme="work-detail"
-				{...(skeletonWasShown ? { "data-no-open-anim": "" } : {})}
+				{...(suppressOpenAnim ? { "data-no-open-anim": "" } : {})}
 				className="mt-0 h-dvh max-h-none p-0 bg-background before:hidden data-[vaul-drawer-direction=bottom]:mt-0 data-[vaul-drawer-direction=bottom]:max-h-none [&>div:first-child]:hidden"
 			>
 				<DrawerTitle className="sr-only">Case Study</DrawerTitle>
@@ -103,28 +117,13 @@ export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 					ref={scrollRef}
 					className="h-full overflow-x-hidden overflow-y-auto bg-background text-foreground"
 				>
-					<header className="sticky top-0 z-50 w-full border-b border-foreground/[0.06] bg-background/75 backdrop-blur-md">
-						<div className="mx-auto flex w-full max-w-2xl items-center justify-between px-6 py-3.5">
-							<button
-								onClick={handleClose}
-								className="group inline-flex w-fit items-center gap-2.5 text-sm font-medium text-foreground transition-opacity hover:opacity-80"
-							>
-								<span className="flex size-7 items-center justify-center rounded-full bg-foreground text-background transition-transform group-hover:scale-95">
-									<ArrowLeft className="size-4" />
-								</span>
-								Back to Work
-							</button>
-						</div>
-					</header>
+					<DrawerBackHeader onBack={handleClose} />
 
 					{isPending ? (
 						<DrawerSkeleton />
 					) : (
 						<main className="mx-auto flex w-full max-w-2xl flex-col gap-12 px-6 pt-10 pb-[0.5rem]">
-							<WorkArticle
-								work={work}
-								hideNav
-							/>
+							<WorkArticle work={work} hideNav />
 							{(work.prev ?? work.next) && (
 								<ModalPrevNext
 									prev={work.prev}
@@ -139,6 +138,8 @@ export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 		</Drawer>
 	);
 }
+
+// ─── Prev / Next navigation ───────────────────────────────────────────────────
 
 interface ModalPrevNextProps {
 	prev: WorkNavLinkDTO | null;
@@ -156,33 +157,49 @@ function ModalPrevNext({ prev, next, onNavigate }: ModalPrevNextProps) {
 			className={`-mx-6 flex items-center border-t border-border px-6 pt-4 pb-6 ${justify}`}
 		>
 			{prev && (
-				<button
+				<NavButton
+					label="Previous"
+					title={prev.title}
+					icon={<ArrowLeft className="size-3" />}
+					iconPosition="left"
 					onClick={() => onNavigate(prev.slug)}
-					className="flex min-h-16 flex-col items-start justify-center gap-1 overflow-hidden rounded-xl border border-[rgba(33,33,33,0.1)] bg-muted px-4 py-3 whitespace-nowrap transition-colors hover:border-[rgba(33,33,33,0.2)]"
-				>
-					<span className="flex items-center gap-1 text-xs leading-none font-normal text-[#808080]">
-						<ArrowLeft className="size-3" />
-						Previous
-					</span>
-					<span className="w-full truncate text-base leading-snug font-semibold text-[#141414]">
-						{prev.title}
-					</span>
-				</button>
+				/>
 			)}
 			{next && (
-				<button
+				<NavButton
+					label="Next"
+					title={next.title}
+					icon={<ArrowRight className="size-3" />}
+					iconPosition="right"
 					onClick={() => onNavigate(next.slug)}
-					className="flex min-h-16 flex-col items-start justify-center gap-1 overflow-hidden rounded-xl border border-[rgba(33,33,33,0.1)] bg-muted px-4 py-3 whitespace-nowrap transition-colors hover:border-[rgba(33,33,33,0.2)]"
-				>
-					<span className="flex items-center gap-1 text-xs leading-none font-normal text-[#808080]">
-						Next
-						<ArrowRight className="size-3" />
-					</span>
-					<span className="w-full truncate text-base leading-snug font-semibold text-[#141414]">
-						{next.title}
-					</span>
-				</button>
+				/>
 			)}
 		</nav>
+	);
+}
+
+interface NavButtonProps {
+	label: string;
+	title: string;
+	icon: React.ReactNode;
+	iconPosition: "left" | "right";
+	onClick: () => void;
+}
+
+function NavButton({ label, title, icon, iconPosition, onClick }: NavButtonProps) {
+	return (
+		<button
+			onClick={onClick}
+			className="flex min-h-16 flex-col items-start justify-center gap-1 overflow-hidden rounded-xl border border-[rgba(33,33,33,0.1)] bg-muted px-4 py-3 whitespace-nowrap transition-colors hover:border-[rgba(33,33,33,0.2)]"
+		>
+			<span className="flex items-center gap-1 text-xs leading-none font-normal text-[#808080]">
+				{iconPosition === "left" && icon}
+				{label}
+				{iconPosition === "right" && icon}
+			</span>
+			<span className="w-full truncate text-base leading-snug font-semibold text-[#141414]">
+				{title}
+			</span>
+		</button>
 	);
 }
