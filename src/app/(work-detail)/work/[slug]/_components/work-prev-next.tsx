@@ -13,56 +13,23 @@ export function WorkPrevNext({ prev, next }: WorkPrevNextProps) {
 		prev && next ? "justify-between" : next ? "justify-end" : "justify-start";
 
 	return (
-		<>
-			{/* Mobile / tablet / small desktop — inline inside content padding */}
-			<nav
-				aria-label="Case study navigation"
-				className={cn("-mx-6 flex items-center border-t border-border px-6 pt-4 xl:hidden", justify)}
-			>
-				{prev && (
-					<NavCard
-						link={prev}
-						direction="prev"
-					/>
-				)}
-				{next && (
-					<NavCard
-						link={next}
-						direction="next"
-					/>
-				)}
-			</nav>
-
-			{/* Desktop — fixed adjacent to content edges, grows with text, safe min-edge */}
+		<nav
+			aria-label="Case study navigation"
+			className={cn("-mx-6 flex items-center border-t border-border px-6 pt-4", justify)}
+		>
 			{prev && (
-				<div
-					className="fixed bottom-10 z-40 hidden overflow-hidden xl:block"
-					style={{
-						right: "calc(50% + 22.25rem)",
-						maxWidth: "calc(50% - 23.25rem)",
-					}}
-				>
-					<NavCard
-						link={prev}
-						direction="prev"
-					/>
-				</div>
+				<NavCard
+					link={prev}
+					direction="prev"
+				/>
 			)}
 			{next && (
-				<div
-					className="fixed bottom-10 z-40 hidden overflow-hidden xl:block"
-					style={{
-						left: "calc(50% + 22.25rem)",
-						maxWidth: "calc(50% - 23.25rem)",
-					}}
-				>
-					<NavCard
-						link={next}
-						direction="next"
-					/>
-				</div>
+				<NavCard
+					link={next}
+					direction="next"
+				/>
 			)}
-		</>
+		</nav>
 	);
 }
 

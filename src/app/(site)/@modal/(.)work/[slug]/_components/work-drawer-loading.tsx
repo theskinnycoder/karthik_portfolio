@@ -1,7 +1,7 @@
 "use client";
 
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
 import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
 import { DrawerBackHeader } from "@/components/drawer-back-header";
 import { DrawerSkeleton } from "./drawer-skeleton";
@@ -13,6 +13,13 @@ export function WorkDrawerLoading() {
 	const router = useRouter();
 	const [open, setOpen] = useState(true);
 	const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+	// Set the flag synchronously before first paint so WorkModalDrawer's
+	// useLayoutEffect always finds it, regardless of how fast data arrives.
+	// consumeSkeletonFlag() in WorkModalDrawer removes it on read.
+	useLayoutEffect(() => {
+		sessionStorage.setItem(LOADING_SHOWN_KEY, "1");
+	}, []);
 
 	// Cancel any pending router.back() when Next.js replaces this loading
 	// component with WorkModalDrawer (data arrived).
@@ -36,14 +43,6 @@ export function WorkDrawerLoading() {
 			open={open}
 			onOpenChange={(isOpen) => {
 				if (!isOpen) handleClose();
-			}}
-			onAnimationEnd={(isOpen) => {
-				// Only set the flag once the skeleton's open animation fully completes.
-				// If data arrives before this fires (fast load), the flag is never set
-				// and WorkModalDrawer plays its own entrance animation normally.
-				// If the skeleton fully opens first (slow load), the flag suppresses
-				// WorkModalDrawer's duplicate animation.
-				if (isOpen) sessionStorage.setItem(LOADING_SHOWN_KEY, "1");
 			}}
 		>
 			<DrawerContent
