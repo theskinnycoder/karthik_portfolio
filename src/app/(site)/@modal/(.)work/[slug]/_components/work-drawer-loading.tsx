@@ -9,9 +9,9 @@ import {
 	DrawerTitle,
 } from "@/components/ui/drawer";
 import { DrawerBackHeader } from "@/components/drawer-back-header";
+import { setWorkDrawerSignal } from "@/lib/work-drawer-signal";
 import { DrawerSkeleton } from "./drawer-skeleton";
 
-const LOADING_SHOWN_KEY = "vaul-loading-shown";
 const CLOSE_ANIMATION_FALLBACK_MS = 600;
 
 export function WorkDrawerLoading() {
@@ -19,11 +19,10 @@ export function WorkDrawerLoading() {
 	const [open, setOpen] = useState(true);
 	const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-	// Set the flag synchronously before first paint so WorkModalDrawer's
-	// useLayoutEffect always finds it, regardless of how fast data arrives.
-	// consumeSkeletonFlag() in WorkModalDrawer removes it on read.
+	// Belt-and-suspenders: the card's onClick already set the signal before
+	// navigation, but if WorkDrawerLoading mounts it sets it again (idempotent).
 	useLayoutEffect(() => {
-		sessionStorage.setItem(LOADING_SHOWN_KEY, "1");
+		setWorkDrawerSignal();
 	}, []);
 
 	// Cancel any pending router.back() when Next.js replaces this loading
@@ -70,4 +69,4 @@ export function WorkDrawerLoading() {
 	);
 }
 
-export { CLOSE_ANIMATION_FALLBACK_MS, LOADING_SHOWN_KEY };
+export { CLOSE_ANIMATION_FALLBACK_MS };

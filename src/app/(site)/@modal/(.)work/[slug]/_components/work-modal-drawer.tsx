@@ -19,25 +19,14 @@ import {
 } from "@/components/ui/drawer";
 import type { WorkItemDetailDTO, WorkNavLinkDTO } from "@/sanity/lib/dal";
 import { DrawerBackHeader } from "@/components/drawer-back-header";
+import { consumeWorkDrawerSignal } from "@/lib/work-drawer-signal";
 import { DrawerSkeleton } from "./drawer-skeleton";
-import {
-	CLOSE_ANIMATION_FALLBACK_MS,
-	LOADING_SHOWN_KEY,
-} from "./work-drawer-loading";
+import { CLOSE_ANIMATION_FALLBACK_MS } from "./work-drawer-loading";
 
 interface WorkModalDrawerProps {
 	work: WorkItemDetailDTO;
 }
 
-// Read and consume the skeleton-shown flag. Returns true if the loading
-// skeleton played for this open, clearing the flag as a side effect so it
-// is never double-consumed across renders.
-function consumeSkeletonFlag(): boolean {
-	if (typeof window === "undefined") return false;
-	const wasShown = !!sessionStorage.getItem(LOADING_SHOWN_KEY);
-	if (wasShown) sessionStorage.removeItem(LOADING_SHOWN_KEY);
-	return wasShown;
-}
 
 export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 	const router = useRouter();
@@ -69,12 +58,11 @@ export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 		};
 	}, []);
 
-	// On initial mount: if WorkDrawerLoading's open animation fully completed
-	// before data arrived, it has written the flag via onAnimationEnd. Reading
-	// the flag here (before first paint) suppresses the duplicate slide-up.
-	// For fast loads the flag is never set, so animation plays normally.
+	// On initial mount: consume the navigation signal set by the card's onClick
+	// (and redundantly by WorkDrawerLoading when it renders). Suppresses the
+	// slide-up animation so it doesn't replay over already-visible cached content.
 	useLayoutEffect(() => {
-		if (consumeSkeletonFlag()) setSuppressOpenAnim(true);
+		if (consumeWorkDrawerSignal()) setSuppressOpenAnim(true);
 	}, []);
 
 	// When the drawer closes: mark that a close has occurred (enables the
@@ -88,8 +76,8 @@ export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 
 	// Same-card reopen: Next.js may reuse this component instance when the user
 	// navigates back to the same slug. Detect the pathname returning to our slug
-	// while the drawer is closed, re-read the skeleton flag (WorkDrawerLoading
-	// sets it in its own useLayoutEffect before this fires), and reopen.
+	// while the drawer is closed, consume the navigation signal (set by the
+	// card's onClick before the navigation fired), and reopen.
 	// hasClosedRef prevents this from triggering on the initial mount.
 	//
 	// We check initialWork.slug (the server-provided slug) rather than work.slug
@@ -113,7 +101,7 @@ export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 				setWork(initialWork);
 				window.history.replaceState(null, "", `/work/${initialWork.slug}`);
 			}
-			setSuppressOpenAnim(consumeSkeletonFlag());
+			setSuppressOpenAnim(consumeWorkDrawerSignal());
 			setOpen(true);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps -- pathname is the only trigger; open/initialWork/work/hasClosedRef are guards read at trigger time

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { CSSProperties } from "react";
 import { MediaImage } from "@/components/media";
+import { setWorkDrawerSignal } from "@/lib/work-drawer-signal";
 import type { WorkItemDTO } from "@/sanity/lib/dal";
 
 interface WorkItemCardProps {
@@ -90,6 +91,7 @@ export function WorkItemCard({ item, priority = false }: WorkItemCardProps) {
 		<Link
 			href={`/work/${item.slug}`}
 			className="block h-full w-full text-left"
+			onClick={setWorkDrawerSignal}
 		>
 			{card}
 		</Link>
