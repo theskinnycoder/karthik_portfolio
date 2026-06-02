@@ -53,6 +53,7 @@ export function FooterSection() {
 						width={30}
 						height={44}
 						aria-hidden="true"
+						className="shrink-0"
 					/>
 				</div>
 

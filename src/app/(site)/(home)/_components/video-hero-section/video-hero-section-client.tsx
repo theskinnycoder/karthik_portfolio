@@ -86,6 +86,8 @@ export function VideoHeroSectionClient({
 								src="/circle.gif"
 								alt=""
 								fill
+								loading="eager"
+								fetchPriority="high"
 								className="pointer-events-none absolute inset-0 z-10 size-full object-cover"
 								unoptimized
 							/>
