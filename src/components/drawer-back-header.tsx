@@ -24,11 +24,17 @@ export function DrawerBackHeader({ href, onBack }: DrawerBackHeaderProps) {
 		<header className="sticky top-0 z-50 w-full border-b border-foreground/[0.06] bg-background/75 backdrop-blur-md">
 			<div className="mx-auto flex w-full max-w-2xl items-center px-6 py-3.5">
 				{href != null ? (
-					<Link href={href} className={className}>
+					<Link
+						href={href}
+						className={className}
+					>
 						{content}
 					</Link>
 				) : (
-					<button onClick={onBack} className={className}>
+					<button
+						onClick={onBack}
+						className={className}
+					>
 						{content}
 					</button>
 				)}

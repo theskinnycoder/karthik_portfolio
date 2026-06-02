@@ -33,10 +33,11 @@ export async function TestimonialsSection() {
 						<MediaImage
 							src={icon}
 							alt=""
-							width={20}
-							height={20}
+							width={0}
+							height={0}
+							sizes="24px"
 							loading="eager"
-							className="inline"
+							className="inline-block h-5 w-auto align-middle"
 						/>
 					)}
 				</div>

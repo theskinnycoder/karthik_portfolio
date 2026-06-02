@@ -1,7 +1,8 @@
 import { getMediumPosts } from "@/lib/medium";
-import { NextResponse } from "next/server";
+import { connection, NextResponse } from "next/server";
 
 export async function GET() {
+	await connection();
 	const posts = await getMediumPosts();
 	return NextResponse.json(posts, {
 		headers: {

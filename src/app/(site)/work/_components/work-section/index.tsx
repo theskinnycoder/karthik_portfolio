@@ -12,10 +12,11 @@ export async function WorkSection() {
 
 	return (
 		<div className="flex flex-col gap-11">
-			{companies.map((company) => (
+			{companies.map((company, idx) => (
 				<CompanyGroup
 					key={company.name}
 					company={company}
+					priorityFirstItem={idx === 0}
 				/>
 			))}
 		</div>

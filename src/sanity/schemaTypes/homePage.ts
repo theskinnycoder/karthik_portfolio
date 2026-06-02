@@ -1,10 +1,7 @@
 import { HomeIcon } from "@sanity/icons";
 import { defineField, defineType } from "sanity";
 import { SectionOrderInput } from "../components/section-order-input";
-import {
-	HOME_SECTION_KEYS,
-	type HomeSectionKey,
-} from "../lib/home-sections";
+import { HOME_SECTION_KEYS, type HomeSectionKey } from "../lib/home-sections";
 
 export { HOME_SECTION_KEYS, type HomeSectionKey };
 

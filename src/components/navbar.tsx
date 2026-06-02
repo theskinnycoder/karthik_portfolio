@@ -1,6 +1,10 @@
 "use client";
 
-import { FOOTER_DIVIDER_ID, PATHNAME_TO_SECTION, type SectionId } from "@/lib/sections";
+import {
+	FOOTER_DIVIDER_ID,
+	PATHNAME_TO_SECTION,
+	type SectionId,
+} from "@/lib/sections";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -39,7 +43,9 @@ export function Navbar() {
 			CSS.supports("animation-timeline", "scroll()");
 
 		// Shared <style> element for injected @keyframes
-		let styleEl = document.getElementById(STYLE_EL_ID) as HTMLStyleElement | null;
+		let styleEl = document.getElementById(
+			STYLE_EL_ID,
+		) as HTMLStyleElement | null;
 		if (!styleEl) {
 			styleEl = document.createElement("style");
 			styleEl.id = STYLE_EL_ID;
@@ -58,8 +64,7 @@ export function Navbar() {
 			if (navH === 0) return; // layout not yet measured
 
 			// Absolute Y of the divider from document top
-			const dividerAbsY =
-				divider.getBoundingClientRect().top + window.scrollY;
+			const dividerAbsY = divider.getBoundingClientRect().top + window.scrollY;
 
 			// Scroll offset at which divider center aligns with navbar center
 			const scrollStart = Math.max(
@@ -130,10 +135,7 @@ export function Navbar() {
 				const entry = cachedVh - NORMAL_BOTTOM - navH / 2;
 
 				if (hrTop <= entry) {
-					nav.style.setProperty(
-						"transform",
-						`translateY(-${entry - hrTop}px)`,
-					);
+					nav.style.setProperty("transform", `translateY(-${entry - hrTop}px)`);
 				} else {
 					nav.style.removeProperty("transform");
 				}

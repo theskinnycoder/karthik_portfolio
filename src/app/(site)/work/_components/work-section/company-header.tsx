@@ -26,8 +26,9 @@ export function CompanyHeader({
 				<MediaImage
 					src={logo}
 					alt={`${name} logo`}
-					width={94}
-					height={32}
+					width={0}
+					height={0}
+					sizes="120px"
 					className="h-8 w-auto object-contain"
 				/>
 				{badge && (
@@ -39,7 +40,7 @@ export function CompanyHeader({
 			{(workTagline || workDescription) && (
 				<div className="flex flex-col gap-3">
 					{workTagline && (
-						<p className="text-[1.125rem] md:text-[1.25rem] lg:text-[1.375rem] font-semibold text-foreground">
+						<p className="text-[1.125rem] font-semibold text-foreground md:text-[1.25rem] lg:text-[1.375rem]">
 							{workTagline}
 						</p>
 					)}

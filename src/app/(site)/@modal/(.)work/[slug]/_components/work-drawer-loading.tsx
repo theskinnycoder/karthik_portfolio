@@ -2,7 +2,12 @@
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
+import {
+	Drawer,
+	DrawerContent,
+	DrawerDescription,
+	DrawerTitle,
+} from "@/components/ui/drawer";
 import { DrawerBackHeader } from "@/components/drawer-back-header";
 import { DrawerSkeleton } from "./drawer-skeleton";
 
@@ -35,7 +40,10 @@ export function WorkDrawerLoading() {
 		if (!open) return;
 		setOpen(false);
 		if (closeTimerRef.current !== null) clearTimeout(closeTimerRef.current);
-		closeTimerRef.current = setTimeout(() => router.back(), CLOSE_ANIMATION_FALLBACK_MS);
+		closeTimerRef.current = setTimeout(
+			() => router.back(),
+			CLOSE_ANIMATION_FALLBACK_MS,
+		);
 	}
 
 	return (
@@ -47,9 +55,12 @@ export function WorkDrawerLoading() {
 		>
 			<DrawerContent
 				data-theme="work-detail"
-				className="mt-0 h-dvh max-h-none p-0 bg-background before:hidden data-[vaul-drawer-direction=bottom]:mt-0 data-[vaul-drawer-direction=bottom]:max-h-none [&>div:first-child]:hidden"
+				className="mt-0 h-dvh max-h-none bg-background p-0 before:hidden data-[vaul-drawer-direction=bottom]:mt-0 data-[vaul-drawer-direction=bottom]:max-h-none [&>div:first-child]:hidden"
 			>
 				<DrawerTitle className="sr-only">Loading…</DrawerTitle>
+				<DrawerDescription className="sr-only">
+					Loading case study details.
+				</DrawerDescription>
 				<div className="h-full overflow-x-hidden overflow-y-auto bg-background text-foreground">
 					<DrawerBackHeader onBack={handleClose} />
 					<DrawerSkeleton />

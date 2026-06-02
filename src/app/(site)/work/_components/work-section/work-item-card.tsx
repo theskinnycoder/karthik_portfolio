@@ -10,12 +10,14 @@ import type { WorkItemDTO } from "@/sanity/lib/dal";
 
 interface WorkItemCardProps {
 	item: WorkItemDTO;
+	/** Eager-load + preload this card's image (set on the first card to improve LCP). */
+	priority?: boolean;
 }
 
 const DEFAULT_BRAND_FROM = "#c8ed97";
 const DEFAULT_BRAND_TO = "#47d9b8";
 
-export function WorkItemCard({ item }: WorkItemCardProps) {
+export function WorkItemCard({ item, priority = false }: WorkItemCardProps) {
 	const from = item.brandFrom ?? DEFAULT_BRAND_FROM;
 	const to = item.brandTo ?? item.brandFrom ?? DEFAULT_BRAND_TO;
 	const ctaStyle = {
@@ -58,6 +60,8 @@ export function WorkItemCard({ item }: WorkItemCardProps) {
 					src={item.image}
 					alt={item.title}
 					fill
+					loading={priority ? "eager" : undefined}
+					fetchPriority={priority ? "high" : undefined}
 					className="object-cover object-center"
 				/>
 			</div>
@@ -83,7 +87,10 @@ export function WorkItemCard({ item }: WorkItemCardProps) {
 	}
 
 	return (
-		<Link href={`/work/${item.slug}`} className="block h-full w-full text-left">
+		<Link
+			href={`/work/${item.slug}`}
+			className="block h-full w-full text-left"
+		>
 			{card}
 		</Link>
 	);

@@ -90,7 +90,9 @@ function TeamRoster({ members }: { members: TeamMemberDTO[] }) {
 						<div
 							key={m.name}
 							className="relative size-22 shrink-0 overflow-hidden rounded-2xl"
-							style={{ transform: `rotate(${AVATAR_ROTATIONS[i % AVATAR_ROTATIONS.length]}deg)` }}
+							style={{
+								transform: `rotate(${AVATAR_ROTATIONS[i % AVATAR_ROTATIONS.length]}deg)`,
+							}}
 						>
 							<MediaImage
 								src={m.avatar}

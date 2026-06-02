@@ -5,9 +5,14 @@ import { WorkItemCard } from "./work-item-card";
 
 interface CompanyGroupProps {
 	company: WorkPageCompanyDTO;
+	/** Prioritize-load this group's first card image (set on the first group for LCP). */
+	priorityFirstItem?: boolean;
 }
 
-export function CompanyGroup({ company }: CompanyGroupProps) {
+export function CompanyGroup({
+	company,
+	priorityFirstItem = false,
+}: CompanyGroupProps) {
 	return (
 		<div className="flex flex-col gap-5">
 			<CompanyHeader
@@ -32,12 +37,15 @@ export function CompanyGroup({ company }: CompanyGroupProps) {
 					unoptimized
 				/>
 				<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-					{company.workItems.map((item) => (
+					{company.workItems.map((item, idx) => (
 						<div
 							key={item.slug}
 							className="h-full w-full md:[&:last-child:nth-child(odd)]:col-span-full md:[&:last-child:nth-child(odd)]:[--card-image-ratio:2.2]"
 						>
-							<WorkItemCard item={item} />
+							<WorkItemCard
+								item={item}
+								priority={priorityFirstItem && idx === 0}
+							/>
 						</div>
 					))}
 				</div>

@@ -13,7 +13,7 @@ export function ContentBadges({ value }: ContentBadgesProps) {
 	if (value.badges.length === 0) return null;
 
 	return (
-		<div className="not-prose -mx-6 my-6 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+		<div className="not-prose -mx-6 my-6 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
 			<div className="flex gap-2 px-6">
 				{value.badges.map((badge, i) => (
 					<span

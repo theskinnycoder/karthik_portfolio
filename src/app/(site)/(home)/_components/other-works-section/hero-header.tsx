@@ -43,9 +43,10 @@ export function HeroHeader({
 							<MediaImage
 								src={icon}
 								alt=""
-								width={20}
-								height={20}
-								className="ml-2 inline"
+								width={0}
+								height={0}
+								sizes="24px"
+								className="ml-2 inline-block h-5 w-auto align-middle"
 								loading="eager"
 							/>
 						) : headingEmoji ? (

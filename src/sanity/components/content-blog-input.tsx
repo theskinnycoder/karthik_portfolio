@@ -65,13 +65,19 @@ export function ContentBlogInput(props: ObjectInputProps) {
 	return (
 		<Stack space={3}>
 			{loading && (
-				<Text size={1} muted>
+				<Text
+					size={1}
+					muted
+				>
 					Loading blog posts…
 				</Text>
 			)}
 
 			{error && (
-				<Text size={1} style={{ color: "red" }}>
+				<Text
+					size={1}
+					style={{ color: "red" }}
+				>
 					Failed to load blog posts. Make sure the dev server is running.
 				</Text>
 			)}
@@ -90,11 +96,17 @@ export function ContentBlogInput(props: ObjectInputProps) {
 						fontSize: "14px",
 					}}
 				>
-					<option value="" disabled>
+					<option
+						value=""
+						disabled
+					>
 						Select a blog post…
 					</option>
 					{posts.map((post, i) => (
-						<option key={post.link} value={String(i)}>
+						<option
+							key={post.link}
+							value={String(i)}
+						>
 							{post.title}
 						</option>
 					))}
@@ -102,13 +114,24 @@ export function ContentBlogInput(props: ObjectInputProps) {
 			)}
 
 			{currentTitle && (
-				<Card padding={3} border radius={2} tone="positive">
+				<Card
+					padding={3}
+					border
+					radius={2}
+					tone="positive"
+				>
 					<Stack space={2}>
-						<Text size={1} weight="semibold">
+						<Text
+							size={1}
+							weight="semibold"
+						>
 							{currentTitle}
 						</Text>
 						{currentLink && (
-							<Text size={0} muted>
+							<Text
+								size={0}
+								muted
+							>
 								{currentLink}
 							</Text>
 						)}

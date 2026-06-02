@@ -15,7 +15,10 @@ export function WorkPrevNext({ prev, next }: WorkPrevNextProps) {
 	return (
 		<nav
 			aria-label="Case study navigation"
-			className={cn("-mx-6 flex items-center border-t border-border px-6 pt-4", justify)}
+			className={cn(
+				"-mx-6 flex items-center border-t border-border px-6 pt-4",
+				justify,
+			)}
 		>
 			{prev && (
 				<NavCard

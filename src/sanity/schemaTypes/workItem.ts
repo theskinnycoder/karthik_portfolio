@@ -345,7 +345,8 @@ export const workItem = defineType({
 							name: "rows",
 							title: "Rows",
 							type: "array",
-							description: "Each row is a set of cells matching the header count",
+							description:
+								"Each row is a set of cells matching the header count",
 							of: [
 								defineArrayMember({
 									type: "object",
