@@ -88,8 +88,15 @@ export const articleComponents: PortableTextComponents = {
 		),
 	},
 	types: {
-		contentImage: ({ value }: { value: ContentImageDTO }) => (
-			<ContentImage value={value} />
+		contentImage: ({
+			value,
+		}: {
+			value: ContentImageDTO & { _priority?: boolean };
+		}) => (
+			<ContentImage
+				value={value}
+				priority={value._priority}
+			/>
 		),
 		contentTestimonial: ({ value }: { value: ContentTestimonialDTO }) => (
 			<ContentTestimonial value={value} />

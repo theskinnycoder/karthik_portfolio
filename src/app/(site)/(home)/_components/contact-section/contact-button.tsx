@@ -25,7 +25,7 @@ export function ContactButton() {
 		>
 			<span className="flex items-center gap-[6px] rounded-[50px] px-[8px] py-[6px]">
 				<WhatsAppIcon />
-				<span className="font-sans text-base font-semibold leading-[25px] tracking-[0.32px] text-black">
+				<span className="font-sans text-base leading-[25px] font-semibold tracking-[0.32px] text-black">
 					Connect on WhatsApp
 				</span>
 			</span>

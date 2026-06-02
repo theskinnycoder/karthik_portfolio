@@ -2,14 +2,28 @@
 
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useLayoutEffect, useRef, useState, useTransition } from "react";
+import {
+	useEffect,
+	useLayoutEffect,
+	useRef,
+	useState,
+	useTransition,
+} from "react";
 import { fetchWorkDetail } from "@/app/actions/work";
 import { WorkArticle } from "@/app/(work-detail)/work/[slug]/_components/work-article";
-import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
+import {
+	Drawer,
+	DrawerContent,
+	DrawerDescription,
+	DrawerTitle,
+} from "@/components/ui/drawer";
 import type { WorkItemDetailDTO, WorkNavLinkDTO } from "@/sanity/lib/dal";
 import { DrawerBackHeader } from "@/components/drawer-back-header";
 import { DrawerSkeleton } from "./drawer-skeleton";
-import { CLOSE_ANIMATION_FALLBACK_MS, LOADING_SHOWN_KEY } from "./work-drawer-loading";
+import {
+	CLOSE_ANIMATION_FALLBACK_MS,
+	LOADING_SHOWN_KEY,
+} from "./work-drawer-loading";
 
 interface WorkModalDrawerProps {
 	work: WorkItemDetailDTO;
@@ -85,7 +99,11 @@ export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 	// initialWork prop. Using initialWork.slug ensures the reopen fires correctly
 	// and we reset the stale work state before re-opening.
 	useLayoutEffect(() => {
-		if (pathname === `/work/${initialWork.slug}` && !open && hasClosedRef.current) {
+		if (
+			pathname === `/work/${initialWork.slug}` &&
+			!open &&
+			hasClosedRef.current
+		) {
 			if (work.slug !== initialWork.slug) {
 				// navigateTo() left stale work state and a stale browser URL.
 				// Increment the generation to discard any in-flight navigateTo fetch,
@@ -98,7 +116,7 @@ export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 			setSuppressOpenAnim(consumeSkeletonFlag());
 			setOpen(true);
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps -- pathname is the only trigger; open/initialWork/work/hasClosedRef are guards read at trigger time
+		// eslint-disable-next-line react-hooks/exhaustive-deps -- pathname is the only trigger; open/initialWork/work/hasClosedRef are guards read at trigger time
 	}, [pathname]);
 
 	function handleClose() {
@@ -156,9 +174,12 @@ export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 			<DrawerContent
 				data-theme="work-detail"
 				{...(suppressOpenAnim ? { "data-no-open-anim": "" } : {})}
-				className="mt-0 h-dvh max-h-none p-0 bg-background before:hidden data-[vaul-drawer-direction=bottom]:mt-0 data-[vaul-drawer-direction=bottom]:max-h-none [&>div:first-child]:hidden"
+				className="mt-0 h-dvh max-h-none bg-background p-0 before:hidden data-[vaul-drawer-direction=bottom]:mt-0 data-[vaul-drawer-direction=bottom]:max-h-none [&>div:first-child]:hidden"
 			>
 				<DrawerTitle className="sr-only">Case Study</DrawerTitle>
+				<DrawerDescription className="sr-only">
+					Detailed case study of the selected work.
+				</DrawerDescription>
 				<div
 					ref={scrollRef}
 					className="h-full overflow-x-hidden overflow-y-auto bg-background text-foreground"
@@ -169,7 +190,10 @@ export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 						<DrawerSkeleton />
 					) : (
 						<main className="mx-auto flex w-full max-w-2xl flex-col gap-12 px-6 pt-10 pb-[0.5rem]">
-							<WorkArticle work={work} hideNav />
+							<WorkArticle
+								work={work}
+								hideNav
+							/>
 							{(work.prev ?? work.next) && (
 								<ModalPrevNext
 									prev={work.prev}
@@ -194,7 +218,8 @@ interface ModalPrevNextProps {
 }
 
 function ModalPrevNext({ prev, next, onNavigate }: ModalPrevNextProps) {
-	const justify = prev && next ? "justify-between" : next ? "justify-end" : "justify-start";
+	const justify =
+		prev && next ? "justify-between" : next ? "justify-end" : "justify-start";
 
 	return (
 		<nav
@@ -231,7 +256,13 @@ interface NavButtonProps {
 	onClick: () => void;
 }
 
-function NavButton({ label, title, icon, iconPosition, onClick }: NavButtonProps) {
+function NavButton({
+	label,
+	title,
+	icon,
+	iconPosition,
+	onClick,
+}: NavButtonProps) {
 	return (
 		<button
 			onClick={onClick}

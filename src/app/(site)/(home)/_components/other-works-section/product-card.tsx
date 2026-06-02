@@ -35,8 +35,9 @@ export function ProductCard({
 			<MediaImage
 				src={image}
 				alt={description}
-				width={400}
-				height={380}
+				width={0}
+				height={0}
+				sizes="(max-width: 768px) 90vw, 400px"
 				className="block h-full w-auto"
 			/>
 

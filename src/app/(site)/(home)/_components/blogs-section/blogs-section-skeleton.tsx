@@ -35,7 +35,10 @@ function SkeletonCard() {
 export function BlogsSectionSkeleton() {
 	return (
 		<div className="relative -mx-6 w-[calc(100%+3rem)] self-center md:-mx-[1.125rem] md:w-[calc(100%+2.25rem)]">
-			<Carousel opts={{ align: "start" }} className="w-full">
+			<Carousel
+				opts={{ align: "start" }}
+				className="w-full"
+			>
 				<CarouselContent className="ml-0 items-stretch">
 					{[0, 1, 2].map((i) => (
 						<CarouselItem

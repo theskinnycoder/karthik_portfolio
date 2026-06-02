@@ -15,10 +15,7 @@ import type {
 	WorkItemBySlugQueryResult,
 	WorkPageQueryResult,
 } from "~/sanity.types";
-import {
-	HOME_SECTION_KEYS,
-	type HomeSectionKey,
-} from "./home-sections";
+import { HOME_SECTION_KEYS, type HomeSectionKey } from "./home-sections";
 import { sanityFetch } from "./fetch";
 import {
 	allWorkItemSlugsQuery,
@@ -387,8 +384,12 @@ function toContentTestimonialDTO(
 		quote: (data.quote ?? []) as PortableTextBlock[],
 		authorName: data.authorName ?? "",
 		authorRole: data.authorRole ?? "",
-		companyLogo: data.companyLogo ? getMediaUrl(data.companyLogo) || undefined : undefined,
-		authorAvatar: data.authorAvatar ? getMediaUrl(data.authorAvatar) || undefined : undefined,
+		companyLogo: data.companyLogo
+			? getMediaUrl(data.companyLogo) || undefined
+			: undefined,
+		authorAvatar: data.authorAvatar
+			? getMediaUrl(data.authorAvatar) || undefined
+			: undefined,
 	};
 }
 

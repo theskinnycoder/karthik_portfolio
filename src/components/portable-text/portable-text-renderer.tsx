@@ -45,6 +45,24 @@ function annotateNumberedListSequence<T extends { _type?: string }>(
 }
 
 /**
+ * Stamps `_priority` on the first inline image block so ContentImage can
+ * eager-load + preload it. The first case-study image is the LCP element, so
+ * priority-loading it removes Next's LCP warning and improves the metric.
+ */
+function markFirstImagePriority<T extends { _type?: string }>(
+	blocks: T[],
+): T[] {
+	let marked = false;
+	return blocks.map((block) => {
+		if (!marked && block._type === "contentImage") {
+			marked = true;
+			return { ...block, _priority: true } as T;
+		}
+		return block;
+	});
+}
+
+/**
  * Typography shell for the `article` variant. We pin the font family
  * (Inter Tight via --font-sans), a modular type scale that gives each
  * heading clear separation from body and adjacent levels, and heading
@@ -124,8 +142,8 @@ export function PortableTextRenderer({
 	variant = "base",
 }: PortableTextRendererProps) {
 	if (variant === "article") {
-		const sequenced = annotateNumberedListSequence(
-			value as PortableTextBlock[],
+		const sequenced = markFirstImagePriority(
+			annotateNumberedListSequence(value as PortableTextBlock[]),
 		);
 		return (
 			<div className={ARTICLE_PROSE}>

@@ -9,7 +9,7 @@
  * useLayoutEffect in WorkModalDrawer). Intentionally scoped to data-state=open
  * so the slideToBottom close animation is never affected.
  */
-[data-vaul-drawer][data-state='open'][data-no-open-anim] {
+[data-vaul-drawer][data-state="open"][data-no-open-anim] {
 	animation-name: none !important;
 }
 

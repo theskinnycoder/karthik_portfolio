@@ -14,5 +14,10 @@ export default async function WorkModalPage({ params }: WorkModalPageProps) {
 	const { slug } = await params;
 	const work = await getWorkItemBySlug(slug);
 	if (!work) notFound();
-	return <WorkModalDrawer key={work.slug} work={work} />;
+	return (
+		<WorkModalDrawer
+			key={work.slug}
+			work={work}
+		/>
+	);
 }

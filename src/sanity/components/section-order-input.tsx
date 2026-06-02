@@ -75,7 +75,9 @@ export function SectionOrderInput(props: ArrayOfPrimitivesInputProps) {
 						cursor: "grab",
 						userSelect: "none",
 						borderTop:
-							dragOver === key ? "2px solid var(--card-focus-ring-color)" : "2px solid transparent",
+							dragOver === key
+								? "2px solid var(--card-focus-ring-color)"
+								: "2px solid transparent",
 					}}
 					draggable
 					onDragStart={(e) => handleDragStart(e, key)}
@@ -83,8 +85,14 @@ export function SectionOrderInput(props: ArrayOfPrimitivesInputProps) {
 					onDrop={() => handleDrop(key)}
 					onDragEnd={handleDragEnd}
 				>
-					<Flex align="center" gap={3}>
-						<Text muted size={1}>
+					<Flex
+						align="center"
+						gap={3}
+					>
+						<Text
+							muted
+							size={1}
+						>
 							{index + 1}
 						</Text>
 						<Text
@@ -94,7 +102,10 @@ export function SectionOrderInput(props: ArrayOfPrimitivesInputProps) {
 						>
 							⠿⠿
 						</Text>
-						<Text size={2} weight="medium">
+						<Text
+							size={2}
+							weight="medium"
+						>
 							{HOME_SECTION_LABELS[key]}
 						</Text>
 					</Flex>
