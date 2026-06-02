@@ -36,12 +36,10 @@ export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 	const [work, setWork] = useState(initialWork);
 	const [isPending, startTransition] = useTransition();
 
-	// Read and consume the navigation signal synchronously during render so
-	// the very first DOM commit already has the suppression attributes set —
-	// vaul never sees the element without them and cannot start the animation.
-	// (Calling in useLayoutEffect left an intermediate commit without the attrs.)
-	// Reset to false on close so the reopen path re-reads a fresh signal.
-	const [suppressOpenAnim, setSuppressOpenAnim] = useState(consumeWorkDrawerSignal);
+	// False by default. Set true (synchronously before first paint) when the
+	// loading skeleton already slid the drawer open, preventing a double slide-up.
+	// Reset to false on close so any subsequent reopen gets its animation back.
+	const [suppressOpenAnim, setSuppressOpenAnim] = useState(false);
 
 	const scrollRef = useRef<HTMLDivElement>(null);
 	const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -58,6 +56,13 @@ export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 		return () => {
 			if (closeTimerRef.current !== null) clearTimeout(closeTimerRef.current);
 		};
+	}, []);
+
+	// On initial mount: consume the navigation signal set by the card's onClick
+	// (and redundantly by WorkDrawerLoading when it renders). Suppresses the
+	// slide-up animation so it doesn't replay over already-visible cached content.
+	useLayoutEffect(() => {
+		if (consumeWorkDrawerSignal()) setSuppressOpenAnim(true);
 	}, []);
 
 	// When the drawer closes: mark that a close has occurred (enables the
@@ -156,9 +161,7 @@ export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 		>
 			<DrawerContent
 				data-theme="work-detail"
-				{...(suppressOpenAnim
-					? { "data-no-open-anim": "", "data-vaul-animate": "false" }
-					: {})}
+				{...(suppressOpenAnim ? { "data-no-open-anim": "" } : {})}
 				className="mt-0 h-dvh max-h-none bg-background p-0 before:hidden data-[vaul-drawer-direction=bottom]:mt-0 data-[vaul-drawer-direction=bottom]:max-h-none [&>div:first-child]:hidden"
 			>
 				<DrawerTitle className="sr-only">Case Study</DrawerTitle>
