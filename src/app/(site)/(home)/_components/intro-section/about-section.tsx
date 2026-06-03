@@ -41,7 +41,7 @@ export function AboutSection({ bio }: AboutSectionProps) {
 
 	return (
 		<motion.div
-			className={`${ARTICLE_PROSE} prose-h5:text-[1.125rem]`}
+			className={`${ARTICLE_PROSE} [&_h5]:text-[1.125rem]`}
 			initial={{ y: 48, opacity: 0 }}
 			whileInView={{ y: 0, opacity: 1 }}
 			viewport={{ once: true }}
