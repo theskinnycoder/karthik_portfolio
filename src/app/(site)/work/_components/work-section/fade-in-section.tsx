@@ -22,19 +22,19 @@ export function FadeInSection({ children }: FadeInSectionProps) {
 
 			// Start hidden
 			el.style.opacity = "0";
-			el.style.transform = "translateY(40px)";
+			el.style.transform = "translateY(70px)";
 
 			const observer = new IntersectionObserver(
 				([entry]) => {
 					if (entry.isIntersecting) {
 						el.style.transition =
-							"opacity 1.2s ease-out, transform 1.2s ease-out";
+							"opacity 1.6s ease-out, transform 1.6s ease-out";
 						el.style.opacity = "1";
 						el.style.transform = "translateY(0)";
 						observer.disconnect();
 					}
 				},
-				{ threshold: 0 },
+				{ threshold: 0, rootMargin: "0px 0px -120px 0px" },
 			);
 
 			observer.observe(el);
