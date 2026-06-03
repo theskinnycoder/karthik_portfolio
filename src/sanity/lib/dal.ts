@@ -93,7 +93,7 @@ export interface ProjectDTO {
 	image: string;
 	description: string;
 	backgroundColor: string;
-	url: string;
+	url?: string;
 }
 
 export interface ExperienceDTO {
@@ -304,7 +304,7 @@ function toProjectDTO(data: ProjectRaw): ProjectDTO {
 		image: getMediaUrl(data.image),
 		description: data.description ?? "",
 		backgroundColor: data.backgroundColor ?? "",
-		url: data.url ?? "",
+		url: data.url ?? undefined,
 	};
 }
 

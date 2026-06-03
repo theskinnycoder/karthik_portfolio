@@ -9,7 +9,7 @@ export interface ProductCardProps {
 	description: string;
 	name: string;
 	backgroundColor: string;
-	navigateUrl: string;
+	navigateUrl?: string;
 }
 
 export function ProductCard({
@@ -24,11 +24,11 @@ export function ProductCard({
 
 	return (
 		<motion.div
-			className="relative h-[380px] cursor-pointer overflow-hidden rounded-[14px]"
+			className={`relative h-[380px] overflow-hidden rounded-[14px] ${navigateUrl ? "cursor-pointer" : "cursor-default"}`}
 			style={{ backgroundColor }}
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
-			onClick={() => window.open(navigateUrl, "_blank")}
+			onClick={() => navigateUrl && window.open(navigateUrl, "_blank")}
 			whileHover={{ scale: 0.98 }}
 			transition={{ duration: 0.3, ease: "easeOut" }}
 		>

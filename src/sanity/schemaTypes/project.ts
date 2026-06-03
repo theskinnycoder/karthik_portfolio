@@ -30,7 +30,6 @@ export const project = defineType({
 			name: "url",
 			title: "Project URL",
 			type: "url",
-			validation: (rule) => rule.required(),
 		}),
 		defineField({
 			name: "backgroundColor",
