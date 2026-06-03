@@ -1,5 +1,6 @@
 import { getWorkPageCompanies } from "@/sanity/lib/dal";
 import { CompanyGroup } from "./company-group";
+import { FadeInSection } from "./fade-in-section";
 
 export async function WorkSection() {
 	const companies = await getWorkPageCompanies();
@@ -13,11 +14,12 @@ export async function WorkSection() {
 	return (
 		<div className="flex flex-col gap-11">
 			{companies.map((company, idx) => (
-				<CompanyGroup
-					key={company.name}
-					company={company}
-					priorityFirstItem={idx === 0}
-				/>
+				<FadeInSection key={company.name}>
+					<CompanyGroup
+						company={company}
+						priorityFirstItem={idx === 0}
+					/>
+				</FadeInSection>
 			))}
 		</div>
 	);
