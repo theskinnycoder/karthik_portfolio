@@ -25,7 +25,7 @@ export function CompanyGroup({
 			/>
 			<div className="relative flex flex-col gap-6">
 				<p className="text-base leading-5 font-semibold text-muted-foreground">
-					My key recipe's at <span className="capitalize">{company.name}</span>
+					My key recipes at <span className="capitalize">{company.name}</span>
 				</p>
 				<Image
 					src="/arrow.gif"
