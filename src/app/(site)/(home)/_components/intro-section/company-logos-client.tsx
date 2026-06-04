@@ -25,7 +25,7 @@ export function CompanyLogosClient({ companies }: CompanyLogosClientProps) {
 							alt={company.name}
 							width={0}
 							height={0}
-							className="h-7 w-auto object-contain object-left md:h-8"
+							className="h-[32px] w-auto object-contain object-left md:h-[36px]"
 							sizes="100vw"
 							loading="eager"
 						/>
