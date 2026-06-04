@@ -98,7 +98,6 @@ export function VideoHeroSectionClient({
 							<div className="relative size-[11.25rem] translate-x-1 overflow-hidden rounded-full min-[375px]:size-[13.75rem] min-[425px]:size-[15.625rem] sm:size-56 md:size-[19.1875rem]">
 								<video
 									ref={videoRef}
-									muted
 									playsInline
 									poster={heroPosterUrl || undefined}
 									className="absolute inset-0 size-full object-cover"

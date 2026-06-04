@@ -31,7 +31,7 @@ export class CloudinaryMediaService {
 	}
 
 	getVideoPosterUrl(asset: CloudinaryAsset): string {
-		return this.buildUrl({ ...asset, format: "jpg" }, "so_0,q_auto:best");
+		return this.buildUrl({ ...asset, format: "jpg" }, "so_1.04,q_auto:best");
 	}
 
 	/**
