@@ -11,7 +11,7 @@ interface CompanyLogosClientProps {
 
 export function CompanyLogosClient({ companies }: CompanyLogosClientProps) {
 	return (
-		<div className="flex flex-wrap items-center gap-x-4 gap-y-4">
+		<div className="flex flex-wrap items-center gap-x-4 gap-y-3">
 			{companies.map((company, index) => (
 				<React.Fragment key={company.name}>
 					<motion.div
