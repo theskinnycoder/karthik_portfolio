@@ -32,6 +32,7 @@ const colorMarks = Object.fromEntries(
 export const inlineMarks: NonNullable<PortableTextComponents["marks"]> = {
 	...weightMarks,
 	...colorMarks,
+	s: ({ children }) => <s>{children}</s>,
 	fontScript: ({ children }) => (
 		<span style={{ fontFamily: "var(--font-serif)" }}>{children}</span>
 	),
