@@ -41,7 +41,7 @@ export function articleBlock() {
 		marks: {
 			decorators: [
 				{ title: "Italic", value: "em" },
-				{ title: "Strike", value: "s" },
+				{ title: "Strike", value: "strike-through" },
 				{ title: "Underline", value: "underline" },
 				...WEIGHT_DECORATORS.map((w) => ({
 					title: WEIGHT_TITLES[w],

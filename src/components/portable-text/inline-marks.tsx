@@ -32,6 +32,9 @@ const colorMarks = Object.fromEntries(
 export const inlineMarks: NonNullable<PortableTextComponents["marks"]> = {
 	...weightMarks,
 	...colorMarks,
+	// "strike-through" is the standard Portable Text value (shows S̶ icon in Studio).
+	// "s" kept as a legacy fallback for any content saved before the rename.
+	"strike-through": ({ children }) => <s>{children}</s>,
 	s: ({ children }) => <s>{children}</s>,
 	fontScript: ({ children }) => (
 		<span style={{ fontFamily: "var(--font-serif)" }}>{children}</span>
