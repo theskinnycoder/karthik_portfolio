@@ -25,14 +25,14 @@ export function CompanyLogosClient({ companies }: CompanyLogosClientProps) {
 							alt={company.name}
 							width={0}
 							height={0}
-							className="h-[30px] w-auto object-contain object-left md:h-[34px]"
+							className="h-[30px] w-auto object-contain object-left md:h-[36px]"
 							sizes="100vw"
 							loading="eager"
 						/>
 					</motion.div>
 					{index === 1 && (
 						<div
-							className="basis-full min-[425px]:hidden"
+							className="basis-full lg:hidden"
 							aria-hidden="true"
 						/>
 					)}

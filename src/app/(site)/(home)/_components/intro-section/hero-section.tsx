@@ -74,7 +74,7 @@ export function HeroSection({ name, title }: HeroSectionProps) {
 					colors={["#FBBA27", "#FB7481"]}
 					direction="horizontal"
 					animationSpeed={8}
-					className="mx-0 inline-flex! overflow-visible rounded-none text-3xl font-semibold"
+					className="mx-0 inline-flex! overflow-visible rounded-none text-3xl font-semibold md:max-w-[480px]! xl:max-w-fit!"
 				>
 					{title?.length ? (
 						<PortableText
