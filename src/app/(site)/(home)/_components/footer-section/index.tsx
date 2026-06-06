@@ -43,7 +43,7 @@ export function FooterSection() {
 								backgroundClip: "text",
 							}}
 						>
-							together{" "}
+							Together{" "}
 						</span>
 						<span className="font-normal text-foreground">:)</span>
 					</p>
