@@ -36,17 +36,14 @@ export function CompanyGroup({
 					className="pointer-events-none absolute top-0 left-36 z-10 w-20"
 					unoptimized
 				/>
-				<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+				<div className="flex flex-col gap-22 md:gap-30">
 					{company.workItems.map((item, idx) => (
-						<div
+						<WorkItemCard
 							key={item.slug}
-							className="h-full w-full md:[&:last-child:nth-child(odd)]:col-span-full md:[&:last-child:nth-child(odd)]:[--card-image-ratio:2.2]"
-						>
-							<WorkItemCard
-								item={item}
-								priority={priorityFirstItem && idx === 0}
-							/>
-						</div>
+							item={item}
+							reverse={idx % 2 === 1}
+							priority={priorityFirstItem && idx === 0}
+						/>
 					))}
 				</div>
 			</div>

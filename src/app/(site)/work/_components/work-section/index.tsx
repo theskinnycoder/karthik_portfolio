@@ -12,7 +12,7 @@ export async function WorkSection() {
 	}
 
 	return (
-		<div className="flex flex-col gap-11">
+		<div className="flex flex-col gap-24">
 			{companies.map((company, idx) => (
 				<FadeInSection key={company.name}>
 					<CompanyGroup
