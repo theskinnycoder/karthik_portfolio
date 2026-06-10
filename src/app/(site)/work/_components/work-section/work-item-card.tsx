@@ -56,7 +56,7 @@ export function WorkItemCard({
 					</span>
 				</div>
 
-				<h3 className="text-4xl leading-[1.1] font-semibold tracking-tight text-foreground md:text-[3.125rem] lg:text-[3.5rem]">
+				<h3 className="text-4xl leading-[1.1] font-semibold tracking-tight text-foreground md:text-[3.125rem] lg:text-[3.375rem]">
 					{item.title}
 				</h3>
 
