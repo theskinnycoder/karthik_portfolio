@@ -17,6 +17,7 @@ import {
 	DrawerDescription,
 	DrawerTitle,
 } from "@/components/ui/drawer";
+import { cn } from "@/lib/utils";
 import type { WorkItemDetailDTO, WorkNavLinkDTO } from "@/sanity/lib/dal";
 import { DrawerBackHeader } from "@/components/drawer-back-header";
 import { consumeWorkDrawerSignal } from "@/lib/work-drawer-signal";
@@ -26,7 +27,6 @@ import { CLOSE_ANIMATION_FALLBACK_MS } from "./work-drawer-loading";
 interface WorkModalDrawerProps {
 	work: WorkItemDetailDTO;
 }
-
 
 export function WorkModalDrawer({ work: initialWork }: WorkModalDrawerProps) {
 	const router = useRouter();
@@ -206,32 +206,33 @@ interface ModalPrevNextProps {
 }
 
 function ModalPrevNext({ prev, next, onNavigate }: ModalPrevNextProps) {
-	const justify =
-		prev && next ? "justify-between" : next ? "justify-end" : "justify-start";
-
 	return (
 		<nav
 			aria-label="Case study navigation"
-			className={`-mx-6 flex items-center border-t border-border px-6 pt-4 pb-6 ${justify}`}
+			className="-mx-6 grid grid-cols-2 items-stretch gap-3 border-t border-border px-6 pt-4 pb-6"
 		>
-			{prev && (
-				<NavButton
-					label="Previous"
-					title={prev.title}
-					icon={<ArrowLeft className="size-3" />}
-					iconPosition="left"
-					onClick={() => onNavigate(prev.slug)}
-				/>
-			)}
-			{next && (
-				<NavButton
-					label="Next"
-					title={next.title}
-					icon={<ArrowRight className="size-3" />}
-					iconPosition="right"
-					onClick={() => onNavigate(next.slug)}
-				/>
-			)}
+			<div className="flex">
+				{prev && (
+					<NavButton
+						label="Previous"
+						title={prev.title}
+						icon={<ArrowLeft className="size-3" />}
+						iconPosition="left"
+						onClick={() => onNavigate(prev.slug)}
+					/>
+				)}
+			</div>
+			<div className="flex justify-end">
+				{next && (
+					<NavButton
+						label="Next"
+						title={next.title}
+						icon={<ArrowRight className="size-3" />}
+						iconPosition="right"
+						onClick={() => onNavigate(next.slug)}
+					/>
+				)}
+			</div>
 		</nav>
 	);
 }
@@ -251,15 +252,19 @@ function NavButton({
 	iconPosition,
 	onClick,
 }: NavButtonProps) {
+	const isRight = iconPosition === "right";
 	return (
 		<button
 			onClick={onClick}
-			className="flex min-h-16 cursor-pointer flex-col items-start justify-center gap-1 overflow-hidden rounded-xl border border-[rgba(33,33,33,0.1)] bg-muted px-4 py-3 whitespace-nowrap transition-colors hover:border-[rgba(33,33,33,0.2)]"
+			className={cn(
+				"flex min-h-16 w-full min-w-0 cursor-pointer flex-col justify-center gap-1 overflow-hidden rounded-xl border border-[rgba(33,33,33,0.1)] bg-muted px-4 py-3 whitespace-nowrap transition-colors hover:border-[rgba(33,33,33,0.2)]",
+				isRight ? "items-end text-right" : "items-start text-left",
+			)}
 		>
 			<span className="flex items-center gap-1 text-xs leading-none font-normal text-[#808080]">
-				{iconPosition === "left" && icon}
+				{!isRight && icon}
 				{label}
-				{iconPosition === "right" && icon}
+				{isRight && icon}
 			</span>
 			<span className="w-full truncate text-base leading-snug font-semibold text-[#141414]">
 				{title}

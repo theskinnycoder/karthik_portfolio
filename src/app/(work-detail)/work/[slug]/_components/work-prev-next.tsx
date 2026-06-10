@@ -9,29 +9,27 @@ interface WorkPrevNextProps {
 }
 
 export function WorkPrevNext({ prev, next }: WorkPrevNextProps) {
-	const justify =
-		prev && next ? "justify-between" : next ? "justify-end" : "justify-start";
-
 	return (
 		<nav
 			aria-label="Case study navigation"
-			className={cn(
-				"-mx-6 flex items-center border-t border-border px-6 pt-4",
-				justify,
-			)}
+			className="-mx-6 grid grid-cols-2 items-stretch gap-3 border-t border-border px-6 pt-4"
 		>
-			{prev && (
-				<NavCard
-					link={prev}
-					direction="prev"
-				/>
-			)}
-			{next && (
-				<NavCard
-					link={next}
-					direction="next"
-				/>
-			)}
+			<div className="flex">
+				{prev && (
+					<NavCard
+						link={prev}
+						direction="prev"
+					/>
+				)}
+			</div>
+			<div className="flex justify-end">
+				{next && (
+					<NavCard
+						link={next}
+						direction="next"
+					/>
+				)}
+			</div>
 		</nav>
 	);
 }
@@ -46,7 +44,10 @@ function NavCard({ link, direction }: NavCardProps) {
 	return (
 		<Link
 			href={{ pathname: `/work/${link.slug}` }}
-			className="flex min-h-16 flex-col items-start justify-center gap-1 overflow-hidden rounded-xl border border-[rgba(33,33,33,0.1)] bg-muted px-4 py-3 whitespace-nowrap transition-colors hover:border-[rgba(33,33,33,0.2)]"
+			className={cn(
+				"flex min-h-16 w-full min-w-0 flex-col justify-center gap-1 overflow-hidden rounded-xl border border-[rgba(33,33,33,0.1)] bg-muted px-4 py-3 whitespace-nowrap transition-colors hover:border-[rgba(33,33,33,0.2)]",
+				isNext ? "items-end text-right" : "items-start text-left",
+			)}
 		>
 			<span className="flex items-center gap-1 text-xs leading-none font-normal text-[#808080]">
 				{!isNext && <ArrowLeft className="size-3" />}
