@@ -13,6 +13,12 @@
 	animation-name: none !important;
 }
 
+/* Highlight selected text in yellow across the site for clear, visible copy. */
+::selection {
+	background-color: #fde047; /* yellow-300 */
+	color: #000000;
+}
+
 @theme inline {
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
