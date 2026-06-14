@@ -202,7 +202,6 @@ const SplitText: FC<SplitTextProps> = ({
 	const style: CSSProperties = {
 		textAlign,
 		wordWrap: "break-word",
-		willChange: "transform, opacity",
 	};
 	const classes = `split-parent overflow-hidden inline-block whitespace-normal ${className}`;
 	const Tag = (tag || "p") as ElementType;
