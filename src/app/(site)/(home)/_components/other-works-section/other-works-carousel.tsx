@@ -53,7 +53,11 @@ export function OtherWorksCarousel({ projects }: OtherWorksCarouselProps) {
 				plugins={[plugin.current]}
 				className="w-full"
 			>
-				<CarouselContent className="items-stretch">
+				{/* ps-4 (mobile only): insets the leading card 16px from the edge at
+				    the resting position. This carousel is RTL, so padding-inline-start
+				    maps to the right edge. Lives inside the scrollable container, so
+				    scrolling is unaffected — desktop stays full-bleed. */}
+				<CarouselContent className="items-stretch ps-4 md:ps-0">
 					{displayedProjects.map((project, index) => (
 						<CarouselItem
 							key={`${project.name}-${index}`}

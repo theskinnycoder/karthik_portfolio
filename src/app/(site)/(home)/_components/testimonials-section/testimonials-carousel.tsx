@@ -44,7 +44,10 @@ export function TestimonialsCarousel({
 				plugins={[plugin.current]}
 				className="w-full"
 			>
-				<CarouselContent className="items-stretch">
+				{/* pl-4 (mobile only): insets the first card 16px from the screen
+				    edge at the resting position. It lives inside the scrollable flex
+				    container, so scrolling is unaffected — desktop stays full-bleed. */}
+				<CarouselContent className="items-stretch pl-4 md:pl-0">
 					{testimonials.map((testimonial, index) => (
 						<CarouselItem
 							key={`${testimonial.authorName}-${index}`}
