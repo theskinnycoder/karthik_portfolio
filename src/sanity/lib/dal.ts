@@ -3,9 +3,12 @@ import { getMediaUrl, getVideoPosterUrl } from "@/lib/media";
 import type { PortableTextBlock } from "next-sanity";
 import "server-only";
 import type {
+	AllHighlightSlugsQueryResult,
 	AllWorkItemSlugsQueryResult,
 	CompaniesQueryResult,
 	ExperiencesQueryResult,
+	HighlightBySlugQueryResult,
+	HighlightsQueryResult,
 	HomePageQueryResult,
 	ProjectsQueryResult,
 	SectionHeaderQueryResult,
@@ -18,9 +21,12 @@ import type {
 import { HOME_SECTION_KEYS, type HomeSectionKey } from "./home-sections";
 import { sanityFetch } from "./fetch";
 import {
+	allHighlightSlugsQuery,
 	allWorkItemSlugsQuery,
 	companiesQuery,
 	experiencesQuery,
+	highlightBySlugQuery,
+	highlightsQuery,
 	homePageQuery,
 	projectsQuery,
 	sectionHeaderQuery,
@@ -51,6 +57,8 @@ type SectionHeaderRaw = NonNullable<SectionHeaderQueryResult>;
 type WorkPageCompanyRaw = WorkPageQueryResult[number];
 type WorkItemCardRaw = WorkPageCompanyRaw["workItems"][number];
 type WorkItemDetailRaw = NonNullable<WorkItemBySlugQueryResult>;
+type HighlightCardRaw = HighlightsQueryResult[number];
+type HighlightDetailRaw = NonNullable<HighlightBySlugQueryResult>;
 type ContentBlockRaw = NonNullable<WorkItemDetailRaw["content"]>[number];
 type ContentBlockOfType<T extends string> = Extract<
 	ContentBlockRaw,
@@ -258,6 +266,31 @@ export interface SectionHeaderDTO {
 	gradientTo?: string;
 	videoUrl?: string;
 	subheading?: string;
+}
+
+export interface HighlightDTO {
+	title: string;
+	description: string;
+	/** ISO date string (YYYY-MM-DD). Formatted for display in the component. */
+	date: string;
+	image: string;
+	slug: string;
+}
+
+export interface HighlightNavLinkDTO {
+	title: string;
+	slug: string;
+}
+
+export interface HighlightDetailDTO {
+	title: string;
+	slug: string;
+	description: string;
+	date: string;
+	image: string;
+	content: ContentBlock[];
+	prev: HighlightNavLinkDTO | null;
+	next: HighlightNavLinkDTO | null;
 }
 
 /**
@@ -558,6 +591,50 @@ function toWorkItemDetailDTO(data: WorkItemDetailRaw): WorkItemDetailDTO {
 	};
 }
 
+function toHighlightCardDTO(data: HighlightCardRaw): HighlightDTO {
+	return {
+		title: data.title ?? "",
+		description: data.description ?? "",
+		date: data.date ?? "",
+		image: getMediaUrl(data.image),
+		slug: (data.slug ?? "").trim(),
+	};
+}
+
+function toHighlightDetailDTO(data: HighlightDetailRaw): HighlightDetailDTO {
+	// Highlight content blocks are projected identically to work items, so the
+	// shared content transformers apply. The generated raw shape differs only by
+	// origin query, hence the cast.
+	const content = ((data.content ?? []) as unknown as ContentBlockRaw[])
+		.map(toContentBlock)
+		.filter((b): b is ContentBlock => b !== null);
+
+	const currentSlug = (data.slug ?? "").trim();
+	const ordered = (data.orderedItems ?? [])
+		.map((item) => ({
+			title: item.title ?? "",
+			slug: (item.slug ?? "").trim(),
+		}))
+		.filter((item) => item.slug);
+	const currentIndex = ordered.findIndex((item) => item.slug === currentSlug);
+	const prev = currentIndex > 0 ? ordered[currentIndex - 1] : null;
+	const next =
+		currentIndex !== -1 && currentIndex < ordered.length - 1
+			? ordered[currentIndex + 1]
+			: null;
+
+	return {
+		title: data.title ?? "",
+		slug: currentSlug,
+		description: data.description ?? "",
+		date: data.date ?? "",
+		image: getMediaUrl(data.image),
+		content,
+		prev: prev ?? null,
+		next: next ?? null,
+	};
+}
+
 /**
  * ========================
  * Cached Data Getters
@@ -680,6 +757,46 @@ export async function getAllWorkItemSlugs(): Promise<string[]> {
 		.filter(Boolean);
 }
 
+export async function getHighlights(): Promise<HighlightDTO[]> {
+	"use cache";
+	cacheSanityResource("highlight");
+	const highlights = await sanityFetch<HighlightsQueryResult>({
+		query: highlightsQuery,
+	});
+	return highlights.map(toHighlightCardDTO);
+}
+
+export async function getHighlightBySlug(
+	slug: string,
+): Promise<HighlightDetailDTO | null> {
+	"use cache";
+	cacheSanityResource("highlight");
+	let trimmed: string;
+	try {
+		trimmed = decodeURIComponent(slug).trim();
+	} catch {
+		return null;
+	}
+	const data = await sanityFetch<HighlightBySlugQueryResult>({
+		query: highlightBySlugQuery,
+		params: { slug: trimmed },
+	});
+	if (!data) return null;
+	return toHighlightDetailDTO(data);
+}
+
+export async function getAllHighlightSlugs(): Promise<string[]> {
+	"use cache";
+	cacheSanityResource("highlight");
+	const slugs = await sanityFetch<AllHighlightSlugsQueryResult>({
+		query: allHighlightSlugsQuery,
+	});
+	return slugs
+		.filter((s): s is string => s !== null)
+		.map((s) => s.trim())
+		.filter(Boolean);
+}
+
 const DEFAULT_HOME_SECTIONS: readonly HomeSectionKey[] = HOME_SECTION_KEYS;
 
 export async function getHomePageSections(): Promise<HomeSectionKey[]> {
@@ -692,5 +809,11 @@ export async function getHomePageSections(): Promise<HomeSectionKey[]> {
 	const ordered = ((data?.sections ?? []) as string[]).filter(
 		(key): key is HomeSectionKey => allowed.has(key),
 	);
-	return ordered.length > 0 ? ordered : [...DEFAULT_HOME_SECTIONS];
+	if (ordered.length === 0) return [...DEFAULT_HOME_SECTIONS];
+	// "All sections are always included" — the stored array only controls order.
+	// Append any keys missing from it (e.g. a newly added section whose homePage
+	// doc predates the key) in their canonical order, mirroring SectionOrderInput.
+	const seen = new Set(ordered);
+	const missing = HOME_SECTION_KEYS.filter((key) => !seen.has(key));
+	return [...ordered, ...missing];
 }

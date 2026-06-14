@@ -4,11 +4,19 @@ import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import type { ComponentProps } from "react";
 
-type DrawerBackHeaderProps =
+type DrawerBackHeaderProps = {
+	/** Text shown next to the back arrow. Defaults to "Back to Work". */
+	label?: string;
+} & (
 	| { href: ComponentProps<typeof Link>["href"]; onBack?: never }
-	| { onBack: () => void; href?: never };
+	| { onBack: () => void; href?: never }
+);
 
-export function DrawerBackHeader({ href, onBack }: DrawerBackHeaderProps) {
+export function DrawerBackHeader({
+	href,
+	onBack,
+	label = "Back to Work",
+}: DrawerBackHeaderProps) {
 	const className =
 		"group inline-flex w-fit items-center gap-2.5 text-sm font-medium text-foreground transition-opacity hover:opacity-80";
 	const content = (
@@ -16,7 +24,7 @@ export function DrawerBackHeader({ href, onBack }: DrawerBackHeaderProps) {
 			<span className="flex size-7 items-center justify-center rounded-full bg-foreground text-background transition-transform group-hover:scale-95">
 				<ArrowLeft className="size-4" />
 			</span>
-			Back to Work
+			{label}
 		</>
 	);
 

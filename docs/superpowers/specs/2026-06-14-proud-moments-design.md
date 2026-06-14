@@ -50,15 +50,15 @@ Direct URL (`/proud-moments/[slug]`) renders the identical layout as a full page
 
 ## Sanity Schema — `highlight` document type
 
-| Field | Type | Notes |
-|---|---|---|
-| `title` | string | Required |
-| `description` | string | One-liner on the card |
-| `date` | date | Required; drives sort order |
-| `image` | cloudinary.asset | Required; card thumb + detail hero |
-| `content` | array | Same rich-text blocks as `workItem` |
-| `slug` | slug | Source: title; required |
-| `order` | number | Manual sort override; default 0 |
+| Field         | Type             | Notes                               |
+| ------------- | ---------------- | ----------------------------------- |
+| `title`       | string           | Required                            |
+| `description` | string           | One-liner on the card               |
+| `date`        | date             | Required; drives sort order         |
+| `image`       | cloudinary.asset | Required; card thumb + detail hero  |
+| `content`     | array            | Same rich-text blocks as `workItem` |
+| `slug`        | slug             | Source: title; required             |
+| `order`       | number           | Manual sort override; default 0     |
 
 `content` block types (reused from workItem): `articleBlock`, `contentImage`, `contentTestimonial`, `contentMeta`, `contentBadges`, `contentTable`, `contentDivider`, `contentVideo`, `contentBlog`.
 
@@ -68,11 +68,11 @@ Direct URL (`/proud-moments/[slug]`) renders the identical layout as a full page
 
 Mirrors the work section exactly:
 
-| Route | Purpose |
-|---|---|
-| `(site)/@modal/(.)proud-moments/[slug]` | Intercepts click → vaul drawer |
-| `(proud-moment-detail)/proud-moments/[slug]` | Direct URL → full page |
-| `(site)/proud-moments/page.tsx` | Section deep-link (like `/work`) |
+| Route                                        | Purpose                          |
+| -------------------------------------------- | -------------------------------- |
+| `(site)/@modal/(.)proud-moments/[slug]`      | Intercepts click → vaul drawer   |
+| `(proud-moment-detail)/proud-moments/[slug]` | Direct URL → full page           |
+| `(site)/proud-moments/page.tsx`              | Section deep-link (like `/work`) |
 
 ---
 
@@ -82,31 +82,32 @@ Mirrors the work section exactly:
 
 ```ts
 interface HighlightCardDTO {
-  title: string;
-  description: string;
-  date: string;       // ISO date string
-  image: string;      // Cloudinary URL
-  slug: string;
+	title: string;
+	description: string;
+	date: string; // ISO date string
+	image: string; // Cloudinary URL
+	slug: string;
 }
 
 interface HighlightDetailDTO {
-  title: string;
-  description: string;
-  date: string;
-  image: string;
-  content: PortableTextBlock[];
-  prev: HighlightNavLinkDTO | null;
-  next: HighlightNavLinkDTO | null;
-  slug: string;
+	title: string;
+	description: string;
+	date: string;
+	image: string;
+	content: PortableTextBlock[];
+	prev: HighlightNavLinkDTO | null;
+	next: HighlightNavLinkDTO | null;
+	slug: string;
 }
 
 interface HighlightNavLinkDTO {
-  title: string;
-  slug: string;
+	title: string;
+	slug: string;
 }
 ```
 
 **Functions:**
+
 - `getHighlights()` — card list, ordered by `date` desc then `order` asc
 - `getHighlightBySlug(slug)` — detail + prev/next links
 - `getAllHighlightSlugs()` — for `generateStaticParams`

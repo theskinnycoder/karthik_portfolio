@@ -3,6 +3,7 @@ export const HOME_SECTION_KEYS = [
 	"experience",
 	"otherWorks",
 	"work",
+	"proudMoments",
 	"testimonials",
 	"blogs",
 ] as const;
@@ -14,6 +15,7 @@ export const HOME_SECTION_LABELS: Record<HomeSectionKey, string> = {
 	experience: "Experience",
 	otherWorks: "Other Works",
 	work: "Work Items",
+	proudMoments: "Proud Moments",
 	testimonials: "Testimonials",
 	blogs: "Blogs",
 };

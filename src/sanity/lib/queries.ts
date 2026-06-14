@@ -164,3 +164,57 @@ export const workItemBySlugQuery = defineQuery(`
 export const allWorkItemSlugsQuery = groq`
   *[_type == "workItem" && defined(slug.current)].slug.current
 `;
+
+// ----- Highlights (Proud Moments) -----
+
+export const highlightsQuery = groq`
+  *[_type == "highlight" && defined(slug.current)] | order(date desc, order asc) {
+    _id,
+    title,
+    description,
+    date,
+    image,
+    "slug": slug.current
+  }
+`;
+
+export const highlightBySlugQuery = defineQuery(`
+  *[_type == "highlight" && slug.current == $slug][0] {
+    _id,
+    title,
+    "slug": slug.current,
+    description,
+    date,
+    image,
+    content[] {
+      ...,
+      _type == "contentTestimonial" => {
+        _type,
+        _key,
+        quote,
+        authorName,
+        authorRole,
+        companyLogo,
+        authorAvatar
+      },
+      _type == "contentTable" => {
+        _type,
+        _key,
+        caption,
+        headers,
+        "rows": rows[]{
+          _key,
+          cells
+        }
+      }
+    },
+    "orderedItems": *[_type == "highlight" && defined(slug.current)] | order(date desc, order asc) {
+      title,
+      "slug": slug.current
+    }
+  }
+`);
+
+export const allHighlightSlugsQuery = groq`
+  *[_type == "highlight" && defined(slug.current)].slug.current
+`;

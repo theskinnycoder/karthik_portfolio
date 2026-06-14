@@ -5,6 +5,7 @@ import { ExperienceSection } from "../(home)/_components/experience-section";
 import { FooterSection } from "../(home)/_components/footer-section";
 import { IntroSection } from "../(home)/_components/intro-section";
 import { OtherWorksSection } from "../(home)/_components/other-works-section";
+import { ProudMomentsSection } from "../(home)/_components/proud-moments-section";
 import { TestimonialsSection } from "../(home)/_components/testimonials-section";
 import { VideoHeroSection } from "../(home)/_components/video-hero-section";
 import { BlogsSection } from "../(home)/_components/blogs-section";
@@ -35,6 +36,11 @@ const SECTION_CONFIGS: Partial<Record<HomeSectionKey, SectionConfig>> = {
 			"mx-auto flex w-full max-w-5xl flex-col gap-16 px-6 pt-8 md:px-11",
 		Component: WorkSection,
 	},
+	proudMoments: {
+		id: "proud-moments",
+		className: "mx-auto w-full max-w-5xl px-6 md:px-11",
+		Component: ProudMomentsSection,
+	},
 	blogs: {
 		id: "blogs",
 		// pb-[9.5rem]: clears the fixed navbar (≈ navbar height 56px + 24px gap + 72px buffer)
@@ -46,7 +52,7 @@ const SECTION_CONFIGS: Partial<Record<HomeSectionKey, SectionConfig>> = {
 export async function SitePage({
 	initialSection = "about",
 }: {
-	initialSection?: "about" | "work" | "blogs";
+	initialSection?: "about" | "work" | "proud-moments" | "blogs";
 }) {
 	const sections = await getHomePageSections();
 

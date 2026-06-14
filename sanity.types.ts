@@ -356,6 +356,133 @@ export type HomePage = {
 	sections?: Array<string>;
 };
 
+export type Highlight = {
+	_id: string;
+	_type: "highlight";
+	_createdAt: string;
+	_updatedAt: string;
+	_rev: string;
+	title?: string;
+	description?: string;
+	date?: string;
+	image?: CloudinaryAsset;
+	content?: Array<
+		| {
+				children?: Array<{
+					marks?: Array<string>;
+					text?: string;
+					_type: "span";
+					_key: string;
+				}>;
+				style?:
+					| "normal"
+					| "h1"
+					| "h2"
+					| "h3"
+					| "h4"
+					| "h5"
+					| "h6"
+					| "blockquote";
+				listItem?: "bullet" | "number" | "check";
+				markDefs?: Array<{
+					href?: string;
+					openInNewTab?: boolean;
+					_type: "link";
+					_key: string;
+				}>;
+				level?: number;
+				_type: "block";
+				_key: string;
+		  }
+		| {
+				asset?: CloudinaryAsset;
+				alt?: string;
+				caption?: string;
+				size?: "inline" | "wide" | "full";
+				_type: "contentImage";
+				_key: string;
+		  }
+		| {
+				quote?: Array<{
+					children?: Array<{
+						marks?: Array<string>;
+						text?: string;
+						_type: "span";
+						_key: string;
+					}>;
+					style?: "normal";
+					listItem?: never;
+					markDefs?: null;
+					level?: number;
+					_type: "block";
+					_key: string;
+				}>;
+				authorName?: string;
+				authorRole?: string;
+				companyLogo?: CloudinaryAsset;
+				authorAvatar?: CloudinaryAsset;
+				_type: "contentTestimonial";
+				_key: string;
+		  }
+		| {
+				role?: string;
+				team?: Array<{
+					name?: string;
+					role?: string;
+					avatar?: CloudinaryAsset;
+					_type: "teamMember";
+					_key: string;
+				}>;
+				timeline?: string;
+				tools?: Array<string>;
+				_type: "contentMeta";
+				_key: string;
+		  }
+		| {
+				badges?: Array<string>;
+				_type: "contentBadges";
+				_key: string;
+		  }
+		| {
+				caption?: string;
+				headers?: Array<string>;
+				rows?: Array<{
+					cells?: Array<string>;
+					_type: "tableRow";
+					_key: string;
+				}>;
+				_type: "contentTable";
+				_key: string;
+		  }
+		| {
+				style?: "line" | "space";
+				_type: "contentDivider";
+				_key: string;
+		  }
+		| {
+				asset?: CloudinaryAsset;
+				caption?: string;
+				autoplay?: boolean;
+				loop?: boolean;
+				muted?: boolean;
+				controls?: boolean;
+				_type: "contentVideo";
+				_key: string;
+		  }
+		| {
+				title?: string;
+				link?: string;
+				pubDate?: string;
+				excerpt?: string;
+				thumbnail?: string;
+				_type: "contentBlog";
+				_key: string;
+		  }
+	>;
+	slug?: Slug;
+	order?: number;
+};
+
 export type Experience = {
 	_id: string;
 	_type: "experience";
@@ -598,6 +725,7 @@ export type AllSanitySchemaTypes =
 	| SectionHeader
 	| Project
 	| HomePage
+	| Highlight
 	| Experience
 	| Company
 	| CloudinaryAssetContextCustom
@@ -1040,6 +1168,151 @@ export type WorkItemBySlugQueryResult = {
 // Query: *[_type == "workItem" && defined(slug.current)].slug.current
 export type AllWorkItemSlugsQueryResult = Array<string | null>;
 
+// Source: src/sanity/lib/queries.ts
+// Variable: highlightsQuery
+// Query: *[_type == "highlight" && defined(slug.current)] | order(date desc, order asc) {    _id,    title,    description,    date,    image,    "slug": slug.current  }
+export type HighlightsQueryResult = Array<{
+	_id: string;
+	title: string | null;
+	description: string | null;
+	date: string | null;
+	image: CloudinaryAsset | null;
+	slug: string | null;
+}>;
+
+// Source: src/sanity/lib/queries.ts
+// Variable: highlightBySlugQuery
+// Query: *[_type == "highlight" && slug.current == $slug][0] {    _id,    title,    "slug": slug.current,    description,    date,    image,    content[] {      ...,      _type == "contentTestimonial" => {        _type,        _key,        quote,        authorName,        authorRole,        companyLogo,        authorAvatar      },      _type == "contentTable" => {        _type,        _key,        caption,        headers,        "rows": rows[]{          _key,          cells        }      }    },    "orderedItems": *[_type == "highlight" && defined(slug.current)] | order(date desc, order asc) {      title,      "slug": slug.current    }  }
+export type HighlightBySlugQueryResult = {
+	_id: string;
+	title: string | null;
+	slug: string | null;
+	description: string | null;
+	date: string | null;
+	image: CloudinaryAsset | null;
+	content: Array<
+		| {
+				children?: Array<{
+					marks?: Array<string>;
+					text?: string;
+					_type: "span";
+					_key: string;
+				}>;
+				style?:
+					| "blockquote"
+					| "h1"
+					| "h2"
+					| "h3"
+					| "h4"
+					| "h5"
+					| "h6"
+					| "normal";
+				listItem?: "bullet" | "check" | "number";
+				markDefs?: Array<{
+					href?: string;
+					openInNewTab?: boolean;
+					_type: "link";
+					_key: string;
+				}>;
+				level?: number;
+				_type: "block";
+				_key: string;
+		  }
+		| {
+				badges?: Array<string>;
+				_type: "contentBadges";
+				_key: string;
+		  }
+		| {
+				title?: string;
+				link?: string;
+				pubDate?: string;
+				excerpt?: string;
+				thumbnail?: string;
+				_type: "contentBlog";
+				_key: string;
+		  }
+		| {
+				style?: "line" | "space";
+				_type: "contentDivider";
+				_key: string;
+		  }
+		| {
+				asset?: CloudinaryAsset;
+				alt?: string;
+				caption?: string;
+				size?: "full" | "inline" | "wide";
+				_type: "contentImage";
+				_key: string;
+		  }
+		| {
+				role?: string;
+				team?: Array<{
+					name?: string;
+					role?: string;
+					avatar?: CloudinaryAsset;
+					_type: "teamMember";
+					_key: string;
+				}>;
+				timeline?: string;
+				tools?: Array<string>;
+				_type: "contentMeta";
+				_key: string;
+		  }
+		| {
+				caption: string | null;
+				headers: Array<string> | null;
+				rows: Array<{
+					_key: string;
+					cells: Array<string> | null;
+				}> | null;
+				_type: "contentTable";
+				_key: string;
+		  }
+		| {
+				quote: Array<{
+					children?: Array<{
+						marks?: Array<string>;
+						text?: string;
+						_type: "span";
+						_key: string;
+					}>;
+					style?: "normal";
+					listItem?: never;
+					markDefs?: null;
+					level?: number;
+					_type: "block";
+					_key: string;
+				}> | null;
+				authorName: string | null;
+				authorRole: string | null;
+				companyLogo: CloudinaryAsset | null;
+				authorAvatar: CloudinaryAsset | null;
+				_type: "contentTestimonial";
+				_key: string;
+		  }
+		| {
+				asset?: CloudinaryAsset;
+				caption?: string;
+				autoplay?: boolean;
+				loop?: boolean;
+				muted?: boolean;
+				controls?: boolean;
+				_type: "contentVideo";
+				_key: string;
+		  }
+	> | null;
+	orderedItems: Array<{
+		title: string | null;
+		slug: string | null;
+	}>;
+} | null;
+
+// Source: src/sanity/lib/queries.ts
+// Variable: allHighlightSlugsQuery
+// Query: *[_type == "highlight" && defined(slug.current)].slug.current
+export type AllHighlightSlugsQueryResult = Array<string | null>;
+
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
@@ -1055,5 +1328,8 @@ declare module "@sanity/client" {
 		'\n  *[_type == "sectionHeader" && slug.current == $slug][0] {\n    _id,\n    headingPrefix,\n    headingHighlight,\n    headingEmoji,\n    icon,\n    gradientFrom,\n    gradientTo,\n    video,\n    subheading\n  }\n': SectionHeaderQueryResult;
 		'\n  *[_type == "workItem" && slug.current == $slug][0] {\n    _id,\n    title,\n    "slug": slug.current,\n    tag,\n    description,\n    excerpt,\n    liveUrl,\n    image,\n    heroImage,\n    brand,\n    content[] {\n      ...,\n      _type == "contentTestimonial" => {\n        _type,\n        _key,\n        quote,\n        authorName,\n        authorRole,\n        companyLogo,\n        authorAvatar\n      },\n      _type == "contentTable" => {\n        _type,\n        _key,\n        caption,\n        headers,\n        "rows": rows[]{\n          _key,\n          cells\n        }\n      }\n    },\n    "orderedItems": *[_type == "workItem" && defined(slug.current)] | order(company->order asc, order asc) {\n      title,\n      "slug": slug.current,\n      tag\n    },\n    "company": company->{\n      _id,\n      name,\n      logo,\n      website\n    }\n  }\n': WorkItemBySlugQueryResult;
 		'\n  *[_type == "workItem" && defined(slug.current)].slug.current\n': AllWorkItemSlugsQueryResult;
+		'\n  *[_type == "highlight" && defined(slug.current)] | order(date desc, order asc) {\n    _id,\n    title,\n    description,\n    date,\n    image,\n    "slug": slug.current\n  }\n': HighlightsQueryResult;
+		'\n  *[_type == "highlight" && slug.current == $slug][0] {\n    _id,\n    title,\n    "slug": slug.current,\n    description,\n    date,\n    image,\n    content[] {\n      ...,\n      _type == "contentTestimonial" => {\n        _type,\n        _key,\n        quote,\n        authorName,\n        authorRole,\n        companyLogo,\n        authorAvatar\n      },\n      _type == "contentTable" => {\n        _type,\n        _key,\n        caption,\n        headers,\n        "rows": rows[]{\n          _key,\n          cells\n        }\n      }\n    },\n    "orderedItems": *[_type == "highlight" && defined(slug.current)] | order(date desc, order asc) {\n      title,\n      "slug": slug.current\n    }\n  }\n': HighlightBySlugQueryResult;
+		'\n  *[_type == "highlight" && defined(slug.current)].slug.current\n': AllHighlightSlugsQueryResult;
 	}
 }

@@ -49,7 +49,7 @@ interface SanityWebhookPayload {
  * Configure in Sanity Dashboard (sanity.io/manage):
  * - URL: https://your-domain.com/api/revalidate
  * - Trigger: Create, Update, Delete
- * - Filter: _type in ["testimonial", "company", "social", "project", "experience", "siteProfile", "sectionHeader", "workItem"]
+ * - Filter: _type in ["testimonial", "company", "social", "project", "experience", "siteProfile", "sectionHeader", "workItem", "highlight"]
  * - Projection: {_type, _id}
  * - Secret: Copy to SANITY_WEBHOOK_SECRET env var
  */

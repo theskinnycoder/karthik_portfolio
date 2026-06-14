@@ -1,6 +1,7 @@
 import { type SchemaPluginOptions, type SchemaTypeDefinition } from "sanity";
 import { company } from "./company";
 import { experience } from "./experience";
+import { highlight } from "./highlight";
 import { homePage } from "./homePage";
 import { project } from "./project";
 import { sectionHeader } from "./sectionHeader";
@@ -13,6 +14,7 @@ export const schema = {
 	types: [
 		company,
 		experience,
+		highlight,
 		homePage,
 		project,
 		sectionHeader,
