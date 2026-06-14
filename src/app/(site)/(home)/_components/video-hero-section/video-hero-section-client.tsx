@@ -29,11 +29,9 @@ function Caption({ message }: { message: string }) {
 export function VideoHeroSectionClient({
 	availabilityMessage,
 	heroVideoUrl,
-	heroPosterUrl,
 }: {
 	availabilityMessage: string;
 	heroVideoUrl: string;
-	heroPosterUrl: string;
 }) {
 	const videoRef = useRef<HTMLVideoElement>(null);
 	const [isPlaying, setIsPlaying] = useState(false);
@@ -99,8 +97,11 @@ export function VideoHeroSectionClient({
 								<video
 									ref={videoRef}
 									playsInline
-									poster={heroPosterUrl || undefined}
+									preload="metadata"
 									className="absolute inset-0 size-full object-cover"
+									onLoadedMetadata={() => {
+										if (videoRef.current) videoRef.current.currentTime = 0.001;
+									}}
 									onEnded={handleEnded}
 								>
 									<source

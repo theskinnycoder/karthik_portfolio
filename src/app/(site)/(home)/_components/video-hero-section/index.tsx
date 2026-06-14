@@ -7,7 +7,6 @@ export async function VideoHeroSection() {
 		<VideoHeroSectionClient
 			availabilityMessage={profile?.availabilityMessage ?? ""}
 			heroVideoUrl={profile?.heroVideoUrl ?? ""}
-			heroPosterUrl={profile?.heroPosterUrl ?? ""}
 		/>
 	);
 }
