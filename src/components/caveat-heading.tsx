@@ -1,14 +1,9 @@
 "use client";
 
-import SplitText from "@/components/SplitText";
+import { motion } from "motion/react";
+
 import { cn } from "@/lib/utils";
 
-/**
- * Left-aligned, Caveat (font-serif) section heading with the SplitText
- * char-reveal animation. Shared by the Work and Proud Moments sections.
- * `pr-6` gives the slanted Caveat flourishes room inside SplitText's
- * `overflow-hidden` wrapper so the trailing glyph isn't clipped.
- */
 export function CaveatHeading({
 	text,
 	className,
@@ -17,14 +12,17 @@ export function CaveatHeading({
 	className?: string;
 }) {
 	return (
-		<SplitText
-			text={text}
-			tag="h2"
+		<motion.h2
+			initial={{ opacity: 0, y: 24 }}
+			whileInView={{ opacity: 1, y: 0 }}
+			transition={{ duration: 0.6, ease: "easeOut" }}
+			viewport={{ once: true, margin: "-100px" }}
 			className={cn(
-				"pr-6 text-left font-serif text-5xl font-semibold text-foreground",
+				"text-left font-serif text-5xl font-semibold text-foreground",
 				className,
 			)}
-			splitType="chars"
-		/>
+		>
+			{text}
+		</motion.h2>
 	);
 }
