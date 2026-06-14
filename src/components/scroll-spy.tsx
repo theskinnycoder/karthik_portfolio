@@ -25,11 +25,20 @@ export function ScrollSpy({
 
 		const handleScroll = () => {
 			let active: SectionId = "about";
+			let activeTop = -Infinity;
 
+			// Pick the section closest to (but not past) the threshold from above —
+			// i.e. the bottom-most section already scrolled into view. Comparing by
+			// actual position keeps this correct regardless of the SECTIONS array
+			// order or how sections are reordered in the CMS.
 			for (const id of SECTIONS) {
 				const el = document.getElementById(id);
 				if (!el) continue;
-				if (el.getBoundingClientRect().top <= threshold) active = id;
+				const top = el.getBoundingClientRect().top;
+				if (top <= threshold && top > activeTop) {
+					active = id;
+					activeTop = top;
+				}
 			}
 
 			if (active !== currentRef.current) {
