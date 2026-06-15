@@ -10,7 +10,7 @@ export async function ProudMomentsSection() {
 
 	if (highlights.length === 0) return null;
 
-	const headingText = header?.headingHighlight ?? "Proud Moments";
+	const headingText = header?.headingHighlight ?? "Proud Moment(s)";
 
 	return (
 		<section className="flex flex-col gap-8">

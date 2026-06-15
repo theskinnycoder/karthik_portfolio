@@ -63,7 +63,7 @@ export function ProudMomentDrawerLoading() {
 				<div className="h-full overflow-x-hidden overflow-y-auto bg-background text-foreground">
 					<DrawerBackHeader
 						onBack={handleClose}
-						label="Back to Proud Moments"
+						label="Back to Proud Moment(s)"
 					/>
 					<DrawerSkeleton />
 				</div>

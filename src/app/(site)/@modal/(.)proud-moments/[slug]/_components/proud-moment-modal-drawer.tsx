@@ -166,7 +166,7 @@ export function ProudMomentModalDrawer({
 				>
 					<DrawerBackHeader
 						onBack={handleClose}
-						label="Back to Proud Moments"
+						label="Back to Proud Moment(s)"
 					/>
 
 					{isPending ? (
