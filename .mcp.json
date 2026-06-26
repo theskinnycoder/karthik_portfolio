@@ -20,6 +20,10 @@
 			"type": "http",
 			"url": "https://mcp.vercel.com/rahul-srirams-projects/karthik-portfolio"
 		},
+		"vercel-state-engine": {
+			"type": "http",
+			"url": "https://mcp.vercel.com/panchalakarthik123-gmailcoms-projects/state-engine"
+		},
 		"sanity": {
 			"type": "http",
 			"url": "https://mcp.sanity.io",
