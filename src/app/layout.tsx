@@ -3,9 +3,30 @@ import type { PropsWithChildren } from "react";
 import "./globals.css";
 import { caveatFont, interFont } from "@/lib/fonts";
 
+const title = "Karthik Panchala — Product Designer";
+const description =
+	"Product Designer with 3+ years of experience designing B2B SaaS and AI-powered products.";
+const siteUrl = "https://imkarthik.in";
+
 export const metadata: Metadata = {
-	title: "Karthik Portfolio",
-	description: "Karthik's Portfolio",
+	metadataBase: new URL(siteUrl),
+	title: {
+		default: title,
+		template: "%s — Karthik Panchala",
+	},
+	description,
+	openGraph: {
+		title,
+		description,
+		url: siteUrl,
+		siteName: "Karthik Panchala",
+		type: "website",
+	},
+	twitter: {
+		card: "summary_large_image",
+		title,
+		description,
+	},
 };
 
 export default function RootLayout({ children }: PropsWithChildren) {
