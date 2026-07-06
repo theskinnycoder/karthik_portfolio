@@ -7,9 +7,9 @@ const title = "Karthik Panchala — Product Designer";
 const description = "I think about business. Product strategy. Impact.";
 const siteUrl = "https://imkarthik.in";
 const ogImage = {
-	url: "https://res.cloudinary.com/dtay6zw4c/image/upload/v1783319366/Thumbnail_lavvse.png",
-	width: 1240,
-	height: 504,
+	url: "https://res.cloudinary.com/dtay6zw4c/image/upload/c_pad,w_1200,h_630,b_black/v1783319366/Thumbnail_lavvse.png",
+	width: 1200,
+	height: 630,
 	alt: title,
 };
 
