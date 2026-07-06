@@ -4,8 +4,7 @@ import "./globals.css";
 import { caveatFont, interFont } from "@/lib/fonts";
 
 const title = "Karthik Panchala — Product Designer";
-const description =
-	"Product Designer with 3+ years of experience designing B2B SaaS and AI-powered products.";
+const description = "I think about business. Product strategy. Impact.";
 const siteUrl = "https://imkarthik.in";
 
 export const metadata: Metadata = {
