@@ -6,6 +6,12 @@ import { caveatFont, interFont } from "@/lib/fonts";
 const title = "Karthik Panchala — Product Designer";
 const description = "I think about business. Product strategy. Impact.";
 const siteUrl = "https://imkarthik.in";
+const ogImage = {
+	url: "https://res.cloudinary.com/dtay6zw4c/image/upload/v1783319366/Thumbnail_lavvse.png",
+	width: 1240,
+	height: 504,
+	alt: title,
+};
 
 export const metadata: Metadata = {
 	metadataBase: new URL(siteUrl),
@@ -20,11 +26,13 @@ export const metadata: Metadata = {
 		url: siteUrl,
 		siteName: "Karthik Panchala",
 		type: "website",
+		images: [ogImage],
 	},
 	twitter: {
 		card: "summary_large_image",
 		title,
 		description,
+		images: [ogImage],
 	},
 };
 
