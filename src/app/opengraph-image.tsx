@@ -20,25 +20,23 @@ export default function Image() {
 					fontFamily: "sans-serif",
 				}}
 			>
-				<div style={{ display: "flex", fontSize: 72, fontWeight: 600, color: "#FFFFFF" }}>
+				<div style={{ display: "flex", fontSize: 72, fontWeight: 700, color: "#FFFFFF" }}>
 					Karthik Panchala
 				</div>
 				<div
 					style={{
 						display: "flex",
-						fontSize: 56,
-						fontWeight: 600,
+						fontSize: 40,
+						fontWeight: 500,
 						backgroundImage: "linear-gradient(90deg, #FBBA27, #FB7481)",
 						backgroundClip: "text",
 						WebkitBackgroundClip: "text",
 						color: "transparent",
-						marginTop: 12,
+						marginTop: 20,
+						maxWidth: 760,
 					}}
 				>
-					Product Designer
-				</div>
-				<div style={{ display: "flex", fontSize: 28, color: "#A1A1AA", marginTop: 32 }}>
-					B2B SaaS &amp; AI-powered products
+					I think about business. Product strategy. Impact.
 				</div>
 			</div>
 		),
