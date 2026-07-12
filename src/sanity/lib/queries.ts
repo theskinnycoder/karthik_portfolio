@@ -74,7 +74,7 @@ export const homePageQuery = groq`
 `;
 
 export const workPageQuery = groq`
-  *[_type == "company" && count(*[_type == "workItem" && references(^._id)]) > 0] | order(order asc) {
+  *[_type == "company" && count(*[_type == "workItem" && company._ref == ^._id]) > 0] | order(order asc) {
     _id,
     name,
     logo,
@@ -83,7 +83,7 @@ export const workPageQuery = groq`
     badge,
     workTagline,
     workDescription,
-    "workItems": *[_type == "workItem" && references(^._id)] | order(order asc) {
+    "workItems": *[_type == "workItem" && company._ref == ^._id] | order(order asc) {
       _id,
       title,
       icon,
@@ -93,7 +93,8 @@ export const workPageQuery = groq`
       "slug": slug.current,
       "brandFrom": brand.primary,
       "brandTo": brand.secondary,
-      "brandIcon": brand.icon
+      "brandIcon": brand.icon,
+      "client": client->{name, logo}
     }
   }
 `;
