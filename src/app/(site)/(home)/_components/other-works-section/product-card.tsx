@@ -19,6 +19,7 @@ export function ProductCard({
 }: ProductCardProps) {
 	return (
 		<motion.div
+			dir="ltr"
 			className={`relative h-[380px] overflow-hidden rounded-[14px] ${navigateUrl ? "cursor-pointer" : "cursor-default"}`}
 			style={{ backgroundColor }}
 			onClick={() => navigateUrl && window.open(navigateUrl, "_blank")}
