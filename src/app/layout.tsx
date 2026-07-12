@@ -45,6 +45,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
 		>
 			<body
 				className={`${interFont.variable} ${caveatFont.variable} dark min-h-dvh overflow-x-hidden overscroll-y-contain antialiased`}
+				suppressHydrationWarning
 			>
 				{children}
 			</body>

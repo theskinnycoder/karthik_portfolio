@@ -16,7 +16,7 @@ export const testimonialsQuery = groq`
 `;
 
 export const companiesQuery = groq`
-  *[_type == "company"] | order(order asc) {
+  *[_type == "company" && count(*[_type == "workItem" && company._ref == ^._id]) > 0] | order(order asc) {
     _id,
     name,
 		logo,

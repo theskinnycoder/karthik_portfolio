@@ -779,7 +779,7 @@ export type TestimonialsQueryResult = Array<{
 
 // Source: src/sanity/lib/queries.ts
 // Variable: companiesQuery
-// Query: *[_type == "company"] | order(order asc) {    _id,    name,		logo,		website	}
+// Query: *[_type == "company" && count(*[_type == "workItem" && company._ref == ^._id]) > 0] | order(order asc) {    _id,    name,		logo,		website	}
 export type CompaniesQueryResult = Array<{
 	_id: string;
 	name: string | null;
@@ -1323,7 +1323,7 @@ import "@sanity/client";
 declare module "@sanity/client" {
 	interface SanityQueries {
 		'\n  *[_type == "testimonial"] | order(order asc) {\n    _id,\n    quote,\n    authorName,\n    authorRole,\n    authorAvatar,\n    company->{\n      _id,\n      name,\n      logo\n    }\n  }\n': TestimonialsQueryResult;
-		'\n  *[_type == "company"] | order(order asc) {\n    _id,\n    name,\n\t\tlogo,\n\t\twebsite\n\t}\n': CompaniesQueryResult;
+		'\n  *[_type == "company" && count(*[_type == "workItem" && company._ref == ^._id]) > 0] | order(order asc) {\n    _id,\n    name,\n\t\tlogo,\n\t\twebsite\n\t}\n': CompaniesQueryResult;
 		'\n  *[_type == "social"] | order(order asc) {\n    _id,\n    label,\n    href,\n    icon\n  }\n': SocialsQueryResult;
 		'\n  *[_type == "project"] | order(order asc) {\n    _id,\n    name,\n    image,\n    description,\n    backgroundColor,\n    url\n  }\n': ProjectsQueryResult;
 		'\n  *[_type == "experience"] | order(order asc) {\n    _id,\n    company,\n    url,\n    role,\n    description\n  }\n': ExperiencesQueryResult;
