@@ -71,11 +71,11 @@ export function WorkItemCard({
 						</span>
 						<MediaImage
 							src={item.client.logo}
-							alt={item.client.name}
+							alt={`${item.client.name} logo`}
 							width={0}
 							height={0}
-							className="h-[22px] w-auto"
-							sizes="100vw"
+							className="h-[22px] w-auto object-contain"
+							sizes="120px"
 						/>
 					</div>
 				)}
