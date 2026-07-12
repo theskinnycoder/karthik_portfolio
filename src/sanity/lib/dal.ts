@@ -130,6 +130,10 @@ export interface WorkItemDTO {
 	brandFrom?: string;
 	brandTo?: string;
 	brandIcon?: string;
+	client?: {
+		name: string;
+		logo: string;
+	};
 }
 
 export interface TeamMemberDTO {
@@ -361,6 +365,12 @@ function toWorkItemCardDTO(data: WorkItemCardRaw): WorkItemDTO {
 		brandFrom: data.brandFrom ?? undefined,
 		brandTo: data.brandTo ?? undefined,
 		brandIcon: data.brandIcon ?? undefined,
+		client: data.client?.name
+			? {
+					name: data.client.name,
+					logo: getMediaUrl(data.client.logo, { width: 200 }),
+				}
+			: undefined,
 	};
 }
 

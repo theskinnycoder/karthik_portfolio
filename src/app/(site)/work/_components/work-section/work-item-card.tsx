@@ -63,6 +63,22 @@ export function WorkItemCard({
 				<p className="text-base leading-relaxed font-light tracking-prose text-muted-foreground md:text-lg">
 					{item.description}
 				</p>
+
+				{item.client && (
+					<div className="flex flex-col items-start gap-1.5">
+						<span className="text-xs tracking-wide text-muted-foreground uppercase">
+							Client
+						</span>
+						<MediaImage
+							src={item.client.logo}
+							alt={`${item.client.name} logo`}
+							width={0}
+							height={0}
+							className="h-[22px] w-auto object-contain"
+							sizes="120px"
+						/>
+					</div>
+				)}
 			</div>
 		</motion.div>
 	);
