@@ -2,7 +2,7 @@
 
 // Gradient text disabled for now — see the commented <GradientText> usage below to restore.
 // import GradientText from "@/components/GradientText";
-import { inlineMarks } from "@/components/portable-text/inline-marks";
+import { inlineMarks, WEIGHTS } from "@/components/portable-text/inline-marks";
 import { COLOR_DECORATORS } from "@/sanity/rich-text/constants";
 import { motion } from "motion/react";
 import {
@@ -27,15 +27,17 @@ const inlineComponents: PortableTextComponents = {
 	marks: inlineMarks,
 };
 
-// Title variant: color marks are stripped so the GradientText shines through.
-// The Sanity editor applies colorMuted to the title text; keeping it would
-// inject `style={{ color: "var(--muted-foreground)" }}` which overrides
-// GradientText's `text-transparent` / `bg-clip-text`.
+// Title variant: color and weight marks are stripped so the tagline always
+// renders in the wrapper's flat --paragraph color at font-normal (400),
+// regardless of what's authored in Sanity. Color-stripping originally existed
+// so GradientText's `text-transparent` / `bg-clip-text` would shine through;
+// weight-stripping was added when the tagline was pinned to 400.
 const titleComponents: PortableTextComponents = {
 	...inlineComponents,
 	marks: {
 		...inlineMarks,
 		...Object.fromEntries(COLOR_DECORATORS.map((c) => [c, passThrough])),
+		...Object.fromEntries(WEIGHTS.map((w) => [`weight${w}`, passThrough])),
 	},
 };
 
@@ -88,7 +90,7 @@ export function HeroSection({ name, title }: HeroSectionProps) {
 					)}
 				</GradientText>
 				*/}
-				<span className="text-3xl font-semibold text-paragraph">
+				<span className="text-3xl font-normal text-paragraph">
 					{title?.length ? (
 						<PortableText
 							value={title}

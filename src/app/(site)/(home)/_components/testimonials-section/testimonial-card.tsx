@@ -19,7 +19,7 @@ export function TestimonialCard({
 			whileHover={{ scale: 0.98 }}
 			transition={{ duration: 0.3, ease: "easeOut" }}
 		>
-			<div className="flex-1 text-base font-light text-muted-foreground">
+			<div className="flex-1 text-base font-light text-muted-foreground select-none">
 				<PortableTextRenderer
 					value={quote}
 					variant="base"

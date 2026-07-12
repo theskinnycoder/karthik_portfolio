@@ -2,7 +2,7 @@ import type { PortableTextComponents } from "next-sanity";
 import type { ReactNode } from "react";
 import { COLOR_DECORATORS, COLOR_TOKENS } from "@/sanity/rich-text/constants";
 
-const WEIGHTS = [300, 400, 500, 600, 700] as const;
+export const WEIGHTS = [300, 400, 500, 600, 700] as const;
 
 function makeWeightMark(weight: number) {
 	return function WeightMark({ children }: { children?: ReactNode }) {

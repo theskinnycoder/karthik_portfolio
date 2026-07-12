@@ -35,7 +35,7 @@ export function ProductCard({
 			/>
 
 			<div className="absolute bottom-0 left-0 w-full bg-linear-to-t from-black/35 via-black/10 to-transparent [mask-image:linear-gradient(to_top,black_70%,transparent_100%)] backdrop-blur-sm">
-				<div className="flex flex-col items-end gap-0 px-5 py-4 text-left">
+				<div className="flex flex-col items-start gap-0 px-5 py-4 text-left">
 					<p className="max-w-sm truncate text-base font-medium text-white">
 						{name}
 					</p>
