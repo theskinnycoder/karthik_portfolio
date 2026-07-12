@@ -17,6 +17,14 @@ export const workItem = defineType({
 			validation: (rule) => rule.required(),
 		}),
 		defineField({
+			name: "client",
+			title: "Client",
+			type: "reference",
+			to: [{ type: "company" }],
+			description:
+				"Optional — the external client this work was done for (shown as a small badge on the work card). Leave blank for internal/product work.",
+		}),
+		defineField({
 			name: "title",
 			title: "Title",
 			type: "string",
