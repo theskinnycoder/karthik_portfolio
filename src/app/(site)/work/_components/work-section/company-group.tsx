@@ -1,6 +1,7 @@
 import type { WorkPageCompanyDTO } from "@/sanity/lib/dal";
 import Image from "next/image";
 import { CompanyHeader } from "./company-header";
+import { FadeInSection } from "./fade-in-section";
 import { WorkItemCard } from "./work-item-card";
 
 interface CompanyGroupProps {
@@ -23,30 +24,33 @@ export function CompanyGroup({
 				workTagline={company.workTagline}
 				workDescription={company.workDescription}
 			/>
-			<div className="relative flex flex-col gap-6">
-				<p className="text-base leading-5 font-semibold text-muted-foreground">
-					My key recipes at <span className="capitalize">{company.name}</span>
-				</p>
-				<Image
-					src="/arrow.gif"
-					alt=""
-					width={80}
-					height={80}
-					aria-hidden="true"
-					className="pointer-events-none absolute top-0 left-36 z-10 w-20"
-					unoptimized
-				/>
-				<div className="flex flex-col gap-22 md:gap-30">
-					{company.workItems.map((item, idx) => (
-						<WorkItemCard
-							key={item.slug}
-							item={item}
-							reverse={idx % 2 === 1}
-							priority={priorityFirstItem && idx === 0}
-						/>
-					))}
+			<FadeInSection>
+				<div className="relative flex flex-col gap-6">
+					<p className="text-base leading-5 font-semibold text-muted-foreground">
+						My key recipes at{" "}
+						<span className="capitalize">{company.name}</span>
+					</p>
+					<Image
+						src="/arrow.gif"
+						alt=""
+						width={80}
+						height={80}
+						aria-hidden="true"
+						className="pointer-events-none absolute top-0 left-36 z-10 w-20"
+						unoptimized
+					/>
+					<div className="flex flex-col gap-22 md:gap-30">
+						{company.workItems.map((item, idx) => (
+							<WorkItemCard
+								key={item.slug}
+								item={item}
+								reverse={idx % 2 === 1}
+								priority={priorityFirstItem && idx === 0}
+							/>
+						))}
+					</div>
 				</div>
-			</div>
+			</FadeInSection>
 		</div>
 	);
 }

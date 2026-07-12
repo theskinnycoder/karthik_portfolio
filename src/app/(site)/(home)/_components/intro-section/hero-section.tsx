@@ -1,6 +1,7 @@
 "use client";
 
-import GradientText from "@/components/GradientText";
+// Gradient text disabled for now — see the commented <GradientText> usage below to restore.
+// import GradientText from "@/components/GradientText";
 import { inlineMarks } from "@/components/portable-text/inline-marks";
 import { COLOR_DECORATORS } from "@/sanity/rich-text/constants";
 import { motion } from "motion/react";
@@ -70,6 +71,7 @@ export function HeroSection({ name, title }: HeroSectionProps) {
 				{...fadeUp}
 				transition={{ ease: "easeOut", duration: 0.6, delay: 0.15 }}
 			>
+				{/* Gradient text disabled for now — restore by uncommenting this and the import above.
 				<GradientText
 					colors={["#FBBA27", "#FB7481"]}
 					direction="horizontal"
@@ -85,6 +87,17 @@ export function HeroSection({ name, title }: HeroSectionProps) {
 						"Product Designer"
 					)}
 				</GradientText>
+				*/}
+				<span className="text-3xl font-semibold text-paragraph">
+					{title?.length ? (
+						<PortableText
+							value={title}
+							components={titleComponents}
+						/>
+					) : (
+						"Product Designer"
+					)}
+				</span>
 			</motion.div>
 		</div>
 	);

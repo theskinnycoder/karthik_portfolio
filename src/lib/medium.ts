@@ -20,10 +20,22 @@ function extractValue(raw: unknown): string {
 	return String(raw ?? "");
 }
 
+/**
+ * Downsize a Medium CDN thumbnail URL to match its display size (~112px, w-28).
+ * Medium image URLs embed a width segment — either legacy `/max/<width>/...`
+ * or `/v2/resize:fit:<width>/...` — that serves the original at that width
+ * with no further transform available, so we rewrite it rather than proxy it.
+ */
+function resizeMediumThumbnail(url: string): string {
+	return url
+		.replace(/\/max\/\d+\//, "/max/240/")
+		.replace(/\/resize:fit:\d+\//, "/resize:fit:240/");
+}
+
 /** Extract the first image src from Medium's content:encoded HTML */
 function extractThumbnail(html: string): string | null {
 	const match = html.match(/<img[^>]+src="([^"]+)"/);
-	return match?.[1] ?? null;
+	return match ? resizeMediumThumbnail(match[1]) : null;
 }
 
 /** Strip HTML tags and truncate to ~200 chars */

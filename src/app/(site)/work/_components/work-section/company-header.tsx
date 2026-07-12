@@ -22,7 +22,7 @@ export function CompanyHeader({
 }: CompanyHeaderProps) {
 	return (
 		<>
-			<div className="sticky top-0 z-10 -mx-6 flex items-center gap-3 bg-background/95 px-6 py-3 backdrop-blur-sm">
+			<div className="sticky top-0 z-10 -mx-6 flex items-center gap-3 bg-background/75 px-6 py-3 backdrop-blur-md">
 				<MediaImage
 					src={logo}
 					alt={`${name} logo`}

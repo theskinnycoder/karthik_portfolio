@@ -1,0 +1,27 @@
+diff --git a/dist/embla-carousel-wheel-gestures.esm.js b/dist/embla-carousel-wheel-gestures.esm.js
+index b1cf1de0f3dd7493791ad247b4df75b0b67813fa..1cc98261833953eb7e017f2552314af2c0742a34 100644
+--- a/dist/embla-carousel-wheel-gestures.esm.js
++++ b/dist/embla-carousel-wheel-gestures.esm.js
+@@ -158,10 +158,21 @@ function WheelGesturesPlugin(userOptions) {
+       var _state$axisDelta = state.axisDelta,
+           deltaX = _state$axisDelta[0],
+           deltaY = _state$axisDelta[1];
++      var primaryAxisDelta = wheelAxis === 'x' ? deltaX : deltaY;
++      // Loop carousels have no real edge — scrollProgress cycles through values
++      // near 0/1 every lap, which would otherwise spuriously read as "at the
++      // boundary" and trigger rubber-band damping + premature gesture
++      // termination (via isBoundaryThresholdReached below), cutting fast
++      // swipes short right as they'd otherwise pick up distance.
++      if (engine.options.loop) {
++        return {
++          isAtBoundary: false,
++          primaryAxisDelta: primaryAxisDelta
++        };
++      }
+       var scrollProgress = embla.scrollProgress();
+       var canScrollNext = scrollProgress < 1;
+       var canScrollPrev = scrollProgress > 0;
+-      var primaryAxisDelta = wheelAxis === 'x' ? deltaX : deltaY;
+       var isScrollingNext = primaryAxisDelta < 0;
+       var isScrollingPrev = primaryAxisDelta > 0;
+       var isAtBoundary = isScrollingNext && !canScrollNext || isScrollingPrev && !canScrollPrev;

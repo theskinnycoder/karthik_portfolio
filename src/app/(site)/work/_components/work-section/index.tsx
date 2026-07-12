@@ -1,7 +1,6 @@
 import { CaveatHeading } from "@/components/caveat-heading";
 import { getSectionHeader, getWorkPageCompanies } from "@/sanity/lib/dal";
 import { CompanyGroup } from "./company-group";
-import { FadeInSection } from "./fade-in-section";
 
 export async function WorkSection() {
 	const [companies, header] = await Promise.all([
@@ -25,12 +24,11 @@ export async function WorkSection() {
 
 			<div className="flex flex-col gap-24">
 				{companies.map((company, idx) => (
-					<FadeInSection key={company.name}>
-						<CompanyGroup
-							company={company}
-							priorityFirstItem={idx === 0}
-						/>
-					</FadeInSection>
+					<CompanyGroup
+						key={company.name}
+						company={company}
+						priorityFirstItem={idx === 0}
+					/>
 				))}
 			</div>
 		</div>

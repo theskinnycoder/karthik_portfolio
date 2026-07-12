@@ -334,7 +334,7 @@ function toSocialDTO(data: SocialRaw): SocialDTO {
 function toProjectDTO(data: ProjectRaw): ProjectDTO {
 	return {
 		name: data.name ?? "",
-		image: getMediaUrl(data.image),
+		image: getMediaUrl(data.image, { width: 1000 }),
 		description: data.description ?? "",
 		backgroundColor: data.backgroundColor ?? "",
 		url: data.url ?? undefined,
@@ -355,7 +355,7 @@ function toWorkItemCardDTO(data: WorkItemCardRaw): WorkItemDTO {
 		title: data.title ?? "",
 		icon: data.icon ? getMediaUrl(data.icon) : undefined,
 		tag: data.tag ?? "",
-		image: getMediaUrl(data.image),
+		image: getMediaUrl(data.image, { width: 900 }),
 		description: data.description ?? "",
 		slug: (data.slug ?? "").trim(),
 		brandFrom: data.brandFrom ?? undefined,
@@ -400,7 +400,7 @@ function toContentImageDTO(
 	return {
 		_type: "contentImage",
 		_key: data._key,
-		url: getMediaUrl(data.asset),
+		url: getMediaUrl(data.asset, { width: 1600 }),
 		alt: data.alt ?? "",
 		caption: data.caption ?? undefined,
 		size: data.size ?? "inline",
@@ -546,7 +546,9 @@ function toContentBlock(block: ContentBlockRaw): ContentBlock | null {
 }
 
 function toWorkItemDetailDTO(data: WorkItemDetailRaw): WorkItemDetailDTO {
-	const heroImage = getMediaUrl(data.heroImage) || getMediaUrl(data.image);
+	const heroImage =
+		getMediaUrl(data.heroImage, { width: 1600 }) ||
+		getMediaUrl(data.image, { width: 1600 });
 	const content = (data.content ?? [])
 		.map(toContentBlock)
 		.filter((b): b is ContentBlock => b !== null);
@@ -596,7 +598,7 @@ function toHighlightCardDTO(data: HighlightCardRaw): HighlightDTO {
 		title: data.title ?? "",
 		description: data.description ?? "",
 		date: data.date ?? "",
-		image: getMediaUrl(data.image),
+		image: getMediaUrl(data.image, { width: 900 }),
 		slug: (data.slug ?? "").trim(),
 	};
 }
@@ -628,7 +630,7 @@ function toHighlightDetailDTO(data: HighlightDetailRaw): HighlightDetailDTO {
 		slug: currentSlug,
 		description: data.description ?? "",
 		date: data.date ?? "",
-		image: getMediaUrl(data.image),
+		image: getMediaUrl(data.image, { width: 1600 }),
 		content,
 		prev: prev ?? null,
 		next: next ?? null,

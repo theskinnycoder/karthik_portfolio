@@ -1,10 +1,13 @@
 "use client";
 
+import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
+import * as React from "react";
 import {
 	Carousel,
 	CarouselContent,
 	CarouselItem,
 } from "@/components/ui/carousel";
+import { SmoothRelease } from "@/lib/embla-smooth-release";
 import { cn } from "@/lib/utils";
 import type { MediumPostDTO } from "@/lib/medium";
 import { BlogCard } from "./blog-card";
@@ -14,6 +17,9 @@ interface BlogsCarouselProps {
 }
 
 export function BlogsCarousel({ posts }: BlogsCarouselProps) {
+	const wheelGestures = React.useRef(WheelGesturesPlugin({ forceWheelAxis: "x" }));
+	const smoothRelease = React.useRef(SmoothRelease());
+
 	return (
 		<div className="relative -mx-6 w-[calc(100%+3rem)] self-center md:-mx-[1.125rem] md:w-[calc(100%+2.25rem)]">
 			<Carousel
@@ -22,6 +28,7 @@ export function BlogsCarousel({ posts }: BlogsCarouselProps) {
 					loop: false,
 					dragFree: true,
 				}}
+				plugins={[wheelGestures.current, smoothRelease.current]}
 				className="w-full"
 			>
 				<CarouselContent className="ml-0 items-stretch">

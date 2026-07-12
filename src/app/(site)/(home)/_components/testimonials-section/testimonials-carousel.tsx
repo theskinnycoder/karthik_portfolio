@@ -1,6 +1,7 @@
 "use client";
 
 import AutoScroll from "embla-carousel-auto-scroll";
+import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
 import * as React from "react";
 
 import {
@@ -9,6 +10,7 @@ import {
 	CarouselItem,
 } from "@/components/ui/carousel";
 import { ProgressiveBlur } from "@/components/ui/progressive-blur";
+import { SmoothRelease } from "@/lib/embla-smooth-release";
 import type { TestimonialDTO } from "@/sanity/lib/dal";
 import { TestimonialCard } from "./testimonial-card";
 
@@ -20,7 +22,10 @@ export function TestimonialsCarousel({
 	const plugin = React.useRef(
 		AutoScroll({
 			speed: 1,
-			startDelay: 0,
+			// Grace period before autoplay (re)starts — applies on page load AND after
+			// the user releases a manual drag. Without this, autoscroll snapped back
+			// instantly on release and fought the user's free-hand scroll.
+			startDelay: 1500,
 			stopOnInteraction: false,
 			stopOnMouseEnter: true,
 			active: false,
@@ -29,6 +34,8 @@ export function TestimonialsCarousel({
 			},
 		}),
 	);
+	const wheelGestures = React.useRef(WheelGesturesPlugin({ forceWheelAxis: "x" }));
+	const smoothRelease = React.useRef(SmoothRelease());
 
 	return (
 		<div className="relative -mx-6 w-[calc(100%+3rem)] self-center md:-mx-[1.125rem] md:w-[calc(100%+2.25rem)]">
@@ -41,7 +48,7 @@ export function TestimonialsCarousel({
 						"(max-width: 767px)": { loop: false },
 					},
 				}}
-				plugins={[plugin.current]}
+				plugins={[plugin.current, wheelGestures.current, smoothRelease.current]}
 				className="w-full"
 			>
 				{/* pl-4 (mobile only): insets the first card 16px from the screen
@@ -66,14 +73,14 @@ export function TestimonialsCarousel({
 			</Carousel>
 			<ProgressiveBlur
 				direction="left"
-				blurLayers={8}
+				blurLayers={4}
 				blurIntensity={0.5}
 				className="absolute inset-y-0 left-0 z-10 hidden w-24 md:block"
 			/>
 			<div className="pointer-events-none absolute inset-y-0 left-0 z-10 hidden w-8 bg-gradient-to-r from-background to-transparent md:block" />
 			<ProgressiveBlur
 				direction="right"
-				blurLayers={8}
+				blurLayers={4}
 				blurIntensity={0.5}
 				className="absolute inset-y-0 right-0 z-10 hidden w-24 md:block"
 			/>
