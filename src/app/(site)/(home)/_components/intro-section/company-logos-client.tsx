@@ -30,7 +30,7 @@ export function CompanyLogosClient({ companies }: CompanyLogosClientProps) {
 							loading="eager"
 						/>
 					</motion.div>
-					{index === 1 && (
+					{index === 1 && companies.length > 2 && (
 						<div
 							className="basis-full lg:hidden"
 							aria-hidden="true"
