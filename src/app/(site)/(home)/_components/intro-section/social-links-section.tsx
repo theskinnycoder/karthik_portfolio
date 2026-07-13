@@ -7,23 +7,31 @@ export async function SocialLinks() {
 	return (
 		<div className="flex flex-wrap gap-2">
 			{socialLinks.map((link) => (
-				<a
+				<div
 					key={link.label}
-					href={link.href}
-					target="_blank"
-					rel="noopener noreferrer"
-					className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-base font-semibold text-foreground transition-colors hover:bg-muted md:px-4 md:py-2 md:text-lg"
+					className="group relative inline-block rounded-full"
 				>
-					<MediaImage
-						src={link.icon}
-						alt={link.label}
-						width={18}
-						height={18}
-						className="size-[18px] md:size-5"
-						loading="eager"
+					<div
+						aria-hidden="true"
+						className="absolute inset-px rounded-full bg-ring"
 					/>
-					<span>{link.label}</span>
-				</a>
+					<a
+						href={link.href}
+						target="_blank"
+						rel="noopener noreferrer"
+						className="relative inline-flex origin-left items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-base font-semibold text-foreground transition-transform duration-150 will-change-transform group-hover:-rotate-4 md:px-4 md:py-2 md:text-lg"
+					>
+						<MediaImage
+							src={link.icon}
+							alt={link.label}
+							width={18}
+							height={18}
+							className="size-[18px] md:size-5"
+							loading="eager"
+						/>
+						<span>{link.label}</span>
+					</a>
+				</div>
 			))}
 		</div>
 	);
