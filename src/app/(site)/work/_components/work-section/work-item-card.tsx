@@ -3,7 +3,9 @@
 import { motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import * as React from "react";
 import { MediaImage } from "@/components/media";
+import useIsMobile from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import { setWorkDrawerSignal } from "@/lib/work-drawer-signal";
 import type { WorkItemDTO } from "@/sanity/lib/dal";
@@ -23,6 +25,58 @@ export function WorkItemCard({
 }: WorkItemCardProps) {
 	const pathname = usePathname();
 	const isDrawerOpen = pathname === `/work/${item.slug}`;
+	const isMobile = useIsMobile();
+
+	const imageRef = React.useRef<HTMLDivElement>(null);
+	const textColRef = React.useRef<HTMLDivElement>(null);
+	const descriptionRef = React.useRef<HTMLParagraphElement>(null);
+
+	React.useLayoutEffect(() => {
+		const imageEl = imageRef.current;
+		const textColEl = textColRef.current;
+		const descriptionEl = descriptionRef.current;
+		if (!imageEl || !textColEl || !descriptionEl) return;
+
+		// measure() is the sole source of truth for the description's clamp
+		// style — it always applies the final result itself rather than
+		// relying on a React re-render, since ResizeObserver's automatic
+		// initial callback can recompute the same clamp value it already
+		// applied, and React skips re-rendering (and re-committing the
+		// style) when a state update doesn't change the value.
+		const measure = () => {
+			// Reset to natural (unclamped) height before measuring.
+			descriptionEl.style.display = "";
+			descriptionEl.style.webkitLineClamp = "";
+			descriptionEl.style.webkitBoxOrient = "";
+			descriptionEl.style.overflow = "";
+
+			if (isMobile) return;
+
+			const imageHeight = imageEl.offsetHeight;
+			const naturalTextHeight = textColEl.scrollHeight;
+			if (naturalTextHeight <= imageHeight) return;
+
+			const lineHeight =
+				Number.parseFloat(getComputedStyle(descriptionEl).lineHeight) || 24;
+			const descriptionLines = Math.round(
+				descriptionEl.scrollHeight / lineHeight,
+			);
+			const excess = naturalTextHeight - imageHeight;
+			const linesToRemove = Math.ceil(excess / lineHeight);
+			const clampLines = Math.max(1, descriptionLines - linesToRemove);
+
+			descriptionEl.style.display = "-webkit-box";
+			descriptionEl.style.webkitLineClamp = String(clampLines);
+			descriptionEl.style.webkitBoxOrient = "vertical";
+			descriptionEl.style.overflow = "hidden";
+		};
+
+		measure();
+
+		const resizeObserver = new ResizeObserver(measure);
+		resizeObserver.observe(imageEl);
+		return () => resizeObserver.disconnect();
+	}, [isMobile, item.description, item.title]);
 
 	const card = (
 		<motion.div
@@ -35,6 +89,7 @@ export function WorkItemCard({
 		>
 			{/* Image */}
 			<div
+				ref={imageRef}
 				className="relative -mx-6 w-[calc(100%+3rem)] shrink-0 overflow-hidden border-0 md:mx-0 md:w-1/2 md:rounded-2xl md:border md:border-border"
 				style={{ aspectRatio: "var(--card-image-ratio, 1 / 1)" }}
 			>
@@ -49,7 +104,10 @@ export function WorkItemCard({
 			</div>
 
 			{/* Text column */}
-			<div className="flex w-full flex-col gap-4 md:w-1/2">
+			<div
+				ref={textColRef}
+				className="flex w-full flex-col gap-4 md:w-1/2"
+			>
 				<div className="flex items-center gap-2">
 					<span className="rounded-full border border-border bg-card px-3 py-1.5 text-xs font-light tracking-prose whitespace-nowrap text-foreground">
 						{item.tag}
@@ -60,7 +118,10 @@ export function WorkItemCard({
 					{item.title}
 				</h3>
 
-				<p className="text-base leading-relaxed font-light tracking-prose text-muted-foreground md:text-lg">
+				<p
+					ref={descriptionRef}
+					className="text-base leading-relaxed font-light tracking-prose text-muted-foreground md:text-lg"
+				>
 					{item.description}
 				</p>
 
