@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { PropsWithChildren } from "react";
 import "./globals.css";
+import { SmoothCursor } from "@/components/ui/smooth-cursor";
 import { caveatFont, interFont } from "@/lib/fonts";
 
 const title = "Karthik Panchala — Product Designer";
@@ -47,6 +48,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
 				className={`${interFont.variable} ${caveatFont.variable} dark min-h-dvh overflow-x-hidden overscroll-y-contain antialiased`}
 				suppressHydrationWarning
 			>
+				<SmoothCursor />
 				{children}
 			</body>
 		</html>
