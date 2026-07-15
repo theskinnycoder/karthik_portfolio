@@ -19,7 +19,7 @@ export async function ExperienceSection() {
 			</div>
 			<ItemGroup>
 				{experiences.map((exp) => (
-					<div key={exp.url}>
+					<div key={exp._id}>
 						<MenuListItem>
 							<ExperienceItem {...exp} />
 						</MenuListItem>

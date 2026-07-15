@@ -105,6 +105,7 @@ export interface ProjectDTO {
 }
 
 export interface ExperienceDTO {
+	_id: string;
 	company: PortableTextBlock[];
 	url: string;
 	role: PortableTextBlock[];
@@ -347,6 +348,7 @@ function toProjectDTO(data: ProjectRaw): ProjectDTO {
 
 function toExperienceDTO(data: ExperienceRaw): ExperienceDTO {
 	return {
+		_id: data._id,
 		company: (data.company ?? []) as unknown as PortableTextBlock[],
 		url: data.url ?? "",
 		role: (data.role ?? []) as unknown as PortableTextBlock[],
