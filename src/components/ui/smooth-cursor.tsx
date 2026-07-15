@@ -156,19 +156,12 @@ export function SmoothCursor({
 	// Cache Components flags as needing a Suspense boundary). The first
 	// pointermove after mount just computes a large, harmless deltaTime.
 	const lastUpdateTime = useRef(0);
-	const previousAngle = useRef(0);
-	const accumulatedRotation = useRef(0);
 	const [isEnabled, setIsEnabled] = useState(false);
 	const [isVisible, setIsVisible] = useState(false);
 	const [isPointerTarget, setIsPointerTarget] = useState(false);
 
 	const cursorX = useSpring(0, springConfig);
 	const cursorY = useSpring(0, springConfig);
-	const rotation = useSpring(0, {
-		...springConfig,
-		damping: 70,
-		stiffness: 500,
-	});
 	const scale = useSpring(1, {
 		...springConfig,
 		stiffness: 500,
@@ -243,17 +236,6 @@ export function SmoothCursor({
 			cursorY.set(currentPos.y);
 
 			if (speed > 0.1) {
-				const currentAngle =
-					Math.atan2(velocity.current.y, velocity.current.x) * (180 / Math.PI) +
-					90;
-
-				let angleDiff = currentAngle - previousAngle.current;
-				if (angleDiff > 180) angleDiff -= 360;
-				if (angleDiff < -180) angleDiff += 360;
-				accumulatedRotation.current += angleDiff;
-				rotation.set(accumulatedRotation.current);
-				previousAngle.current = currentAngle;
-
 				scale.set(0.95);
 
 				if (timeout !== null) {
@@ -299,7 +281,7 @@ export function SmoothCursor({
 				clearTimeout(timeout);
 			}
 		};
-	}, [cursorX, cursorY, rotation, scale, isEnabled]);
+	}, [cursorX, cursorY, scale, isEnabled]);
 
 	if (!isEnabled) {
 		return null;
@@ -325,11 +307,7 @@ export function SmoothCursor({
 				duration: 0.15,
 			}}
 		>
-			{isPointerTarget ? (
-				pointerCursor
-			) : (
-				<motion.div style={{ rotate: rotation }}>{cursor}</motion.div>
-			)}
+			{isPointerTarget ? pointerCursor : cursor}
 		</motion.div>
 	);
 }
