@@ -81,9 +81,11 @@ export function WorkItemCard({
 	const card = (
 		<motion.div
 			className={cn(
-				"flex flex-col gap-6 transition-transform duration-300 ease-out md:items-center md:gap-12",
+				"flex flex-col gap-6 transition-transform duration-300 ease-out md:gap-12",
 				!isDrawerOpen && "group-hover:scale-[0.98]",
-				reverse ? "md:flex-row-reverse" : "md:flex-row",
+				reverse
+					? "md:flex-row-reverse md:items-start"
+					: "md:flex-row md:items-center",
 			)}
 		>
 			{/* Image */}
