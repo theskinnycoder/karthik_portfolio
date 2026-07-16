@@ -1,7 +1,4 @@
-"use client";
-
 import type { MediumPostDTO } from "@/lib/medium";
-import { motion } from "motion/react";
 
 interface BlogCardProps {
 	post: MediumPostDTO;
@@ -30,46 +27,46 @@ function formatDate(iso: string): string {
 
 export function BlogCard({ post }: BlogCardProps) {
 	return (
-		<motion.a
-			href={post.link}
-			target="_blank"
-			rel="noopener noreferrer"
-			className="flex h-full flex-col border-y border-border"
-			aria-label={`Read "${post.title}" on Medium`}
-			whileHover={{ scale: 0.98 }}
-			transition={{ duration: 0.3, ease: "easeOut" }}
-		>
-			<div className="flex flex-col gap-3 py-5 pr-5 pl-5 md:pr-7 md:pl-7">
-				{/* Text + thumbnail */}
-				<div className="flex items-start gap-4">
-					<div className="flex flex-1 flex-col gap-2">
-						<p className="text-xs text-muted-foreground">
-							{formatDate(post.pubDate)}
-						</p>
-						<h3 className="line-clamp-3 text-base leading-snug font-bold text-foreground">
-							{post.title}
-						</h3>
-						<p className="line-clamp-2 text-sm font-light text-muted-foreground">
-							{post.excerpt}
-						</p>
+		<div className="group h-full">
+			<a
+				href={post.link}
+				target="_blank"
+				rel="noopener noreferrer"
+				className="flex h-full flex-col border-y border-border transition-transform duration-300 ease-out group-hover:scale-[0.98]"
+				aria-label={`Read "${post.title}" on Medium`}
+			>
+				<div className="flex flex-col gap-3 py-5 pr-5 pl-5 md:pr-7 md:pl-7">
+					{/* Text + thumbnail */}
+					<div className="flex items-start gap-4">
+						<div className="flex flex-1 flex-col gap-2">
+							<p className="text-xs text-muted-foreground">
+								{formatDate(post.pubDate)}
+							</p>
+							<h3 className="line-clamp-3 text-base leading-snug font-bold text-foreground">
+								{post.title}
+							</h3>
+							<p className="line-clamp-2 text-sm font-light text-muted-foreground">
+								{post.excerpt}
+							</p>
+						</div>
+						{post.thumbnail && (
+							// eslint-disable-next-line @next/next/no-img-element
+							<img
+								src={post.thumbnail}
+								alt=""
+								loading="lazy"
+								className="aspect-[3/2] w-28 shrink-0 rounded object-cover"
+							/>
+						)}
 					</div>
-					{post.thumbnail && (
-						// eslint-disable-next-line @next/next/no-img-element
-						<img
-							src={post.thumbnail}
-							alt=""
-							loading="lazy"
-							className="aspect-[3/2] w-28 shrink-0 rounded object-cover"
-						/>
-					)}
-				</div>
 
-				{/* Read on Medium */}
-				<div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-					<MediumIcon className="size-3" />
-					<span>Read on Medium</span>
+					{/* Read on Medium */}
+					<div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+						<MediumIcon className="size-3" />
+						<span>Read on Medium</span>
+					</div>
 				</div>
-			</div>
-		</motion.a>
+			</a>
+		</div>
 	);
 }

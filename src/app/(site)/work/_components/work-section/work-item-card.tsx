@@ -81,11 +81,10 @@ export function WorkItemCard({
 	const card = (
 		<motion.div
 			className={cn(
-				"flex flex-col gap-6 md:items-center md:gap-12",
+				"flex flex-col gap-6 transition-transform duration-300 ease-out md:items-center md:gap-12",
+				!isDrawerOpen && "group-hover:scale-[0.98]",
 				reverse ? "md:flex-row-reverse" : "md:flex-row",
 			)}
-			whileHover={isDrawerOpen ? undefined : { scale: 0.98 }}
-			transition={{ duration: 0.3, ease: "easeOut" }}
 		>
 			{/* Image */}
 			<div
@@ -145,13 +144,13 @@ export function WorkItemCard({
 	);
 
 	if (isDrawerOpen) {
-		return <div className="block w-full text-left">{card}</div>;
+		return <div className="group block w-full text-left">{card}</div>;
 	}
 
 	return (
 		<Link
 			href={`/work/${item.slug}`}
-			className="block w-full text-left"
+			className="group block w-full text-left"
 			onClick={setWorkDrawerSignal}
 		>
 			{card}

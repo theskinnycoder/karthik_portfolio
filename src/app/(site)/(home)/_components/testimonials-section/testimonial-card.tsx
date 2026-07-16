@@ -1,6 +1,3 @@
-"use client";
-
-import { motion } from "motion/react";
 import { MediaImage } from "@/components/media";
 import { PortableTextRenderer } from "@/components/portable-text";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -14,54 +11,52 @@ export function TestimonialCard({
 	company,
 }: TestimonialDTO) {
 	return (
-		<motion.div
-			className="flex h-full flex-col gap-6 rounded-[18px] border border-border p-4.5"
-			whileHover={{ scale: 0.98 }}
-			transition={{ duration: 0.3, ease: "easeOut" }}
-		>
-			<div className="flex-1 text-base font-light text-muted-foreground select-none">
-				<PortableTextRenderer
-					value={quote}
-					variant="base"
-				/>
-			</div>
-
-			<div className="flex items-center gap-3">
-				<Avatar className="size-10">
-					<AvatarImage
-						src={authorAvatar}
-						alt={authorName}
-						className="object-top"
+		<div className="group h-full">
+			<div className="flex h-full flex-col gap-6 rounded-[18px] border border-border p-4.5 transition-transform duration-300 ease-out group-hover:scale-[0.98]">
+				<div className="flex-1 text-base font-light text-muted-foreground select-none">
+					<PortableTextRenderer
+						value={quote}
+						variant="base"
 					/>
-					<AvatarFallback>
-						{authorName
-							.split(" ")
-							.map((n) => n[0])
-							.join("")
-							.slice(0, 2)}
-					</AvatarFallback>
-				</Avatar>
-				<div className="flex flex-col">
-					<span className="text-base font-semibold text-foreground">
-						{authorName}
-					</span>
-					<div className="flex items-center gap-1">
-						<span className="text-xs font-light text-muted-foreground">
-							{authorRole}
-							<span> at</span>
-						</span>
-						<MediaImage
-							src={company.logo}
-							alt={company.name}
-							width={0}
-							height={0}
-							className="h-3.5 w-auto shrink-0 self-start"
-							sizes="100vw"
-							loading="eager"
+				</div>
+
+				<div className="flex items-center gap-3">
+					<Avatar className="size-10">
+						<AvatarImage
+							src={authorAvatar}
+							alt={authorName}
+							className="object-top"
 						/>
+						<AvatarFallback>
+							{authorName
+								.split(" ")
+								.map((n) => n[0])
+								.join("")
+								.slice(0, 2)}
+						</AvatarFallback>
+					</Avatar>
+					<div className="flex flex-col">
+						<span className="text-base font-semibold text-foreground">
+							{authorName}
+						</span>
+						<div className="flex items-center gap-1">
+							<span className="text-xs font-light text-muted-foreground">
+								{authorRole}
+								<span> at</span>
+							</span>
+							<MediaImage
+								src={company.logo}
+								alt={company.name}
+								width={0}
+								height={0}
+								className="h-3.5 w-auto shrink-0 self-start"
+								sizes="100vw"
+								loading="eager"
+							/>
+						</div>
 					</div>
 				</div>
 			</div>
-		</motion.div>
+		</div>
 	);
 }
