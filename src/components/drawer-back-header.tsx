@@ -21,7 +21,7 @@ export function DrawerBackHeader({
 		"group inline-flex w-fit items-center gap-2.5 text-sm font-medium text-foreground transition-opacity hover:opacity-80";
 	const content = (
 		<>
-			<span className="flex size-7 items-center justify-center rounded-full bg-foreground text-background transition-transform group-hover:scale-95">
+			<span className="flex size-7 items-center justify-center rounded-full bg-foreground text-background">
 				<ArrowLeft className="size-4" />
 			</span>
 			{label}
