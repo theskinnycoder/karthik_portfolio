@@ -17,7 +17,7 @@ export function ProductCard({
 	return (
 		<div
 			dir="ltr"
-			className={`group relative inline-block h-[380px] ${navigateUrl ? "cursor-pointer" : "cursor-default"}`}
+			className={`group relative inline-block h-[380px] overflow-hidden rounded-[14px] ${navigateUrl ? "cursor-pointer" : "cursor-default"}`}
 			onClick={() => navigateUrl && window.open(navigateUrl, "_blank")}
 		>
 			<div
@@ -33,7 +33,7 @@ export function ProductCard({
 					className="block h-full w-auto"
 				/>
 
-				<div className="absolute bottom-0 left-0 w-full bg-linear-to-t from-black/35 via-black/10 to-transparent [mask-image:linear-gradient(to_top,black_70%,transparent_100%)] backdrop-blur-sm">
+				<div className="absolute bottom-0 left-0 w-full bg-linear-to-t from-black/35 via-black/10 to-transparent [mask-image:linear-gradient(to_top,black_70%,transparent_100%)]">
 					<div className="flex flex-col items-start gap-0 px-5 py-4 text-left">
 						<p className="max-w-sm truncate text-base font-medium text-white">
 							{name}
