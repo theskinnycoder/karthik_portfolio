@@ -68,7 +68,9 @@ export default async function RootLayout({ children }: PropsWithChildren) {
 		"@context": "https://schema.org",
 		"@type": "Person",
 		name: profile ? toPlainText(profile.name) : "Karthik Panchala",
-		jobTitle: profile ? toPlainText(profile.title) : "Product Designer",
+		// `siteProfile.title` holds the homepage tagline, not a job title — it's
+		// unsuitable for a structured-data field consumers expect to be a role.
+		jobTitle: "Product Designer",
 		url: siteUrl,
 		image: ogImage.url,
 		sameAs: socials.map((s) => s.href).filter(Boolean),
