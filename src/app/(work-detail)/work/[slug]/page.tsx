@@ -34,7 +34,15 @@ export async function generateMetadata({
 	return {
 		title: `${work.title} · Karthik`,
 		description,
+		alternates: { canonical: `/work/${work.slug}` },
 		openGraph: {
+			title: work.title,
+			description,
+			type: "article",
+			images: work.heroImage ? [work.heroImage] : undefined,
+		},
+		twitter: {
+			card: "summary_large_image",
 			title: work.title,
 			description,
 			images: work.heroImage ? [work.heroImage] : undefined,
@@ -48,6 +56,22 @@ export default async function WorkDetailPage({ params }: WorkDetailPageProps) {
 	const work = await getWorkItemBySlug(slug);
 	if (!work) notFound();
 
+	const description = work.excerpt
+		? toPlainText(work.excerpt)
+		: work.description;
+	const creativeWorkJsonLd = {
+		"@context": "https://schema.org",
+		"@type": "CreativeWork",
+		name: work.title,
+		description,
+		image: work.heroImage || undefined,
+		url: `https://imkarthik.in/work/${work.slug}`,
+		author: {
+			"@type": "Person",
+			name: "Karthik Panchala",
+		},
+	};
+
 	// Per-route warm light palette lives in globals.css under
 	// `[data-theme="work-detail"]`. Every descendant token (background,
 	// foreground, card, border, muted-foreground) flips to the Figma values.
@@ -56,6 +80,12 @@ export default async function WorkDetailPage({ params }: WorkDetailPageProps) {
 			data-theme="work-detail"
 			className="min-h-dvh bg-background text-foreground"
 		>
+			<script
+				type="application/ld+json"
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(creativeWorkJsonLd),
+				}}
+			/>
 			<WorkDetailDrawerShell work={work} />
 		</div>
 	);

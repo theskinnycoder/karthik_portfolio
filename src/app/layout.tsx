@@ -1,7 +1,9 @@
+import { toPlainText } from "@portabletext/toolkit";
 import type { Metadata } from "next";
 import type { PropsWithChildren } from "react";
 import "./globals.css";
 import { caveatFont, interFont } from "@/lib/fonts";
+import { getSiteProfile, getSocials } from "@/sanity/lib/dal";
 
 const title = "Karthik Panchala — Product Designer";
 const description = "I think about business. Product strategy. Impact.";
@@ -20,6 +22,26 @@ export const metadata: Metadata = {
 		template: "%s — Karthik Panchala",
 	},
 	description,
+	keywords: [
+		"Karthik Panchala",
+		"product designer",
+		"product design portfolio",
+		"UX design",
+		"product strategy",
+		"design case studies",
+	],
+	alternates: {
+		canonical: "/",
+	},
+	robots: {
+		index: true,
+		follow: true,
+		googleBot: {
+			index: true,
+			follow: true,
+			"max-image-preview": "large",
+		},
+	},
 	openGraph: {
 		title,
 		description,
@@ -36,7 +58,22 @@ export const metadata: Metadata = {
 	},
 };
 
-export default function RootLayout({ children }: PropsWithChildren) {
+export default async function RootLayout({ children }: PropsWithChildren) {
+	const [profile, socials] = await Promise.all([
+		getSiteProfile(),
+		getSocials(),
+	]);
+
+	const personJsonLd = {
+		"@context": "https://schema.org",
+		"@type": "Person",
+		name: profile ? toPlainText(profile.name) : "Karthik Panchala",
+		jobTitle: profile ? toPlainText(profile.title) : "Product Designer",
+		url: siteUrl,
+		image: ogImage.url,
+		sameAs: socials.map((s) => s.href).filter(Boolean),
+	};
+
 	return (
 		<html
 			lang="en"
@@ -47,6 +84,10 @@ export default function RootLayout({ children }: PropsWithChildren) {
 				className={`${interFont.variable} ${caveatFont.variable} dark min-h-dvh overflow-x-hidden overscroll-y-contain antialiased`}
 				suppressHydrationWarning
 			>
+				<script
+					type="application/ld+json"
+					dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+				/>
 				{children}
 			</body>
 		</html>
