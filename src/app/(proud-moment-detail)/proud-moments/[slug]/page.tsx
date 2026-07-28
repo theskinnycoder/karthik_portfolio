@@ -30,7 +30,15 @@ export async function generateMetadata({
 	return {
 		title: `${highlight.title} · Karthik`,
 		description: highlight.description,
+		alternates: { canonical: `/proud-moments/${highlight.slug}` },
 		openGraph: {
+			title: highlight.title,
+			description: highlight.description,
+			type: "article",
+			images: highlight.image ? [highlight.image] : undefined,
+		},
+		twitter: {
+			card: "summary_large_image",
 			title: highlight.title,
 			description: highlight.description,
 			images: highlight.image ? [highlight.image] : undefined,
@@ -46,6 +54,20 @@ export default async function ProudMomentDetailPage({
 	const highlight = await getHighlightBySlug(slug);
 	if (!highlight) notFound();
 
+	const articleJsonLd = {
+		"@context": "https://schema.org",
+		"@type": "Article",
+		headline: highlight.title,
+		description: highlight.description,
+		image: highlight.image || undefined,
+		datePublished: highlight.date || undefined,
+		url: `https://imkarthik.in/proud-moments/${highlight.slug}`,
+		author: {
+			"@type": "Person",
+			name: "Karthik Panchala",
+		},
+	};
+
 	// Reuse the warm light palette from the work case-study route — the detail
 	// layout shares the same visual treatment.
 	return (
@@ -53,6 +75,12 @@ export default async function ProudMomentDetailPage({
 			data-theme="work-detail"
 			className="min-h-dvh bg-background text-foreground"
 		>
+			<script
+				type="application/ld+json"
+				dangerouslySetInnerHTML={{
+					__html: JSON.stringify(articleJsonLd).replace(/</g, "\\u003c"),
+				}}
+			/>
 			<ProudMomentDetailDrawerShell highlight={highlight} />
 		</div>
 	);
