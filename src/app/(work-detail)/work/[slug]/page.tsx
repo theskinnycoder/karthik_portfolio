@@ -83,7 +83,10 @@ export default async function WorkDetailPage({ params }: WorkDetailPageProps) {
 			<script
 				type="application/ld+json"
 				dangerouslySetInnerHTML={{
-					__html: JSON.stringify(creativeWorkJsonLd),
+					__html: JSON.stringify(creativeWorkJsonLd).replace(
+						/</g,
+						"\\u003c",
+					),
 				}}
 			/>
 			<WorkDetailDrawerShell work={work} />
